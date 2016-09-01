@@ -17,6 +17,7 @@
 package com.pyamsoft.wordwiz.app.main;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,7 @@ public class MainActivity extends DonationActivity {
     unbinder = ButterKnife.bind(this);
 
     setupToolbarAsActionBar();
+    showPreferenceFragment();
   }
 
   @Override protected int bindActivityToView() {
@@ -50,5 +52,14 @@ public class MainActivity extends DonationActivity {
   private void setupToolbarAsActionBar() {
     setSupportActionBar(toolbar);
     toolbar.setTitle(getString(R.string.app_name));
+  }
+
+  private void showPreferenceFragment() {
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+    if (fragmentManager.findFragmentByTag(MainPreferenceFragment.TAG) == null) {
+      fragmentManager.beginTransaction()
+          .add(R.id.main_view_container, new MainPreferenceFragment(), MainPreferenceFragment.TAG)
+          .commit();
+    }
   }
 }

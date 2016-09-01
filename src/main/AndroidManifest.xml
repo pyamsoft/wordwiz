@@ -46,6 +46,24 @@
       </intent-filter>
     </activity>
 
+    <activity
+        android:name=".app.word.count.WordCountActivity"
+        android:excludeFromRecents="false"
+        android:exported="true"
+        android:label="@string/label_word_count"
+        android:launchMode="singleTop"
+        android:noHistory="false"
+        android:enabled="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent"
+        >
+
+      <intent-filter>
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
+
     <!-- Crash Log Provider -->
     <provider
         android:name="android.support.v4.content.FileProvider"
