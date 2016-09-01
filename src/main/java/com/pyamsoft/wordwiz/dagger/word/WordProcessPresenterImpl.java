@@ -39,6 +39,11 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
     this.interactor = interactor;
   }
 
+  @Override protected void onUnbind() {
+    super.onUnbind();
+    unsubActivityLaunchType();
+  }
+
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
       @NonNull CharSequence text) {
     unsubActivityLaunchType();
