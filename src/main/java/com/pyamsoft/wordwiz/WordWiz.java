@@ -18,11 +18,11 @@ package com.pyamsoft.wordwiz;
 
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.app.ApplicationBase;
+import com.pyamsoft.pydroid.base.app.CrashHandlerApplication;
 import com.pyamsoft.pydroid.crash.CrashHandler;
 import com.squareup.leakcanary.LeakCanary;
 
-public class WordWiz extends ApplicationBase {
+public class WordWiz extends CrashHandlerApplication {
 
   @Override protected boolean buildConfigDebug() {
     return BuildConfig.DEBUG;
