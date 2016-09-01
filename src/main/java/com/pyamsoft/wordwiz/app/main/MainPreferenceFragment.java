@@ -31,10 +31,6 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
 
   @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
     addPreferencesFromResource(R.xml.preferences);
-    resolvePreferences();
-  }
-
-  private void resolvePreferences() {
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
