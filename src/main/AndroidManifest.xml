@@ -17,6 +17,7 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pyamsoft.wordwiz">
 
   <!-- For Billing Service -->
@@ -29,6 +30,11 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/Theme.WordWiz.Light">
+
+    <!-- Remove the Google API activity -->
+    <activity
+        android:name="com.google.android.gms.common.api.GoogleApiActivity"
+        tools:node="remove"/>
 
     <activity
         android:name=".app.main.MainActivity"
@@ -48,12 +54,12 @@
 
     <activity
         android:name=".app.word.count.WordCountActivity"
+        android:enabled="false"
         android:excludeFromRecents="false"
         android:exported="true"
         android:label="@string/label_word_count"
         android:launchMode="singleTop"
         android:noHistory="false"
-        android:enabled="false"
         android:theme="@style/Theme.WordWiz.Light.Transparent"
         >
 
@@ -63,17 +69,6 @@
         <data android:mimeType="text/plain"/>
       </intent-filter>
     </activity>
-
-    <!-- Crash Log Provider -->
-    <provider
-        android:name="android.support.v4.content.FileProvider"
-        android:authorities="com.pyamsoft.wordwiz.crash.LOG_PROVIDER"
-        android:exported="false"
-        android:grantUriPermissions="true">
-      <meta-data
-          android:name="android.support.FILE_PROVIDER_PATHS"
-          android:resource="@xml/crashlog_provider"/>
-    </provider>
 
   </application>
 
