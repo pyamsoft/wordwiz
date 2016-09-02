@@ -16,49 +16,17 @@
 
 package com.pyamsoft.wordwiz;
 
-import android.os.StrictMode;
-import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.app.CrashHandlerApplication;
-import com.pyamsoft.pydroid.crash.CrashHandler;
+import com.pyamsoft.pydroid.base.app.ApplicationBase;
 import com.squareup.leakcanary.LeakCanary;
 
-public class WordWiz extends CrashHandlerApplication {
+public class WordWiz extends ApplicationBase {
 
   @Override protected boolean buildConfigDebug() {
     return BuildConfig.DEBUG;
   }
 
-  @NonNull @Override public String appName() {
-    return getString(R.string.app_name);
-  }
-
-  @NonNull @Override public String buildConfigApplicationId() {
-    return BuildConfig.APPLICATION_ID;
-  }
-
-  @NonNull @Override public String buildConfigVersionName() {
-    return BuildConfig.VERSION_NAME;
-  }
-
-  @Override public int buildConfigVersionCode() {
-    return BuildConfig.VERSION_CODE;
-  }
-
   @Override protected void installInDebugMode() {
     super.installInDebugMode();
-    new CrashHandler(getApplicationContext(), this).register();
-    setStrictMode();
     LeakCanary.install(this);
-  }
-
-  private void setStrictMode() {
-    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll()
-        .penaltyLog()
-        .penaltyDeath()
-        .permitDiskReads()
-        .permitDiskWrites()
-        .penaltyFlashScreen()
-        .build());
-    StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
   }
 }

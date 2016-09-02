@@ -17,12 +17,14 @@
 package com.pyamsoft.wordwiz.app.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.pyamsoft.pydroid.base.activity.DonationActivity;
+import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 
 public class MainActivity extends DonationActivity {
@@ -42,6 +44,14 @@ public class MainActivity extends DonationActivity {
   @Override protected int bindActivityToView() {
     setContentView(R.layout.activity_main);
     return R.id.ad_view;
+  }
+
+  @NonNull @Override protected String provideAdViewUnitId() {
+    return getString(R.string.banner_ad_id);
+  }
+
+  @Override protected boolean isAdDebugMode() {
+    return BuildConfig.DEBUG;
   }
 
   @Override protected void onDestroy() {
