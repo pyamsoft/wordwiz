@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.app.word;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.app.PersistLoader;
+import com.pyamsoft.pydroid.base.PersistLoader;
 import com.pyamsoft.wordwiz.Singleton;
 import javax.inject.Inject;
 import javax.inject.Provider;

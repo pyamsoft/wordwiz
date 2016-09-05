@@ -20,10 +20,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.pyamsoft.pydroid.base.activity.DonationActivity;
+import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
+import com.pyamsoft.pydroid.app.activity.DonationActivity;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 
@@ -50,10 +52,6 @@ public class MainActivity extends DonationActivity {
     return getString(R.string.banner_ad_id);
   }
 
-  @Override protected boolean isAdDebugMode() {
-    return BuildConfig.DEBUG;
-  }
-
   @Override protected void onDestroy() {
     super.onDestroy();
     unbinder.unbind();
@@ -66,10 +64,43 @@ public class MainActivity extends DonationActivity {
 
   private void showPreferenceFragment() {
     final FragmentManager fragmentManager = getSupportFragmentManager();
-    if (fragmentManager.findFragmentByTag(MainPreferenceFragment.TAG) == null) {
+    if (fragmentManager.findFragmentByTag(MainPreferenceFragment.TAG) == null
+        && fragmentManager.findFragmentByTag(AboutLibrariesFragment.TAG) == null) {
       fragmentManager.beginTransaction()
           .add(R.id.main_view_container, new MainPreferenceFragment(), MainPreferenceFragment.TAG)
           .commit();
     }
+  }
+
+  @Override public void onBackPressed() {
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+    final int backStackCount = fragmentManager.getBackStackEntryCount();
+    if (backStackCount > 0) {
+      fragmentManager.popBackStack();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  @Override public boolean onOptionsItemSelected(final @NonNull MenuItem item) {
+    final int itemId = item.getItemId();
+    boolean handled;
+    switch (itemId) {
+      case android.R.id.home:
+        onBackPressed();
+        handled = true;
+        break;
+      default:
+        handled = false;
+    }
+    return handled || super.onOptionsItemSelected(item);
+  }
+
+  @NonNull @Override public String provideApplicationName() {
+    return "WordWiz";
+  }
+
+  @Override public int getCurrentApplicationVersion() {
+    return BuildConfig.VERSION_CODE;
   }
 }

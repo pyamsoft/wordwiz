@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.app.ActivityScope;
+import com.pyamsoft.pydroid.dagger.ActivityScope;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import dagger.Module;
 import dagger.Provides;
