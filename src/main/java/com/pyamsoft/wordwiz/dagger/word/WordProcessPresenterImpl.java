@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.ComponentName;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.presenter.SchedulerPresenter;
+import com.pyamsoft.pydroid.dagger.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import javax.inject.Inject;

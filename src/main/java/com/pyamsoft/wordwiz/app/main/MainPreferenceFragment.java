@@ -19,9 +19,12 @@ package com.pyamsoft.wordwiz.app.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.view.View;
-import com.pyamsoft.pydroid.base.fragment.ActionBarSettingsPreferenceFragment;
+import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
+import com.pyamsoft.pydroid.app.fragment.ActionBarSettingsPreferenceFragment;
+import com.pyamsoft.pydroid.model.Licenses;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.app.word.count.WordCountActivity;
 
@@ -48,6 +51,14 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
     final SwitchPreferenceCompat showAds =
         (SwitchPreferenceCompat) findPreference(getString(R.string.adview_key));
     showAds.setOnPreferenceChangeListener((preference, newValue) -> toggleAdVisibility(newValue));
+
+    final Preference showAboutLicenses = findPreference(getString(R.string.about_license_key));
+    showAboutLicenses.setOnPreferenceClickListener(
+        preference -> showAboutLicensesFragment(R.id.main_view_container,
+            AboutLibrariesFragment.Styling.LIGHT, Licenses.ANDROID, Licenses.PYDROID));
+
+    final Preference checkVersion = findPreference(getString(R.string.check_version_key));
+    checkVersion.setOnPreferenceClickListener(preference -> checkForUpdate());
 
     //final Preference upgradeInfo = findPreference(getString(R.string.upgrade_info_key));
     //upgradeInfo.setOnPreferenceClickListener(preference -> showChangelog());

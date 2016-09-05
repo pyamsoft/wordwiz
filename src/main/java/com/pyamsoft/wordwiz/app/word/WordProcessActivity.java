@@ -21,9 +21,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
-import com.pyamsoft.pydroid.base.activity.ActivityBase;
-import com.pyamsoft.pydroid.base.app.PersistLoader;
-import com.pyamsoft.pydroid.tool.PersistentCache;
+import com.pyamsoft.pydroid.base.ActivityBase;
+import com.pyamsoft.pydroid.base.PersistLoader;
+import com.pyamsoft.pydroid.util.PersistentCache;
 import timber.log.Timber;
 
 public abstract class WordProcessActivity extends ActivityBase implements WordProcessPresenter.View {
