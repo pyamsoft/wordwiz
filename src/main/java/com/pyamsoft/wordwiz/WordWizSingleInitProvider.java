@@ -16,8 +16,7 @@
 
 package com.pyamsoft.wordwiz;
 
-import com.pyamsoft.pydroid.base.ApplicationBase;
-import com.squareup.leakcanary.LeakCanary;
+import com.pyamsoft.pydroid.base.SingleInitContentProvider;
 
-public class WordWiz extends ApplicationBase {
+public class WordWizSingleInitProvider extends SingleInitContentProvider{
 }
