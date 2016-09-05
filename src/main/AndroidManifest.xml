@@ -31,11 +31,6 @@
       android:supportsRtl="true"
       android:theme="@style/Theme.WordWiz.Light">
 
-    <!-- Remove the Google API activity -->
-    <activity
-        android:name="com.google.android.gms.common.api.GoogleApiActivity"
-        tools:node="remove"/>
-
     <activity
         android:name=".app.main.MainActivity"
         android:excludeFromRecents="false"
