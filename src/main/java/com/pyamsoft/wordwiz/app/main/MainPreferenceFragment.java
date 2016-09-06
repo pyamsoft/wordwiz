@@ -32,6 +32,10 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
 
   @NonNull public static final String TAG = "MainPreferenceFragment";
 
+  @NonNull @Override protected AboutLibrariesFragment.BackStackState isLastOnBackStack() {
+    return AboutLibrariesFragment.BackStackState.LAST;
+  }
+
   @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
     addPreferencesFromResource(R.xml.preferences);
   }
