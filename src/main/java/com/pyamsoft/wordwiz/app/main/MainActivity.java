@@ -20,16 +20,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
 import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.app.activity.DonationActivity;
+import com.pyamsoft.pydroid.support.RatingDialog;
+import com.pyamsoft.pydroid.util.StringUtil;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 
-public class MainActivity extends DonationActivity {
+public class MainActivity extends DonationActivity implements RatingDialog.ChangeLogProvider {
 
   @BindView(R.id.toolbar) Toolbar toolbar;
   private Unbinder unbinder;
@@ -98,6 +101,47 @@ public class MainActivity extends DonationActivity {
 
   @NonNull @Override public String provideApplicationName() {
     return "WordWiz";
+  }
+
+  @NonNull @Override public Spannable getChangeLogText() {
+    // The changelog text
+    final String title = "What's New in Version " + BuildConfig.VERSION_NAME;
+    final String line1 = "BUGFIX: Memory usage reduced";
+
+    // Turn it into a spannable
+    final Spannable spannable = StringUtil.createLineBreakBuilder(title, line1);
+
+    int start = 0;
+    int end = title.length();
+    final int largeSize =
+        StringUtil.getTextSizeFromAppearance(this, android.R.attr.textAppearanceLarge);
+    final int largeColor =
+        StringUtil.getTextColorFromAppearance(this, android.R.attr.textAppearanceLarge);
+    final int smallSize =
+        StringUtil.getTextSizeFromAppearance(this, android.R.attr.textAppearanceSmall);
+    final int smallColor =
+        StringUtil.getTextColorFromAppearance(this, android.R.attr.textAppearanceSmall);
+
+    StringUtil.boldSpan(spannable, start, end);
+    StringUtil.sizeSpan(spannable, start, end, largeSize);
+    StringUtil.colorSpan(spannable, start, end, largeColor);
+
+    start += end + 2;
+    end += 2 + line1.length();
+
+    StringUtil.sizeSpan(spannable, start, end, smallSize);
+    StringUtil.colorSpan(spannable, start, end, smallColor);
+
+    return spannable;
+  }
+
+  @Override protected void onPostResume() {
+    super.onPostResume();
+    RatingDialog.showRatingDialog(this, this);
+  }
+
+  @Override public int getChangeLogIcon() {
+    return R.mipmap.ic_launcher;
   }
 
   @Override public int getCurrentApplicationVersion() {
