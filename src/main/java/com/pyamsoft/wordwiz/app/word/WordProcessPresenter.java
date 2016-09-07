@@ -17,17 +17,25 @@
 package com.pyamsoft.wordwiz.app.word;
 
 import android.content.ComponentName;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.base.Presenter;
 
 public interface WordProcessPresenter extends Presenter<WordProcessPresenter.View> {
 
-  void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text);
+  void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
+      @NonNull Bundle extras);
 
   interface View {
 
-    void onProcessError(@NonNull CharSequence text);
+    void onProcessError();
 
-    void onProcessTypeWordCount(int wordCount, @NonNull CharSequence text);
+    void onProcessComplete();
+
+    void onProcessTypeWordCount(int wordCount);
+
+    void onProcessTypeLetterCount(int letterCount);
+
+    void onProcessTypeOccurrences(int occurrences, @NonNull String snip);
   }
 }

@@ -17,6 +17,7 @@
 package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.ComponentName;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.dagger.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
@@ -45,24 +46,43 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
   }
 
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
-      @NonNull CharSequence text) {
+      @NonNull CharSequence text, @NonNull Bundle extras) {
     unsubActivityLaunchType();
-    activityLaunchTypeSubscription = interactor.getProcessType(componentName, text)
+    activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
         .subscribe(this::handleProcessType, throwable -> {
           Timber.e(throwable, "onError handleActivityLaunchType");
-          getView().onProcessError(text);
-        }, this::unsubActivityLaunchType);
+          getView().onProcessError();
+        }, () -> {
+          getView().onProcessComplete();
+          unsubActivityLaunchType();
+        });
   }
 
   void handleProcessType(@NonNull WordProcessResult processType) {
+    final Bundle extras = processType.extras();
     switch (processType.type()) {
       case WORD_COUNT:
-        getView().onProcessTypeWordCount(processType.count(), processType.text());
+        getView().onProcessTypeWordCount(processType.count());
+        break;
+      case LETTER_COUNT:
+        getView().onProcessTypeLetterCount(processType.count());
+        break;
+      case OCCURRENCES:
+        if (extras == null) {
+          throw new NullPointerException("Extras is NULL");
+        }
+
+        final String snippet = extras.getString(WordProcessResult.KEY_EXTRA_SNIPPET, null);
+        if (snippet == null) {
+          throw new NullPointerException("Snippet is NULL");
+        }
+
+        getView().onProcessTypeOccurrences(processType.count(), snippet);
         break;
       case ERROR:
-        getView().onProcessError(processType.text());
+        getView().onProcessError();
     }
   }
 
