@@ -45,7 +45,7 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
     // Label constants
     LABEL_TYPE_WORD_COUNT = appContext.getString(R.string.label_word_count);
     LABEL_TYPE_LETTER_COUNT = appContext.getString(R.string.label_letter_count);
-    LABEL_TYPE_OCCURRENCES = appContext.getString(R.string.label_occurrences);
+    LABEL_TYPE_OCCURRENCES = appContext.getString(R.string.label_occurrence_count);
   }
 
   @NonNull @Override
