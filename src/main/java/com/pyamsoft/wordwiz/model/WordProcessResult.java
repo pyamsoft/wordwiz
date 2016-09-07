@@ -16,29 +16,41 @@
 
 package com.pyamsoft.wordwiz.model;
 
+import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue public abstract class WordProcessResult {
 
+  @NonNull public static final String KEY_EXTRA_SNIPPET = "key_extra_snipper";
+
   @CheckResult @NonNull
-  public static WordProcessResult create(@NonNull ProcessType type, @NonNull CharSequence text, int wordCount) {
-    return new AutoValue_WordProcessResult(type, text, wordCount);
+  public static WordProcessResult create(@NonNull ProcessType type, int wordCount) {
+    return create(type, wordCount, null);
+  }
+
+  @CheckResult @NonNull
+  public static WordProcessResult create(@NonNull ProcessType type, int wordCount,
+      @Nullable Bundle extras) {
+    return new AutoValue_WordProcessResult(type, wordCount, extras);
   }
 
   @CheckResult @NonNull public static WordProcessResult error() {
-    return new AutoValue_WordProcessResult(ProcessType.ERROR, "", -1);
+    return create(ProcessType.ERROR, -1);
   }
 
   public abstract ProcessType type();
 
-  public abstract CharSequence text();
-
   public abstract int count();
+
+  @Nullable public abstract Bundle extras();
 
   public enum ProcessType {
     ERROR,
-    WORD_COUNT
+    WORD_COUNT,
+    LETTER_COUNT,
+    OCCURRENCES,
   }
 }

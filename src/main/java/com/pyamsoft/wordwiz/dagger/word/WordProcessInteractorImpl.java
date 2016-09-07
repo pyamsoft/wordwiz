@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.R;
@@ -34,6 +35,8 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
   @NonNull final PackageManager packageManager;
   @NonNull private final Context appContext;
   @NonNull private final String LABEL_TYPE_WORD_COUNT;
+  @NonNull private final String LABEL_TYPE_LETTER_COUNT;
+  @NonNull private final String LABEL_TYPE_OCCURRENCES;
 
   @Inject WordProcessInteractorImpl(@NonNull Context context) {
     this.appContext = context.getApplicationContext();
@@ -41,18 +44,20 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
 
     // Label constants
     LABEL_TYPE_WORD_COUNT = appContext.getString(R.string.label_word_count);
+    LABEL_TYPE_LETTER_COUNT = appContext.getString(R.string.label_letter_count);
+    LABEL_TYPE_OCCURRENCES = appContext.getString(R.string.label_occurrences);
   }
 
   @NonNull @Override
   public Observable<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
-      @NonNull CharSequence text) {
+      @NonNull CharSequence text, @NonNull Bundle extras) {
     return Observable.defer(() -> {
       WordProcessResult result;
       try {
         Timber.d("Attempt to load the label this activity launched with");
         final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
         final CharSequence label = activityInfo.loadLabel(packageManager);
-        result = getProcessTypeForLabel(label, text);
+        result = getProcessTypeForLabel(label, text, extras);
       } catch (PackageManager.NameNotFoundException e) {
         Timber.e(e, "Name not found ERROR");
         result = WordProcessResult.error();
@@ -63,11 +68,16 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
   }
 
   @CheckResult @NonNull WordProcessResult getProcessTypeForLabel(@NonNull CharSequence label,
-      @NonNull CharSequence text) {
+      @NonNull CharSequence text, @NonNull Bundle extras) {
     final WordProcessResult result;
     if (label.equals(LABEL_TYPE_WORD_COUNT)) {
-      result = WordProcessResult.create(WordProcessResult.ProcessType.WORD_COUNT, text,
-          getWordCount(text));
+      result =
+          WordProcessResult.create(WordProcessResult.ProcessType.WORD_COUNT, getWordCount(text));
+    } else if (label.equals(LABEL_TYPE_LETTER_COUNT)) {
+      result = WordProcessResult.create(WordProcessResult.ProcessType.LETTER_COUNT,
+          getLetterCount(text));
+    } else if (label.equals(LABEL_TYPE_OCCURRENCES)) {
+      throw new RuntimeException("Not ready yet");
     } else {
       result = WordProcessResult.error();
     }

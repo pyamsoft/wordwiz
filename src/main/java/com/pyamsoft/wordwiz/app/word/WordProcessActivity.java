@@ -24,9 +24,11 @@ import android.widget.Toast;
 import com.pyamsoft.pydroid.base.ActivityBase;
 import com.pyamsoft.pydroid.base.PersistLoader;
 import com.pyamsoft.pydroid.util.PersistentCache;
+import java.util.Locale;
 import timber.log.Timber;
 
-public abstract class WordProcessActivity extends ActivityBase implements WordProcessPresenter.View {
+public abstract class WordProcessActivity extends ActivityBase
+    implements WordProcessPresenter.View {
 
   @NonNull private static final String KEY_PRESENTER = "key_word_process_presenter";
   WordProcessPresenter presenter;
@@ -79,19 +81,35 @@ public abstract class WordProcessActivity extends ActivityBase implements WordPr
   private void handleIntent(@NonNull Intent intent) {
     Timber.d("Handle a process text intent");
     final CharSequence text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
-    presenter.handleActivityLaunchType(getComponentName(), text);
+    presenter.handleActivityLaunchType(getComponentName(), text, getIntent().getExtras());
   }
 
-  @Override public void onProcessTypeWordCount(int wordCount, @NonNull CharSequence text) {
-    Timber.d("Word count: %d", wordCount);
-    Toast.makeText(getApplicationContext(), "Word count: " + wordCount, Toast.LENGTH_SHORT).show();
+  @Override public void onProcessComplete() {
+    Timber.d("Process complete");
     finish();
   }
 
-  @Override public void onProcessError(@NonNull CharSequence text) {
+  @Override public void onProcessError() {
     Timber.e("An error occurred while attempting to process text");
     Toast.makeText(getApplicationContext(), "An error occurred while attempting to process text",
         Toast.LENGTH_SHORT).show();
-    finish();
+  }
+
+  @Override public void onProcessTypeWordCount(int wordCount) {
+    Timber.d("Word count: %d", wordCount);
+    Toast.makeText(getApplicationContext(), "Word count: " + wordCount, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override public void onProcessTypeLetterCount(int letterCount) {
+    Timber.d("Letter count: %d", letterCount);
+    Toast.makeText(getApplicationContext(), "Letter count: " + letterCount, Toast.LENGTH_SHORT)
+        .show();
+  }
+
+  @Override public void onProcessTypeOccurrences(int occurrences, @NonNull String snippet) {
+    Timber.d("Occurrence count of snippet %s: %d", snippet, occurrences);
+    Toast.makeText(getApplicationContext(),
+        String.format(Locale.getDefault(), "Occurrence count of snippet %s: %d", snippet,
+            occurrences), Toast.LENGTH_SHORT).show();
   }
 }

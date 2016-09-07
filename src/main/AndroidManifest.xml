@@ -17,7 +17,6 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.pyamsoft.wordwiz">
 
   <!-- For Billing Service -->
@@ -53,6 +52,24 @@
         android:excludeFromRecents="false"
         android:exported="true"
         android:label="@string/label_word_count"
+        android:launchMode="singleTop"
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent"
+        >
+
+      <intent-filter>
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
+
+    <activity
+        android:name=".app.word.count.LetterCountActivity"
+        android:enabled="false"
+        android:excludeFromRecents="false"
+        android:exported="true"
+        android:label="@string/label_letter_count"
         android:launchMode="singleTop"
         android:noHistory="false"
         android:theme="@style/Theme.WordWiz.Light.Transparent"

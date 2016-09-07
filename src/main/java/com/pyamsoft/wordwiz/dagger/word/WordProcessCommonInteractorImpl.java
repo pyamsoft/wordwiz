@@ -19,20 +19,52 @@ package com.pyamsoft.wordwiz.dagger.word;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import timber.log.Timber;
 
 abstract class WordProcessCommonInteractorImpl {
 
   @NonNull private static final String SPLIT_BY_WHITESPACE = "\\s+";
 
-  @CheckResult int getWordCount(@NonNull CharSequence text) {
+  @NonNull @CheckResult String[] tokenizeString(@NonNull CharSequence text) {
     Timber.d("Convert text to a string");
     final String string = text.toString();
 
     Timber.d("Tokenize string by spaces");
     final String[] tokens = string.split(SPLIT_BY_WHITESPACE);
 
+    return tokens;
+  }
+
+  @CheckResult int getWordCount(@NonNull CharSequence text) {
+    final String[] tokens = tokenizeString(text);
+
     Timber.d("String tokenized: %s", Arrays.toString(tokens));
     return tokens.length;
+  }
+
+  @CheckResult int getLetterCount(@NonNull CharSequence text) {
+    final String[] tokens = tokenizeString(text);
+
+    Timber.d("Get a sub of letter counts");
+    int sum = 0;
+    for (final String token : tokens) {
+      sum += token.length();
+    }
+
+    return sum;
+  }
+
+  @CheckResult int getOccurrences(@NonNull CharSequence text, @NonNull String snip) {
+    Timber.d("Find number of occurrences of %s in text:\n%s", snip, text);
+    final Pattern pattern = Pattern.compile(snip, Pattern.LITERAL);
+    final Matcher matcher = pattern.matcher(text);
+    int count = 0;
+    while (matcher.find()) {
+      ++count;
+    }
+
+    return count;
   }
 }
