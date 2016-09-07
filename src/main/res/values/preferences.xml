@@ -19,7 +19,12 @@
 
   <string name="word_count_key">word_count_key</string>
   <string name="word_count_summary">Enable Word Count command in the Text Selection menu</string>
-  <string name="word_count_title">Word Count</string>
+
+  <string name="letter_count_key">letter_count_key</string>
+  <string name="letter_count_summary">Enable Letter Count command in the Text Selection menu</string>
+
+  <string name="occurrence_count_key">occurrence_count_key</string>
+  <string name="occurrence_count_summary">Enable Occurrence Count command in the Text Selection menu</string>
 
   <string name="upgrade_info_key">upgrade_info</string>
   <string name="upgrade_info_title">Show Upgrade Information</string>

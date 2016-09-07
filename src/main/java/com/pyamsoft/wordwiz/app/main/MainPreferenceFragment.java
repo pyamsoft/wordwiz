@@ -26,6 +26,7 @@ import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.app.fragment.ActionBarSettingsPreferenceFragment;
 import com.pyamsoft.pydroid.model.Licenses;
 import com.pyamsoft.wordwiz.R;
+import com.pyamsoft.wordwiz.app.word.count.LetterCountActivity;
 import com.pyamsoft.wordwiz.app.word.count.WordCountActivity;
 
 public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment {
@@ -49,6 +50,15 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
     wordCountPreference.setOnPreferenceClickListener(preference -> {
       final boolean enabled = WordCountActivity.isEnabled(getContext());
       WordCountActivity.enable(getContext(), !enabled);
+      return true;
+    });
+
+    final SwitchPreferenceCompat letterCountPreference =
+        (SwitchPreferenceCompat) findPreference(getString(R.string.letter_count_key));
+    letterCountPreference.setChecked(LetterCountActivity.isEnabled(getContext()));
+    letterCountPreference.setOnPreferenceClickListener(preference -> {
+      final boolean enabled = LetterCountActivity.isEnabled(getContext());
+      LetterCountActivity.enable(getContext(), !enabled);
       return true;
     });
 
