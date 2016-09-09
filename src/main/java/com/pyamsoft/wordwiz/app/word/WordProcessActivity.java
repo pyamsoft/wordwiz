@@ -37,7 +37,7 @@ public abstract class WordProcessActivity extends ActivityBase
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    loadedKey = PersistentCache.load(KEY_PRESENTER, savedInstanceState,
+    loadedKey = PersistentCache.get().load(KEY_PRESENTER, savedInstanceState,
         new PersistLoader.Callback<WordProcessPresenter>() {
           @NonNull @Override public PersistLoader<WordProcessPresenter> createLoader() {
             return new WordProcessPresenterLoader(getApplicationContext());
@@ -69,12 +69,12 @@ public abstract class WordProcessActivity extends ActivityBase
   @Override protected void onDestroy() {
     super.onDestroy();
     if (!isChangingConfigurations()) {
-      PersistentCache.unload(loadedKey);
+      PersistentCache.get().unload(loadedKey);
     }
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
-    PersistentCache.saveKey(outState, KEY_PRESENTER, loadedKey);
+    PersistentCache.get().saveKey(outState, KEY_PRESENTER, loadedKey);
     super.onSaveInstanceState(outState);
   }
 

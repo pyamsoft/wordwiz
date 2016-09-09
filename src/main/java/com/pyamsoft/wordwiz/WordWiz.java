@@ -16,8 +16,38 @@
 
 package com.pyamsoft.wordwiz;
 
-import com.pyamsoft.pydroid.base.ApplicationBase;
-import com.squareup.leakcanary.LeakCanary;
+import android.content.Context;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.lib.PYDroidApplication;
+import com.pyamsoft.wordwiz.dagger.DaggerWordWizComponent;
+import com.pyamsoft.wordwiz.dagger.WordWizComponent;
+import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWiz extends ApplicationBase {
+public class WordWiz extends PYDroidApplication implements IWordWiz {
+
+  private WordWizComponent component;
+
+  @NonNull @CheckResult public static IWordWiz get(@NonNull Context context) {
+    final Context appContext = context.getApplicationContext();
+    if (appContext instanceof IWordWiz) {
+      return (IWordWiz) appContext;
+    } else {
+      throw new ClassCastException("Cannot cast Application Context to IWordWiz");
+    }
+  }
+
+  @Override protected void onFirstCreate() {
+    super.onFirstCreate();
+    component = DaggerWordWizComponent.builder()
+        .wordWizModule(new WordWizModule(getApplicationContext()))
+        .build();
+  }
+
+  @SuppressWarnings("unchecked") @NonNull @Override public WordWizComponent provideComponent() {
+    if (component == null) {
+      throw new NullPointerException("WordWiz component is NULL");
+    }
+    return component;
+  }
 }
