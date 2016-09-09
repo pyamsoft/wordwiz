@@ -37,16 +37,17 @@ public abstract class WordProcessActivity extends ActivityBase
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    loadedKey = PersistentCache.get().load(KEY_PRESENTER, savedInstanceState,
-        new PersistLoader.Callback<WordProcessPresenter>() {
-          @NonNull @Override public PersistLoader<WordProcessPresenter> createLoader() {
-            return new WordProcessPresenterLoader(getApplicationContext());
-          }
+    loadedKey = PersistentCache.get()
+        .load(KEY_PRESENTER, savedInstanceState,
+            new PersistLoader.Callback<WordProcessPresenter>() {
+              @NonNull @Override public PersistLoader<WordProcessPresenter> createLoader() {
+                return new WordProcessPresenterLoader(getApplicationContext());
+              }
 
-          @Override public void onPersistentLoaded(@NonNull WordProcessPresenter persist) {
-            presenter = persist;
-          }
-        });
+              @Override public void onPersistentLoaded(@NonNull WordProcessPresenter persist) {
+                presenter = persist;
+              }
+            });
 
     handleIntent(getIntent());
   }
