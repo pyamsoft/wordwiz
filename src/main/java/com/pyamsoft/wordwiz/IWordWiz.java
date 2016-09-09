@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.app.word;
+package com.pyamsoft.wordwiz;
 
-import android.content.Context;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.PersistLoader;
-import com.pyamsoft.wordwiz.WordWiz;
-import javax.inject.Inject;
-import javax.inject.Provider;
+import com.pyamsoft.wordwiz.dagger.WordWizComponent;
 
-public class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
+public interface IWordWiz {
 
-  @Inject Provider<WordProcessPresenter> presenterProvider;
-
-  WordProcessPresenterLoader(@NonNull Context context) {
-    super(context);
-  }
-
-  @NonNull @Override public WordProcessPresenter loadPersistent() {
-    WordWiz.get(getContext()).provideComponent().plusWordProcessComponent().inject(this);
-    return presenterProvider.get();
-  }
+  @CheckResult @NonNull <T extends WordWizComponent> T provideComponent();
 }
