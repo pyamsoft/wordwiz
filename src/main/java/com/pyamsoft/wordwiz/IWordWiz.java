@@ -20,7 +20,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.dagger.WordWizComponent;
 
-public interface IWordWiz {
+public interface IWordWiz<T extends WordWizComponent> {
 
-  @CheckResult @NonNull <T extends WordWizComponent> T provideComponent();
+  @CheckResult @NonNull T provideComponent();
 }

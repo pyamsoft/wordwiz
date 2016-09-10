@@ -24,14 +24,14 @@ import com.pyamsoft.wordwiz.dagger.DaggerWordWizComponent;
 import com.pyamsoft.wordwiz.dagger.WordWizComponent;
 import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWiz extends PYDroidApplication implements IWordWiz {
+public class WordWiz extends PYDroidApplication implements IWordWiz<WordWizComponent> {
 
   private WordWizComponent component;
 
   @NonNull @CheckResult public static IWordWiz get(@NonNull Context context) {
     final Context appContext = context.getApplicationContext();
     if (appContext instanceof IWordWiz) {
-      return (IWordWiz) appContext;
+      return WordWiz.class.cast(appContext);
     } else {
       throw new ClassCastException("Cannot cast Application Context to IWordWiz");
     }
@@ -44,7 +44,7 @@ public class WordWiz extends PYDroidApplication implements IWordWiz {
         .build();
   }
 
-  @SuppressWarnings("unchecked") @NonNull @Override public WordWizComponent provideComponent() {
+  @NonNull @Override public WordWizComponent provideComponent() {
     if (component == null) {
       throw new NullPointerException("WordWiz component is NULL");
     }
