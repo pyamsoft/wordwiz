@@ -24,10 +24,9 @@
 
   <application
       android:name=".WordWiz"
-      android:allowBackup="true"
+      android:allowBackup="false"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
-      android:supportsRtl="true"
       android:theme="@style/Theme.WordWiz.Light">
 
     <activity
@@ -35,7 +34,7 @@
         android:excludeFromRecents="false"
         android:exported="true"
         android:label="@string/app_name"
-        android:launchMode="singleTop"
+        android:launchMode="singleTask"
         android:noHistory="false"
         android:theme="@style/Theme.WordWiz.Light.Splash"
         >
