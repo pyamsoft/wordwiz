@@ -36,11 +36,11 @@
         />
 
     <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
-        android:key="@string/occurrence_count_key"
-        android:summary="@string/occurrence_count_summary"
-        android:title="@string/label_occurrence_count"
-        />
+    <!--<SwitchPreferenceCompat-->
+    <!--android:key="@string/occurrence_count_key"-->
+    <!--android:summary="@string/occurrence_count_summary"-->
+    <!--android:title="@string/label_occurrence_count"-->
+    <!--/>-->
 
   </PreferenceCategory>
 
