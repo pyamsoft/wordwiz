@@ -53,9 +53,9 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
         .observeOn(getObserveScheduler())
         .subscribe(this::handleProcessType, throwable -> {
           Timber.e(throwable, "onError handleActivityLaunchType");
-          getView().onProcessError();
+          getView(View::onProcessError);
         }, () -> {
-          getView().onProcessComplete();
+          getView(View::onProcessComplete);
           unsubActivityLaunchType();
         });
   }
@@ -64,10 +64,10 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
     final Bundle extras = processType.extras();
     switch (processType.type()) {
       case WORD_COUNT:
-        getView().onProcessTypeWordCount(processType.count());
+        getView(view -> view.onProcessTypeWordCount(processType.count()));
         break;
       case LETTER_COUNT:
-        getView().onProcessTypeLetterCount(processType.count());
+        getView(view -> view.onProcessTypeLetterCount(processType.count()));
         break;
       case OCCURRENCES:
         if (extras == null) {
@@ -79,10 +79,10 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
           throw new NullPointerException("Snippet is NULL");
         }
 
-        getView().onProcessTypeOccurrences(processType.count(), snippet);
+        getView(view -> view.onProcessTypeOccurrences(processType.count(), snippet));
         break;
       case ERROR:
-        getView().onProcessError();
+        getView(View::onProcessError);
     }
   }
 
