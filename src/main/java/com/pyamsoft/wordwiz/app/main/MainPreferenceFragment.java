@@ -24,7 +24,7 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import android.view.View;
 import com.pyamsoft.pydroid.lib.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.lib.ActionBarSettingsPreferenceFragment;
-import com.pyamsoft.pydroid.model.Licenses;
+import com.pyamsoft.pydroid.lib.Licenses;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.app.word.count.LetterCountActivity;
 import com.pyamsoft.wordwiz.app.word.count.WordCountActivity;
@@ -70,7 +70,7 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
     showAboutLicenses.setOnPreferenceClickListener(
         preference -> showAboutLicensesFragment(R.id.main_view_container,
             AboutLibrariesFragment.Styling.LIGHT, Licenses.ANDROID, Licenses.ANDROID_SUPPORT,
-            Licenses.PYDROID, Licenses.GOOGLE_PLAY_SERVICES, Licenses.ANDROID_IN_APP_BILLING,
+            Licenses.PYDROID, Licenses.GOOGLE_PLAY_SERVICES, Licenses.ANDROID_CHECKOUT,
             Licenses.AUTO_VALUE, Licenses.BUTTERKNIFE, Licenses.DAGGER, Licenses.FAST_ADAPTER,
             Licenses.FIREBASE, Licenses.LEAK_CANARY, Licenses.RETROFIT2, Licenses.RXANDROID,
             Licenses.RXJAVA));
