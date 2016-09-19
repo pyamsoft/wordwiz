@@ -77,12 +77,6 @@
       </intent-filter>
     </activity>
 
-    <provider
-        android:name=".WordWizSingleInitProvider"
-        android:authorities="com.pyamsoft.wordwiz.WordWizSingleInitProvider"
-        android:exported="false"
-        android:syncable="false"/>
-
   </application>
 
 </manifest>
