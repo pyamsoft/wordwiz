@@ -35,8 +35,8 @@ android {
     applicationId "com.pyamsoft.wordwiz"
     minSdkVersion 23
     targetSdkVersion 24
-    versionCode 10
-    versionName "1.1.4"
+    versionCode 12
+    versionName "1.1.6"
 
     // For vector drawables
     vectorDrawables.useSupportLibrary = true
@@ -126,7 +126,7 @@ dependencies {
   // Mockito for unit tests
   testCompile "org.mockito:mockito-core:$mockito"
 
-  // PYDroid 4.2.0
+  // PYDroid 4.2.1
   debugCompile project(path: ":PYDroid", configuration: "debug")
   releaseCompile project(path: ":PYDroid", configuration: "release")
 }
