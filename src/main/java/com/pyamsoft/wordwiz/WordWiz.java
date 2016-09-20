@@ -39,8 +39,8 @@ public class WordWiz extends PYDroidApplication implements IWordWiz<WordWizCompo
     }
   }
 
-  @Override public void onCreate() {
-    super.onCreate();
+  @Override protected void createApplicationComponents() {
+    super.createApplicationComponents();
     component = DaggerWordWizComponent.builder()
         .wordWizModule(new WordWizModule(getApplicationContext()))
         .build();
