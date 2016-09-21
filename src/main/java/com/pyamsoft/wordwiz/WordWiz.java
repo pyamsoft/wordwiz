@@ -21,7 +21,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.pyamsoft.pydroid.lib.PYDroidApplication;
+import com.pyamsoft.pydroid.PYDroidApplication;
 import com.pyamsoft.wordwiz.dagger.DaggerWordWizComponent;
 import com.pyamsoft.wordwiz.dagger.WordWizComponent;
 import com.pyamsoft.wordwiz.dagger.WordWizModule;
