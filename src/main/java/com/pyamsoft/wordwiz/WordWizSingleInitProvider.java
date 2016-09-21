@@ -16,7 +16,7 @@
 
 package com.pyamsoft.wordwiz;
 
-import com.pyamsoft.pydroid.base.SingleInitContentProvider;
+import com.pyamsoft.pydroid.SingleInitContentProvider;
 
 public class WordWizSingleInitProvider extends SingleInitContentProvider {
 }

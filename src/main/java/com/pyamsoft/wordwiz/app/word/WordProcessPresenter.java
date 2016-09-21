@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.app.word;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.base.Presenter;
+import com.pyamsoft.pydroid.presenter.Presenter;
 
 public interface WordProcessPresenter extends Presenter<WordProcessPresenter.View> {
 
