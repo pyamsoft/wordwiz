@@ -56,4 +56,8 @@ public class WordWiz extends PYDroidApplication implements IWordWiz<WordWizCompo
   @Nullable @Override public String provideGoogleOpenSourceLicenses() {
     return GoogleApiAvailability.getInstance().getOpenSourceSoftwareLicenseInfo(this);
   }
+
+  @Override public void insertCustomLicensesIntoMap() {
+
+  }
 }
