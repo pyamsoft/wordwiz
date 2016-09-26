@@ -29,7 +29,7 @@ import rx.Scheduler;
 
   @ActivityScope @Provides WordProcessPresenter provideWordProcessPresenter(
       @NonNull WordProcessInteractor interactor, @Named("main") Scheduler observeScheduler,
-      @Named("io") Scheduler subcribeScheduler) {
+      @Named("computation") Scheduler subcribeScheduler) {
     return new WordProcessPresenterImpl(interactor, observeScheduler, subcribeScheduler);
   }
 
