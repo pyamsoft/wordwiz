@@ -32,20 +32,18 @@ import timber.log.Timber;
 class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
     implements WordProcessInteractor {
 
-  @NonNull final PackageManager packageManager;
-  @NonNull private final Context appContext;
+  @SuppressWarnings("WeakerAccess") @NonNull final PackageManager packageManager;
   @NonNull private final String LABEL_TYPE_WORD_COUNT;
   @NonNull private final String LABEL_TYPE_LETTER_COUNT;
   @NonNull private final String LABEL_TYPE_OCCURRENCES;
 
   @Inject WordProcessInteractorImpl(@NonNull Context context) {
-    this.appContext = context.getApplicationContext();
-    packageManager = appContext.getPackageManager();
+    packageManager = context.getPackageManager();
 
     // Label constants
-    LABEL_TYPE_WORD_COUNT = appContext.getString(R.string.label_word_count);
-    LABEL_TYPE_LETTER_COUNT = appContext.getString(R.string.label_letter_count);
-    LABEL_TYPE_OCCURRENCES = appContext.getString(R.string.label_occurrence_count);
+    LABEL_TYPE_WORD_COUNT = context.getString(R.string.label_word_count);
+    LABEL_TYPE_LETTER_COUNT = context.getString(R.string.label_letter_count);
+    LABEL_TYPE_OCCURRENCES = context.getString(R.string.label_occurrence_count);
   }
 
   @NonNull @Override
@@ -56,8 +54,13 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
       try {
         Timber.d("Attempt to load the label this activity launched with");
         final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
-        final CharSequence label = activityInfo.loadLabel(packageManager);
-        result = getProcessTypeForLabel(label, text, extras);
+        if (activityInfo == null) {
+          Timber.e("Activity info is NULL");
+          result = WordProcessResult.error();
+        } else {
+          final CharSequence label = activityInfo.loadLabel(packageManager);
+          result = getProcessTypeForLabel(label, text);
+        }
       } catch (PackageManager.NameNotFoundException e) {
         Timber.e(e, "Name not found ERROR");
         result = WordProcessResult.error();
@@ -67,8 +70,8 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
     });
   }
 
-  @CheckResult @NonNull WordProcessResult getProcessTypeForLabel(@NonNull CharSequence label,
-      @NonNull CharSequence text, @NonNull Bundle extras) {
+  @SuppressWarnings("WeakerAccess") @CheckResult @NonNull WordProcessResult getProcessTypeForLabel(
+      @NonNull CharSequence label, @NonNull CharSequence text) {
     final WordProcessResult result;
     if (label.equals(LABEL_TYPE_WORD_COUNT)) {
       result =
