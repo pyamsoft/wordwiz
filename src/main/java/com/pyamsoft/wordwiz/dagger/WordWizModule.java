@@ -20,11 +20,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
 import javax.inject.Singleton;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 @Module public class WordWizModule {
 
@@ -36,13 +32,5 @@ import rx.schedulers.Schedulers;
 
   @Singleton @Provides Context provideContext() {
     return appContext;
-  }
-
-  @Singleton @Provides @Named("sub") Scheduler provideIOScheduler() {
-    return Schedulers.io();
-  }
-
-  @Singleton @Provides @Named("obs") Scheduler provideMainThreadScheduler() {
-    return AndroidSchedulers.mainThread();
   }
 }

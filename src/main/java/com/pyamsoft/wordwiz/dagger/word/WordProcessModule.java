@@ -18,23 +18,18 @@ package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.ActivityScope;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
-import rx.Scheduler;
 
 @Module public class WordProcessModule {
 
-  @ActivityScope @Provides WordProcessPresenter provideWordProcessPresenter(
-      @NonNull WordProcessInteractor interactor, @Named("obs") Scheduler observeScheduler,
-      @Named("sub") Scheduler subcribeScheduler) {
-    return new WordProcessPresenterImpl(interactor, observeScheduler, subcribeScheduler);
+  @Provides WordProcessPresenter provideWordProcessPresenter(
+      @NonNull WordProcessInteractor interactor) {
+    return new WordProcessPresenterImpl(interactor);
   }
 
-  @ActivityScope @Provides WordProcessInteractor provideWordProcessInteractor(
-      @NonNull Context context) {
+  @Provides WordProcessInteractor provideWordProcessInteractor(@NonNull Context context) {
     return new WordProcessInteractorImpl(context);
   }
 }

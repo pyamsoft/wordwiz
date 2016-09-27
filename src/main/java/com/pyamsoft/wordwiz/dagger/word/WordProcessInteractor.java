@@ -17,14 +17,16 @@
 package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.ComponentName;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.ActionSingle;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import rx.Observable;
 
 interface WordProcessInteractor {
 
-  @CheckResult @NonNull Observable<WordProcessResult> getProcessType(
-      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras);
+  @CheckResult @NonNull AsyncTask<Void, Void, WordProcessResult> getProcessType(
+      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
+      @NonNull ActionSingle<WordProcessResult> onLoaded);
 }
