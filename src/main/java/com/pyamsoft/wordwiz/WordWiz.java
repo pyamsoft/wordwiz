@@ -20,18 +20,17 @@ import android.content.Context;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.pyamsoft.pydroid.IPYDroidApp;
 import com.pyamsoft.pydroid.PYDroidApplication;
-import com.pyamsoft.wordwiz.dagger.DaggerWordWizComponent;
-import com.pyamsoft.wordwiz.dagger.WordWizComponent;
 import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWiz extends PYDroidApplication implements IWordWiz<WordWizComponent> {
+public class WordWiz extends PYDroidApplication implements IPYDroidApp<WordWizModule> {
 
-  private WordWizComponent component;
+  private WordWizModule module;
 
-  @NonNull @CheckResult public static IWordWiz get(@NonNull Context context) {
+  @NonNull @CheckResult public static IPYDroidApp<WordWizModule> get(@NonNull Context context) {
     final Context appContext = context.getApplicationContext();
-    if (appContext instanceof IWordWiz) {
+    if (appContext instanceof WordWiz) {
       return WordWiz.class.cast(appContext);
     } else {
       throw new ClassCastException("Cannot cast Application Context to IWordWiz");
@@ -40,16 +39,14 @@ public class WordWiz extends PYDroidApplication implements IWordWiz<WordWizCompo
 
   @Override protected void createApplicationComponents() {
     super.createApplicationComponents();
-    component = DaggerWordWizComponent.builder()
-        .wordWizModule(new WordWizModule(getApplicationContext()))
-        .build();
+    module = new WordWizModule(this);
   }
 
-  @NonNull @Override public WordWizComponent provideComponent() {
-    if (component == null) {
-      throw new NullPointerException("WordWiz component is NULL");
+  @NonNull @Override public WordWizModule provideComponent() {
+    if (module == null) {
+      throw new NullPointerException("WordWiz module is NULL");
     }
-    return component;
+    return module;
   }
 
   @Nullable @Override public String provideGoogleOpenSourceLicenses() {

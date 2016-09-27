@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import javax.inject.Inject;
 
 class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     implements WordProcessPresenter {
@@ -32,7 +31,7 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
   @NonNull private final WordProcessInteractor interactor;
   @Nullable private AsyncTask activityLaunchTypeSubscription;
 
-  @Inject WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
+  WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
     this.interactor = interactor;
   }
 
