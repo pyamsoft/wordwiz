@@ -20,19 +20,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.app.PersistLoader;
 import com.pyamsoft.wordwiz.WordWiz;
-import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
-
-  @Inject Provider<WordProcessPresenter> presenterProvider;
 
   WordProcessPresenterLoader(@NonNull Context context) {
     super(context);
   }
 
   @NonNull @Override public WordProcessPresenter loadPersistent() {
-    WordWiz.get(getContext()).provideComponent().plusWordProcessComponent().inject(this);
-    return presenterProvider.get();
+    return WordWiz.get(getContext()).provideComponent().provideWordProcessModule().getPresenter();
   }
 }

@@ -17,20 +17,31 @@
 package com.pyamsoft.wordwiz.dagger;
 
 import android.content.Context;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import dagger.Module;
-import dagger.Provides;
-import javax.inject.Singleton;
+import com.pyamsoft.wordwiz.dagger.word.WordProcessModule;
 
-@Module public class WordWizModule {
+public class WordWizModule {
 
-  @NonNull private final Context appContext;
+  @NonNull private final Provider provider;
 
   public WordWizModule(@NonNull Context context) {
-    this.appContext = context.getApplicationContext();
+    this.provider = new Provider(context);
   }
 
-  @Singleton @Provides Context provideContext() {
-    return appContext;
+  @CheckResult @NonNull public WordProcessModule provideWordProcessModule() {
+    return new WordProcessModule(provider);
+  }
+
+  public static class Provider {
+    @NonNull private final Context appContext;
+
+    Provider(@NonNull Context context) {
+      this.appContext = context.getApplicationContext();
+    }
+
+    @CheckResult @NonNull public Context provideContext() {
+      return appContext;
+    }
   }
 }

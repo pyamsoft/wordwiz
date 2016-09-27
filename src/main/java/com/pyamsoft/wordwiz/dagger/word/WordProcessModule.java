@@ -16,20 +16,22 @@
 
 package com.pyamsoft.wordwiz.dagger.word;
 
-import android.content.Context;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
-import dagger.Module;
-import dagger.Provides;
+import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-@Module public class WordProcessModule {
+public class WordProcessModule {
 
-  @Provides WordProcessPresenter provideWordProcessPresenter(
-      @NonNull WordProcessInteractor interactor) {
-    return new WordProcessPresenterImpl(interactor);
+  @NonNull private final WordProcessInteractor interactor;
+  @NonNull private final WordProcessPresenter presenter;
+
+  public WordProcessModule(@NonNull WordWizModule.Provider wordWizModule) {
+    interactor = new WordProcessInteractorImpl(wordWizModule.provideContext());
+    presenter = new WordProcessPresenterImpl(interactor);
   }
 
-  @Provides WordProcessInteractor provideWordProcessInteractor(@NonNull Context context) {
-    return new WordProcessInteractorImpl(context);
+  @NonNull @CheckResult public WordProcessPresenter getPresenter() {
+    return presenter;
   }
 }

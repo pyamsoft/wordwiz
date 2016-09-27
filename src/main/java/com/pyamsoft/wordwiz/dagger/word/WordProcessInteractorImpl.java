@@ -28,7 +28,6 @@ import com.pyamsoft.pydroid.ActionSingle;
 import com.pyamsoft.pydroid.tool.AsyncCallbackTask;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
@@ -39,7 +38,7 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
   @NonNull private final String LABEL_TYPE_LETTER_COUNT;
   @NonNull private final String LABEL_TYPE_OCCURRENCES;
 
-  @Inject WordProcessInteractorImpl(@NonNull Context context) {
+  WordProcessInteractorImpl(@NonNull Context context) {
     packageManager = context.getPackageManager();
 
     // Label constants
