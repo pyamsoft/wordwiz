@@ -16,12 +16,10 @@
 
 package com.pyamsoft.wordwiz.dagger.word;
 
-import com.pyamsoft.pydroid.ActivityScope;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenterLoader;
 import dagger.Subcomponent;
 
-@ActivityScope @Subcomponent(modules = WordProcessModule.class)
-public interface WordProcessComponent {
+@Subcomponent(modules = WordProcessModule.class) public interface WordProcessComponent {
 
   void inject(WordProcessPresenterLoader loader);
 }

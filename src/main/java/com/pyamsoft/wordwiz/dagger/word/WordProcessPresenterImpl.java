@@ -17,26 +17,22 @@
 package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.ComponentName;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
+import android.support.annotation.Nullable;
+import com.pyamsoft.pydroid.presenter.PresenterBase;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import javax.inject.Inject;
-import rx.Scheduler;
-import rx.Subscription;
-import rx.subscriptions.Subscriptions;
-import timber.log.Timber;
 
-class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.View>
+class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     implements WordProcessPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
-  @NonNull private Subscription activityLaunchTypeSubscription = Subscriptions.empty();
+  @Nullable private AsyncTask activityLaunchTypeSubscription;
 
-  @Inject WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor,
-      @NonNull Scheduler observeScheduler, @NonNull Scheduler subscribeScheduler) {
-    super(observeScheduler, subscribeScheduler);
+  @Inject WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
     this.interactor = interactor;
   }
 
@@ -48,19 +44,11 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
       @NonNull CharSequence text, @NonNull Bundle extras) {
     unsubActivityLaunchType();
-    activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
-        .subscribeOn(getSubscribeScheduler())
-        .observeOn(getObserveScheduler())
-        .subscribe(this::handleProcessType, throwable -> {
-          Timber.e(throwable, "onError handleActivityLaunchType");
-          getView(View::onProcessError);
-        }, () -> {
-          getView(View::onProcessComplete);
-          unsubActivityLaunchType();
-        });
+    activityLaunchTypeSubscription =
+        interactor.getProcessType(componentName, text, extras, this::handleProcessType);
   }
 
-  void handleProcessType(@NonNull WordProcessResult processType) {
+  @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType) {
     final Bundle extras = processType.extras();
     switch (processType.type()) {
       case WORD_COUNT:
@@ -86,9 +74,11 @@ class WordProcessPresenterImpl extends SchedulerPresenter<WordProcessPresenter.V
     }
   }
 
-  void unsubActivityLaunchType() {
-    if (!activityLaunchTypeSubscription.isUnsubscribed()) {
-      activityLaunchTypeSubscription.unsubscribe();
+  @SuppressWarnings("WeakerAccess") void unsubActivityLaunchType() {
+    if (activityLaunchTypeSubscription != null) {
+      if (!activityLaunchTypeSubscription.isCancelled()) {
+        activityLaunchTypeSubscription.cancel(true);
+      }
     }
   }
 }

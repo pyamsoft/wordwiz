@@ -20,13 +20,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.ActionSingle;
+import com.pyamsoft.pydroid.tool.AsyncCallbackTask;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import javax.inject.Inject;
-import rx.Observable;
 import timber.log.Timber;
 
 class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
@@ -46,28 +48,30 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
     LABEL_TYPE_OCCURRENCES = context.getString(R.string.label_occurrence_count);
   }
 
-  @NonNull @Override
-  public Observable<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
-      @NonNull CharSequence text, @NonNull Bundle extras) {
-    return Observable.defer(() -> {
-      WordProcessResult result;
-      try {
-        Timber.d("Attempt to load the label this activity launched with");
-        final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
-        if (activityInfo == null) {
-          Timber.e("Activity info is NULL");
+  @NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
+      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
+      @NonNull ActionSingle<WordProcessResult> onLoaded) {
+    return new AsyncCallbackTask<Void, WordProcessResult>(onLoaded) {
+      @Override protected WordProcessResult doInBackground(Void... params) {
+        WordProcessResult result;
+        try {
+          Timber.d("Attempt to load the label this activity launched with");
+          final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
+          if (activityInfo == null) {
+            Timber.e("Activity info is NULL");
+            result = WordProcessResult.error();
+          } else {
+            final CharSequence label = activityInfo.loadLabel(packageManager);
+            result = getProcessTypeForLabel(label, text);
+          }
+        } catch (PackageManager.NameNotFoundException e) {
+          Timber.e(e, "Name not found ERROR");
           result = WordProcessResult.error();
-        } else {
-          final CharSequence label = activityInfo.loadLabel(packageManager);
-          result = getProcessTypeForLabel(label, text);
         }
-      } catch (PackageManager.NameNotFoundException e) {
-        Timber.e(e, "Name not found ERROR");
-        result = WordProcessResult.error();
-      }
 
-      return Observable.just(result);
-    });
+        return result;
+      }
+    };
   }
 
   @SuppressWarnings("WeakerAccess") @CheckResult @NonNull WordProcessResult getProcessTypeForLabel(
