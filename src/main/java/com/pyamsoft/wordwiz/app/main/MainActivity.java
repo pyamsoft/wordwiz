@@ -16,49 +16,45 @@
 
 package com.pyamsoft.wordwiz.app.main;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.view.MenuItem;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.support.DonationActivity;
 import com.pyamsoft.pydroid.support.RatingDialog;
 import com.pyamsoft.pydroid.util.StringUtil;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
+import com.pyamsoft.wordwiz.databinding.ActivityMainBinding;
 
 public class MainActivity extends DonationActivity implements RatingDialog.ChangeLogProvider {
 
-  @BindView(R.id.toolbar) Toolbar toolbar;
-  private Unbinder unbinder;
+  private ActivityMainBinding binding;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.Theme_WordWiz_Light);
     super.onCreate(savedInstanceState);
-    unbinder = ButterKnife.bind(this);
 
     setupToolbarAsActionBar();
     showPreferenceFragment();
   }
 
   @Override protected int bindActivityToView() {
-    setContentView(R.layout.activity_main);
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
     return R.id.ad_view;
   }
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    unbinder.unbind();
+    binding.unbind();
   }
 
   private void setupToolbarAsActionBar() {
-    setSupportActionBar(toolbar);
-    toolbar.setTitle(getString(R.string.app_name));
+    setSupportActionBar(binding.toolbar);
+    binding.toolbar.setTitle(getString(R.string.app_name));
   }
 
   private void showPreferenceFragment() {
@@ -102,12 +98,10 @@ public class MainActivity extends DonationActivity implements RatingDialog.Chang
   @NonNull @Override public Spannable getChangeLogText() {
     // The changelog text
     final String title = "What's New in Version " + BuildConfig.VERSION_NAME;
-    final String line1 =
-        "CHANGE: Removed Advertisements and Analytics tracking";
+    final String line1 = "CHANGE: Removed Advertisements and Analytics tracking";
 
     // Turn it into a spannable
-    final Spannable spannable =
-        StringUtil.createLineBreakBuilder(title, line1);
+    final Spannable spannable = StringUtil.createLineBreakBuilder(title, line1);
 
     int start = 0;
     int end = title.length();
