@@ -17,19 +17,20 @@
 package com.pyamsoft.wordwiz.dagger.word;
 
 import android.content.ComponentName;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
+import com.pyamsoft.pydroid.tool.Offloader;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
+import timber.log.Timber;
 
 class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     implements WordProcessPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
-  @Nullable private AsyncTask activityLaunchTypeSubscription;
+  @NonNull private Offloader<WordProcessResult> activityLaunchTypeSubscription =
+      new Offloader.Empty<>();
 
   WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
     this.interactor = interactor;
@@ -43,8 +44,10 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
       @NonNull CharSequence text, @NonNull Bundle extras) {
     unsubActivityLaunchType();
-    activityLaunchTypeSubscription =
-        interactor.getProcessType(componentName, text, extras, this::handleProcessType);
+    activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
+        .result(this::handleProcessType)
+        .error(throwable -> Timber.e(throwable, "onError handleActivityLaunchType"))
+        .execute();
   }
 
   @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType) {
@@ -73,11 +76,9 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     }
   }
 
-  @SuppressWarnings("WeakerAccess") void unsubActivityLaunchType() {
-    if (activityLaunchTypeSubscription != null) {
-      if (!activityLaunchTypeSubscription.isCancelled()) {
-        activityLaunchTypeSubscription.cancel(true);
-      }
+  private void unsubActivityLaunchType() {
+    if (!activityLaunchTypeSubscription.isCancelled()) {
+      activityLaunchTypeSubscription.cancel();
     }
   }
 }
