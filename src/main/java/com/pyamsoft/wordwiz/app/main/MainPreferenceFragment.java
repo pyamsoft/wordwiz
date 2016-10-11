@@ -73,7 +73,7 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
     final Preference checkVersion = findPreference(getString(R.string.check_version_key));
     checkVersion.setOnPreferenceClickListener(preference -> checkForUpdate());
 
-    //final Preference upgradeInfo = findPreference(getString(R.string.upgrade_info_key));
-    //upgradeInfo.setOnPreferenceClickListener(preference -> showChangelog());
+    final Preference upgradeInfo = findPreference(getString(R.string.upgrade_info_key));
+    upgradeInfo.setOnPreferenceClickListener(preference -> showChangelog());
   }
 }
