@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.tool.Offloader;
-import com.pyamsoft.pydroid.tool.OffloaderAsyncTask;
+import com.pyamsoft.pydroid.tool.AsyncOffloader;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import timber.log.Timber;
@@ -54,7 +54,7 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
   @NonNull @Override
   public Offloader<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
       @NonNull CharSequence text, @NonNull Bundle extras) {
-    return new OffloaderAsyncTask<WordProcessResult>().background(() -> {
+    return new AsyncOffloader<WordProcessResult>().background(() -> {
       WordProcessResult result;
       try {
         Timber.d("Attempt to load the label this activity launched with");
