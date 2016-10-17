@@ -54,7 +54,7 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
   @NonNull @Override
   public Offloader<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
       @NonNull CharSequence text, @NonNull Bundle extras) {
-    return new AsyncOffloader<WordProcessResult>().background(() -> {
+    return new AsyncOffloader<WordProcessResult>().onProcess(() -> {
       WordProcessResult result;
       try {
         Timber.d("Attempt to load the label this activity launched with");

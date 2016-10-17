@@ -20,7 +20,7 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
-import com.pyamsoft.pydroid.tool.Offloader;
+import com.pyamsoft.pydroid.tool.ExecutedOffloader;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import timber.log.Timber;
@@ -29,8 +29,7 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     implements WordProcessPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
-  @NonNull private Offloader<WordProcessResult> activityLaunchTypeSubscription =
-      new Offloader.Empty<>();
+  @NonNull private ExecutedOffloader activityLaunchTypeSubscription = new ExecutedOffloader.Empty();
 
   WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
     this.interactor = interactor;
@@ -45,8 +44,8 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
       @NonNull CharSequence text, @NonNull Bundle extras) {
     unsubActivityLaunchType();
     activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
-        .result(this::handleProcessType)
-        .error(throwable -> Timber.e(throwable, "onError handleActivityLaunchType"))
+        .onError(throwable -> Timber.e(throwable, "onError handleActivityLaunchType"))
+        .onResult(this::handleProcessType)
         .execute();
   }
 
