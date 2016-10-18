@@ -27,14 +27,12 @@ abstract class WordProcessCommonInteractorImpl {
 
   @NonNull private static final String SPLIT_BY_WHITESPACE = "\\s+";
 
-  @NonNull @CheckResult String[] tokenizeString(@NonNull CharSequence text) {
+  @NonNull @CheckResult private String[] tokenizeString(@NonNull CharSequence text) {
     Timber.d("Convert text to a string");
     final String string = text.toString();
 
     Timber.d("Tokenize string by spaces");
-    final String[] tokens = string.split(SPLIT_BY_WHITESPACE);
-
-    return tokens;
+    return string.split(SPLIT_BY_WHITESPACE);
   }
 
   @CheckResult int getWordCount(@NonNull CharSequence text) {
