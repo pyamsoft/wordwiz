@@ -97,7 +97,7 @@ dependencies {
   compile "com.google.firebase:firebase-crash:$firebase"
 
   // Needs to compile support annotations into actual project
-  compile "com.android.support:support-annotations:$supportLib"
+  annotationProcessor "com.android.support:support-annotations:$supportLib"
 
   // Auto value
   provided "com.google.auto.value:auto-value:$autoValue"
