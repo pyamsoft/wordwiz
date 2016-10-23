@@ -27,13 +27,13 @@ apply plugin: "net.ltgt.errorprone"
 apply plugin: "me.tatarka.retrolambda"
 
 android {
-  compileSdkVersion 24
+  compileSdkVersion 25
   buildToolsVersion "$buildTools"
 
   defaultConfig {
     applicationId "com.pyamsoft.wordwiz"
     minSdkVersion 23
-    targetSdkVersion 24
+    targetSdkVersion 25
     versionCode 16
     versionName "1.1.10"
 
@@ -118,7 +118,7 @@ dependencies {
   // Mockito for unit tests
   testCompile "org.mockito:mockito-core:$mockito"
 
-  // PYDroid 4.7.2
+  // PYDroid 4.8.0
   debugCompile project(path: ":PYDroid", configuration: "debug")
   releaseCompile project(path: ":PYDroid", configuration: "release")
 }
