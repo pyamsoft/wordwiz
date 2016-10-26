@@ -16,18 +16,19 @@
 
 package com.pyamsoft.wordwiz.app.word;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.app.PersistLoader;
-import com.pyamsoft.wordwiz.WordWiz;
+import com.pyamsoft.wordwiz.WordWizSingleInitProvider;
 
-public class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
+class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
 
-  WordProcessPresenterLoader(@NonNull Context context) {
-    super(context);
+  WordProcessPresenterLoader() {
   }
 
   @NonNull @Override public WordProcessPresenter loadPersistent() {
-    return WordWiz.get(getContext()).provideComponent().provideWordProcessModule().getPresenter();
+    return WordWizSingleInitProvider.get()
+        .provideComponent()
+        .provideWordProcessModule()
+        .getPresenter();
   }
 }
