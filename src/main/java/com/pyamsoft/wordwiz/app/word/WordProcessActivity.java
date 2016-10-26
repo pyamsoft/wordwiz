@@ -21,8 +21,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
-import com.pyamsoft.pydroid.app.activity.ActivityBase;
 import com.pyamsoft.pydroid.app.PersistLoader;
+import com.pyamsoft.pydroid.app.activity.ActivityBase;
 import com.pyamsoft.pydroid.util.PersistentCache;
 import java.util.Locale;
 import timber.log.Timber;
@@ -41,7 +41,7 @@ public abstract class WordProcessActivity extends ActivityBase
         .load(KEY_PRESENTER, savedInstanceState,
             new PersistLoader.Callback<WordProcessPresenter>() {
               @NonNull @Override public PersistLoader<WordProcessPresenter> createLoader() {
-                return new WordProcessPresenterLoader(getApplicationContext());
+                return new WordProcessPresenterLoader();
               }
 
               @Override public void onPersistentLoaded(@NonNull WordProcessPresenter persist) {
