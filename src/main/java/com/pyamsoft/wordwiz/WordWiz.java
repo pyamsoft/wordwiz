@@ -16,44 +16,8 @@
 
 package com.pyamsoft.wordwiz;
 
-import android.content.Context;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import com.pyamsoft.pydroid.IPYDroidApp;
 import com.pyamsoft.pydroid.PYDroidApplication;
-import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWiz extends PYDroidApplication implements IPYDroidApp<WordWizModule> {
+public class WordWiz extends PYDroidApplication {
 
-  private WordWizModule module;
-
-  @NonNull @CheckResult public static IPYDroidApp<WordWizModule> get(@NonNull Context context) {
-    final Context appContext = context.getApplicationContext();
-    if (appContext instanceof WordWiz) {
-      return WordWiz.class.cast(appContext);
-    } else {
-      throw new ClassCastException("Cannot cast Application Context to IWordWiz");
-    }
-  }
-
-  @Override protected void createApplicationComponents() {
-    super.createApplicationComponents();
-    module = new WordWizModule(this);
-  }
-
-  @NonNull @Override public WordWizModule provideComponent() {
-    if (module == null) {
-      throw new NullPointerException("WordWiz module is NULL");
-    }
-    return module;
-  }
-
-  @Nullable @Override public String provideGoogleOpenSourceLicenses() {
-    return null;
-  }
-
-  @Override public void insertCustomLicensesIntoMap() {
-
-  }
 }

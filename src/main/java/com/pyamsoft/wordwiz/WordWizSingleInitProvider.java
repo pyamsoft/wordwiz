@@ -16,7 +16,54 @@
 
 package com.pyamsoft.wordwiz;
 
+import android.content.Context;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.pyamsoft.pydroid.IPYDroidApp;
 import com.pyamsoft.pydroid.SingleInitContentProvider;
+import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWizSingleInitProvider extends SingleInitContentProvider {
+public class WordWizSingleInitProvider extends SingleInitContentProvider
+    implements IPYDroidApp<WordWizModule> {
+
+  @Nullable private static volatile WordWizSingleInitProvider instance = null;
+  @Nullable private WordWizModule module;
+
+  @NonNull @CheckResult public static IPYDroidApp<WordWizModule> get() {
+    if (instance == null) {
+      throw new NullPointerException("Instance is NULL");
+    }
+
+    //noinspection ConstantConditions
+    return instance;
+  }
+
+  private static void setInstance(@NonNull WordWizSingleInitProvider instance) {
+    WordWizSingleInitProvider.instance = instance;
+  }
+
+  @Override protected void onInstanceCreated(@NonNull Context context) {
+    setInstance(this);
+  }
+
+  @Override protected void onFirstCreate(@NonNull Context context) {
+    super.onFirstCreate(context);
+    module = new WordWizModule(context);
+  }
+
+  @Nullable @Override public String provideGoogleOpenSourceLicenses(@NonNull Context context) {
+    return null;
+  }
+
+  @Override public void insertCustomLicensesIntoMap() {
+
+  }
+
+  @NonNull @Override public WordWizModule provideComponent() {
+    if (module == null) {
+      throw new NullPointerException("WordWiz module is NULL");
+    }
+    return module;
+  }
 }
