@@ -30,7 +30,8 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     implements WordProcessPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
-  @NonNull private ExecutedOffloader activityLaunchTypeSubscription = new ExecutedOffloader.Empty();
+  @SuppressWarnings("WeakerAccess") @NonNull ExecutedOffloader activityLaunchTypeSubscription =
+      new ExecutedOffloader.Empty();
 
   WordProcessPresenterImpl(@NonNull WordProcessInteractor interactor) {
     this.interactor = interactor;
@@ -47,6 +48,7 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
     activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
         .onError(throwable -> Timber.e(throwable, "onError handleActivityLaunchType"))
         .onResult(this::handleProcessType)
+        .onFinish(() -> OffloaderHelper.cancel(activityLaunchTypeSubscription))
         .execute();
   }
 
