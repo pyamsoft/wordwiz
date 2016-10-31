@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
 import com.pyamsoft.pydroid.tool.ExecutedOffloader;
+import com.pyamsoft.pydroid.tool.OffloaderHelper;
 import com.pyamsoft.wordwiz.app.word.WordProcessPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import timber.log.Timber;
@@ -37,12 +38,12 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
 
   @Override protected void onUnbind() {
     super.onUnbind();
-    unsubActivityLaunchType();
+    OffloaderHelper.cancel(activityLaunchTypeSubscription);
   }
 
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
       @NonNull CharSequence text, @NonNull Bundle extras) {
-    unsubActivityLaunchType();
+    OffloaderHelper.cancel(activityLaunchTypeSubscription);
     activityLaunchTypeSubscription = interactor.getProcessType(componentName, text, extras)
         .onError(throwable -> Timber.e(throwable, "onError handleActivityLaunchType"))
         .onResult(this::handleProcessType)
@@ -72,12 +73,6 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
         break;
       case ERROR:
         getView(View::onProcessError);
-    }
-  }
-
-  private void unsubActivityLaunchType() {
-    if (!activityLaunchTypeSubscription.isCancelled()) {
-      activityLaunchTypeSubscription.cancel();
     }
   }
 }
