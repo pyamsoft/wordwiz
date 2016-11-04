@@ -16,40 +16,38 @@
 
 package com.pyamsoft.wordwiz;
 
-import android.content.Context;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.IPYDroidApp;
-import com.pyamsoft.pydroid.SingleInitContentProvider;
 import com.pyamsoft.wordwiz.dagger.WordWizModule;
 
-public class WordWizSingleInitProvider extends SingleInitContentProvider
-    implements IPYDroidApp<WordWizModule> {
+public class Injector implements IPYDroidApp<WordWizModule> {
 
-  @Nullable private WordWizModule module;
+  @Nullable private static volatile Injector instance = null;
+  @NonNull private final WordWizModule component;
 
-  @Override protected void onInstanceCreated(@NonNull Context context) {
-    Injector.set(module);
+  private Injector(@NonNull WordWizModule component) {
+    this.component = component;
   }
 
-  @Override protected void onFirstCreate(@NonNull Context context) {
-    super.onFirstCreate(context);
-    module = new WordWizModule(context);
+  static void set(@Nullable WordWizModule component) {
+    if (component == null) {
+      throw new NullPointerException("Cannot set a NULL component");
+    }
+    instance = new Injector(component);
   }
 
-  @Nullable @Override public String provideGoogleOpenSourceLicenses(@NonNull Context context) {
-    return null;
-  }
+  @NonNull @CheckResult public static Injector get() {
+    if (instance == null) {
+      throw new NullPointerException("Instance is NULL");
+    }
 
-  @Override public void insertCustomLicensesIntoMap() {
-
+    //noinspection ConstantConditions
+    return instance;
   }
 
   @NonNull @Override public WordWizModule provideComponent() {
-    if (module == null) {
-      throw new NullPointerException("WordWiz module is NULL");
-    }
-    return module;
+    return component;
   }
 }
