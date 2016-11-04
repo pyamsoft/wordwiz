@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.app.word;
 
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.app.PersistLoader;
-import com.pyamsoft.wordwiz.WordWizSingleInitProvider;
+import com.pyamsoft.wordwiz.Injector;
 
 class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
 
@@ -26,7 +26,7 @@ class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
   }
 
   @NonNull @Override public WordProcessPresenter loadPersistent() {
-    return WordWizSingleInitProvider.get()
+    return Injector.get()
         .provideComponent()
         .provideWordProcessModule()
         .getPresenter();
