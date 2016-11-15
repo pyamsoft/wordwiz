@@ -20,10 +20,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
 import android.view.MenuItem;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.support.RatingActivity;
 import com.pyamsoft.pydroid.support.RatingDialog;
+import com.pyamsoft.pydroid.util.AppUtil;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding;
@@ -52,7 +54,8 @@ public class MainActivity extends RatingActivity {
 
   private void setupToolbarAsActionBar() {
     setSupportActionBar(binding.toolbar);
-    binding.toolbar.setTitle(getString(R.string.app_name));
+    binding.toolbar.setTitle(R.string.app_name);
+    ViewCompat.setElevation(binding.toolbar, AppUtil.convertToDP(this, 4));
   }
 
   private void showPreferenceFragment() {
