@@ -34,8 +34,8 @@ android {
     applicationId "com.pyamsoft.wordwiz"
     minSdkVersion 23
     targetSdkVersion 25
-    versionCode 20
-    versionName "1.2.0"
+    versionCode 23
+    versionName "1.2.3"
 
     // For vector drawables
     vectorDrawables.useSupportLibrary = true
