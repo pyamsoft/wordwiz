@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.view.MenuItem;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
+import com.pyamsoft.pydroid.sec.TamperActivity;
 import com.pyamsoft.pydroid.support.RatingActivity;
 import com.pyamsoft.pydroid.support.RatingDialog;
 import com.pyamsoft.pydroid.util.AppUtil;
@@ -30,7 +31,7 @@ import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding;
 
-public class MainActivity extends RatingActivity {
+public class MainActivity extends TamperActivity {
 
   private ActivityMainBinding binding;
 
@@ -108,6 +109,10 @@ public class MainActivity extends RatingActivity {
   @Override protected void onPostResume() {
     super.onPostResume();
     RatingDialog.showRatingDialog(this, this);
+  }
+
+  @NonNull @Override protected String getSafePackageName() {
+    return "com.pyamsoft.wordwiz";
   }
 
   @Override public int getApplicationIcon() {
