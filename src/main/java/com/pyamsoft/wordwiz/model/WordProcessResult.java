@@ -31,9 +31,9 @@ import com.google.auto.value.AutoValue;
     return create(type, wordCount, null);
   }
 
-  @CheckResult @NonNull
+  @SuppressWarnings("WeakerAccess") @CheckResult @NonNull
   public static WordProcessResult create(@NonNull ProcessType type, int wordCount,
-      @Nullable Bundle extras) {
+      @SuppressWarnings("SameParameterValue") @Nullable Bundle extras) {
     return new AutoValue_WordProcessResult(type, wordCount, extras);
   }
 
