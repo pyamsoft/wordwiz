@@ -31,7 +31,7 @@ public abstract class WordProcessActivity extends ActivityBase
     implements WordProcessPresenter.View {
 
   @NonNull private static final String KEY_PRESENTER = "key_word_process_presenter";
-  WordProcessPresenter presenter;
+  @SuppressWarnings("WeakerAccess") WordProcessPresenter presenter;
   private long loadedKey;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
