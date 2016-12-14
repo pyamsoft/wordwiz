@@ -26,9 +26,6 @@ class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
   }
 
   @NonNull @Override public WordProcessPresenter loadPersistent() {
-    return Injector.get()
-        .provideComponent()
-        .provideWordProcessModule()
-        .getPresenter();
+    return Injector.get().provideComponent().provideWordProcessModule().getPresenter();
   }
 }
