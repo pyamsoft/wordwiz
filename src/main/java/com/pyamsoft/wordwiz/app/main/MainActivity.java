@@ -24,7 +24,7 @@ import android.support.v4.view.ViewCompat;
 import android.view.MenuItem;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.sec.TamperActivity;
-import com.pyamsoft.pydroid.support.RatingDialog;
+import com.pyamsoft.pydroid.rating.RatingDialog;
 import com.pyamsoft.pydroid.util.AppUtil;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
