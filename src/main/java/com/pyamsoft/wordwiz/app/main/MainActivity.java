@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.view.MenuItem;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.sec.TamperActivity;
@@ -37,6 +38,7 @@ public class MainActivity extends TamperActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.Theme_WordWiz_Light);
     super.onCreate(savedInstanceState);
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     setupToolbarAsActionBar();
     showPreferenceFragment();

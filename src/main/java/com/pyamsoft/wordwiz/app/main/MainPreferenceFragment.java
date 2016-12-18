@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz.app.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.preference.Preference;
 import android.support.v7.preference.SwitchPreferenceCompat;
 import android.view.View;
 import com.pyamsoft.pydroid.about.AboutLibrariesFragment;
@@ -36,8 +35,16 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
     return AboutLibrariesFragment.BackStackState.LAST;
   }
 
-  @Override public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-    addPreferencesFromResource(R.xml.preferences);
+  @Override protected int getRootViewContainer() {
+    return R.id.main_view_container;
+  }
+
+  @NonNull @Override protected String getApplicationName() {
+    return getString(R.string.app_name);
+  }
+
+  @Override protected int getPreferenceXmlResId() {
+    return R.xml.preferences;
   }
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -60,20 +67,9 @@ public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment 
       LetterCountActivity.enable(getContext(), !enabled);
       return true;
     });
+  }
 
-    final SwitchPreferenceCompat showAds =
-        (SwitchPreferenceCompat) findPreference(getString(R.string.adview_key));
-    showAds.setOnPreferenceChangeListener((preference, newValue) -> toggleAdVisibility(newValue));
-
-    final Preference showAboutLicenses = findPreference(getString(R.string.about_license_key));
-    showAboutLicenses.setOnPreferenceClickListener(
-        preference -> showAboutLicensesFragment(R.id.main_view_container,
-            AboutLibrariesFragment.Styling.LIGHT));
-
-    final Preference checkVersion = findPreference(getString(R.string.check_version_key));
-    checkVersion.setOnPreferenceClickListener(preference -> checkForUpdate());
-
-    final Preference upgradeInfo = findPreference(getString(R.string.upgrade_info_key));
-    upgradeInfo.setOnPreferenceClickListener(preference -> showChangelog());
+  @Override protected boolean hideClearAll() {
+    return true;
   }
 }
