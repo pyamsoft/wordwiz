@@ -75,7 +75,7 @@ public abstract class WordProcessActivity extends ActivityBase
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
-    PersistentCache.get().saveKey(outState, KEY_PRESENTER, loadedKey);
+    PersistentCache.get().saveKey(outState, KEY_PRESENTER, loadedKey, WordProcessPresenter.class);
     super.onSaveInstanceState(outState);
   }
 
