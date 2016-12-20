@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':wordwiz'
+include ':wordwiz', ':wordwiz-presenter', ':wordwiz-model'

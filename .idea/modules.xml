@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WordWiz.iml" filepath="$PROJECT_DIR$/WordWiz.iml" />
       <module fileurl="file://$PROJECT_DIR$/wordwiz/wordwiz.iml" filepath="$PROJECT_DIR$/wordwiz/wordwiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wordwiz-model/wordwiz-model.iml" filepath="$PROJECT_DIR$/wordwiz-model/wordwiz-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wordwiz-presenter/wordwiz-presenter.iml" filepath="$PROJECT_DIR$/wordwiz-presenter/wordwiz-presenter.iml" />
     </modules>
   </component>
 </project>

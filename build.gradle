@@ -35,6 +35,9 @@ buildscript {
     buildTools = "25.0.2"
     supportLib = "25.1.0"
     firebase = "10.0.1"
+    autoValue = "1.3"
+    pydroid = "5.1.0"
+    leakCanary = "1.4-beta2"
   }
 
   dependencies {

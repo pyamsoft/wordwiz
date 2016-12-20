@@ -82,11 +82,6 @@ android {
   }
 }
 
-ext {
-  autoValue = "1.3"
-  leakCanary = "1.4-beta2"
-}
-
 dependencies {
   compile fileTree(dir: "libs", include: ["*.jar"])
 
@@ -100,14 +95,12 @@ dependencies {
   // Firebase Crash
   compile "com.google.firebase:firebase-crash:$firebase"
 
-  // Auto value
-  provided "com.google.auto.value:auto-value:$autoValue"
-  annotationProcessor "com.google.auto.value:auto-value:$autoValue"
-
   // PYDroid
-  compile("com.github.pyamsoft.pydroid:pydroidui:5.1.0@aar") {
+  compile("com.github.pyamsoft.pydroid:pydroidui:$pydroid@aar") {
     transitive = true
   }
+
+  compile project(":wordwiz-presenter")
 }
 
 // AdView
