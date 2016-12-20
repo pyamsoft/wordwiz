@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.app.main;
+package com.pyamsoft.wordwiz.main;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

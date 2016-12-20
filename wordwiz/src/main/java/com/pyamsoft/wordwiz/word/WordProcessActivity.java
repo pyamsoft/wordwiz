@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.app.word;
+package com.pyamsoft.wordwiz.word;
 
 import android.content.Intent;
 import android.os.Bundle;
