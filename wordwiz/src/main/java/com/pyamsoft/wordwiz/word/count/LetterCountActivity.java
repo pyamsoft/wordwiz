@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.app.word.count;
+package com.pyamsoft.wordwiz.word.count;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import com.pyamsoft.wordwiz.app.word.WordProcessActivity;
+import com.pyamsoft.wordwiz.word.WordProcessActivity;
 import timber.log.Timber;
 
-public class WordCountActivity extends WordProcessActivity {
+public class LetterCountActivity extends WordProcessActivity {
 
-  public WordCountActivity() {
+  public LetterCountActivity() {
   }
 
   public static void enable(@NonNull Context context, boolean enable) {
-    Timber.d("set WordCountActivity enabled state: %s", enable);
+    Timber.d("set LetterCountActivity enabled state: %s", enable);
     final ComponentName cmp =
-        new ComponentName(context.getApplicationContext(), WordCountActivity.class);
+        new ComponentName(context.getApplicationContext(), LetterCountActivity.class);
     final int componentState = enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
     context.getApplicationContext()
@@ -41,7 +41,7 @@ public class WordCountActivity extends WordProcessActivity {
 
   public static boolean isEnabled(final Context context) {
     final ComponentName cmp =
-        new ComponentName(context.getApplicationContext(), WordCountActivity.class);
+        new ComponentName(context.getApplicationContext(), LetterCountActivity.class);
     final int componentState =
         context.getApplicationContext().getPackageManager().getComponentEnabledSetting(cmp);
     return componentState == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;

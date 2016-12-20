@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.app.main;
+package com.pyamsoft.wordwiz.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,8 +25,8 @@ import com.pyamsoft.pydroidui.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroidui.app.fragment.ActionBarSettingsPreferenceFragment;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.WordWiz;
-import com.pyamsoft.wordwiz.app.word.count.LetterCountActivity;
-import com.pyamsoft.wordwiz.app.word.count.WordCountActivity;
+import com.pyamsoft.wordwiz.word.count.LetterCountActivity;
+import com.pyamsoft.wordwiz.word.count.WordCountActivity;
 
 public class MainPreferenceFragment extends ActionBarSettingsPreferenceFragment {
 
