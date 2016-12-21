@@ -32,7 +32,7 @@ public class WordWiz extends PYDroidApplication {
   @CheckResult @NonNull public static RefWatcher getRefWatcher(@NonNull Fragment fragment) {
     final Application application = fragment.getActivity().getApplication();
     if (application instanceof WordWiz) {
-      return ((WordWiz) application).getRefWatcher();
+      return ((WordWiz) application).getWatcher();
     } else {
       throw new IllegalStateException("Application is not WordWiz");
     }
@@ -48,7 +48,7 @@ public class WordWiz extends PYDroidApplication {
     refWatcher = RefWatcher.DISABLED;
   }
 
-  @NonNull @CheckResult RefWatcher getRefWatcher() {
+  @NonNull @CheckResult private RefWatcher getWatcher() {
     if (refWatcher == null) {
       throw new IllegalStateException("RefWatcher is NULL");
     }
