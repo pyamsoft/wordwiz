@@ -25,6 +25,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.tool.AsyncOffloader;
 import com.pyamsoft.pydroid.tool.Offloader;
+import com.pyamsoft.wordwizmodel.ProcessType;
 import com.pyamsoft.wordwizmodel.WordProcessResult;
 import com.pyamsoft.wordwizpresenter.R;
 import timber.log.Timber;
@@ -80,9 +81,9 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
     final WordProcessResult result;
     if (label.equals(LABEL_TYPE_WORD_COUNT)) {
       result =
-          WordProcessResult.create(WordProcessResult.ProcessType.WORD_COUNT, getWordCount(text));
+          WordProcessResult.create(ProcessType.WORD_COUNT, getWordCount(text));
     } else if (label.equals(LABEL_TYPE_LETTER_COUNT)) {
-      result = WordProcessResult.create(WordProcessResult.ProcessType.LETTER_COUNT,
+      result = WordProcessResult.create(ProcessType.LETTER_COUNT,
           getLetterCount(text));
     } else if (label.equals(LABEL_TYPE_OCCURRENCES)) {
       throw new RuntimeException("Not ready yet");

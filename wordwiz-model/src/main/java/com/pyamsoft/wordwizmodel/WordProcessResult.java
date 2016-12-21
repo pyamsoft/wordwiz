@@ -46,11 +46,4 @@ import com.google.auto.value.AutoValue;
   public abstract int count();
 
   @Nullable public abstract Bundle extras();
-
-  public enum ProcessType {
-    ERROR,
-    WORD_COUNT,
-    LETTER_COUNT,
-    OCCURRENCES,
-  }
 }
