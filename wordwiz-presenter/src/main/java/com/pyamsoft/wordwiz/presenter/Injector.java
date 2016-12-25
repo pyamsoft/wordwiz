@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwizpresenter;
+package com.pyamsoft.wordwiz.presenter;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;

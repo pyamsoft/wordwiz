@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwizpresenter.word;
+package com.pyamsoft.wordwiz.presenter.word;
 
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.app.PersistLoader;
-import com.pyamsoft.wordwizpresenter.Injector;
+import com.pyamsoft.wordwiz.presenter.Injector;
 
 public class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
 
