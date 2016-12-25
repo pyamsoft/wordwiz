@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwizpresenter.word;
+package com.pyamsoft.wordwiz.presenter.word;
 
-import android.content.ComponentName;
-import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.tool.Offloader;
-import com.pyamsoft.wordwiz.model.WordProcessResult;
+import com.pyamsoft.wordwiz.presenter.WordWizModule;
 
-interface WordProcessInteractor {
+public class WordProcessModule {
 
-  @CheckResult @NonNull Offloader<WordProcessResult> getProcessType(
-      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras);
+  @NonNull private final WordProcessInteractor interactor;
+  @NonNull private final WordProcessPresenter presenter;
+
+  public WordProcessModule(@NonNull WordWizModule.Provider wordWizModule) {
+    interactor = new WordProcessInteractorImpl(wordWizModule.provideContext());
+    presenter = new WordProcessPresenterImpl(interactor);
+  }
+
+  @NonNull @CheckResult public WordProcessPresenter getPresenter() {
+    return presenter;
+  }
 }

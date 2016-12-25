@@ -22,8 +22,8 @@ import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.BuildConfigChecker;
 import com.pyamsoft.pydroid.IPYDroidApp;
 import com.pyamsoft.pydroid.SingleInitContentProvider;
-import com.pyamsoft.wordwizpresenter.Injector;
-import com.pyamsoft.wordwizpresenter.WordWizModule;
+import com.pyamsoft.wordwiz.presenter.Injector;
+import com.pyamsoft.wordwiz.presenter.WordWizModule;
 
 public class WordWizSingleInitProvider extends SingleInitContentProvider
     implements IPYDroidApp<WordWizModule> {
