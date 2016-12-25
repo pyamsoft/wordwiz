@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwizmodel;
+package com.pyamsoft.wordwiz.model;
 
 public enum ProcessType {
   ERROR,

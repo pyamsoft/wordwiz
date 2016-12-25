@@ -25,8 +25,8 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.tool.AsyncOffloader;
 import com.pyamsoft.pydroid.tool.Offloader;
-import com.pyamsoft.wordwizmodel.ProcessType;
-import com.pyamsoft.wordwizmodel.WordProcessResult;
+import com.pyamsoft.wordwiz.model.ProcessType;
+import com.pyamsoft.wordwiz.model.WordProcessResult;
 import com.pyamsoft.wordwizpresenter.R;
 import timber.log.Timber;
 

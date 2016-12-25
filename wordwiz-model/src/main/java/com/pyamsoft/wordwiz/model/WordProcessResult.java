@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwizmodel;
+package com.pyamsoft.wordwiz.model;
 
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
