@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
 import com.pyamsoft.pydroid.tool.ExecutedOffloader;
 import com.pyamsoft.pydroid.tool.OffloaderHelper;
-import com.pyamsoft.wordwizmodel.WordProcessResult;
+import com.pyamsoft.wordwiz.model.WordProcessResult;
 import timber.log.Timber;
 
 class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
