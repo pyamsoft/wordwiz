@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.BuildConfigChecker;
 import com.pyamsoft.pydroid.IPYDroidApp;
 import com.pyamsoft.pydroid.SingleInitContentProvider;
+import com.pyamsoft.pydroid.ui.UiLicenses;
 import com.pyamsoft.wordwiz.presenter.Injector;
 import com.pyamsoft.wordwiz.presenter.WordWizModule;
 
@@ -52,7 +53,7 @@ public class WordWizSingleInitProvider extends SingleInitContentProvider
   }
 
   @Override public void insertCustomLicensesIntoMap() {
-
+    UiLicenses.addLicenses();
   }
 
   @NonNull @Override public WordWizModule provideComponent() {

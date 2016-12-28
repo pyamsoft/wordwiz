@@ -104,8 +104,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.pyamsoft.pydroid/pydroid-ui/5.4.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.pyamsoft.pydroid/pydroid/5.4.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.pyamsoft.pydroid/pydroid-ui/5.4.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.github.pyamsoft.pydroid/pydroid/5.4.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/10.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/10.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/10.0.1/jars" />
@@ -139,10 +139,10 @@
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
     <orderEntry type="library" exported="" name="juniversalchardet-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="firebase-core-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="pydroid-ui-5.4.0" level="project" />
     <orderEntry type="library" exported="" name="adapters-1.2.1" level="project" />
+    <orderEntry type="library" exported="" name="pydroid-ui-5.4.1" level="project" />
+    <orderEntry type="library" exported="" name="pydroid-5.4.1" level="project" />
     <orderEntry type="library" exported="" name="checkout-0.9.1" level="project" />
-    <orderEntry type="library" exported="" name="pydroid-5.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-crash-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-25.1.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="leakcanary-android-no-op-1.4-beta2" level="project" />
