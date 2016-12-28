@@ -40,7 +40,28 @@
     <favorites_list name="WordWiz" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WordWizSingleInitProvider.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWizSingleInitProvider.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="462">
+              <caret line="55" column="28" selection-start-line="55" selection-start-column="28" selection-end-line="55" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -210,6 +231,11 @@
                 <option name="description" value="Prepare com.android.support:animated-vector-drawable:25.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2510Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid-ui:5.4.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGithubPyamsoftPydroidPydroidUi541Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -389,11 +415,6 @@
                 <option name="description" value="Prepare com.android.support:appcompat-v7:25.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComAndroidSupportAppcompatV72510Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:support-core-ui:25.1.0" />
@@ -828,6 +849,11 @@
                 <option name="name" value="generateDebugAndroidTestResValues" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid541Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Prepare WordWiz:wordwiz-presenter:unspecified" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareWordWizWordwizPresenterUnspecifiedLibrary" />
@@ -917,11 +943,6 @@
                 <option name="description" value="Prepare com.jakewharton.timber:timber:4.4.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareComJakewhartonTimberTimber440Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid-ui:5.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareComGithubPyamsoftPydroidPydroidUi540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project and all projects that depend on it." />
@@ -1142,6 +1163,11 @@
                 <option name="name" value="prepareComAndroidSupportAnimatedVectorDrawable2510Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid-ui:5.4.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
+                <option name="name" value="prepareComGithubPyamsoftPydroidPydroidUi541Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
                 <option name="name" value="processDebugAndroidTestManifest" />
               </ExternalTaskPojo>
@@ -1302,11 +1328,6 @@
                 <option name="description" value="Prepare com.android.support:appcompat-v7:25.1.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
                 <option name="name" value="prepareComAndroidSupportAppcompatV72510Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
-                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:support-core-ui:25.1.0" />
@@ -1688,6 +1709,11 @@
                 <option name="name" value="generateDebugAndroidTestResValues" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
+                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid541Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Prepare WordWiz:wordwiz-presenter:unspecified" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
                 <option name="name" value="prepareWordWizWordwizPresenterUnspecifiedLibrary" />
@@ -1777,11 +1803,6 @@
                 <option name="description" value="Prepare com.jakewharton.timber:timber:4.4.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
                 <option name="name" value="prepareComJakewhartonTimberTimber440Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid-ui:5.4.0" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz" />
-                <option name="name" value="prepareComGithubPyamsoftPydroidPydroidUi540Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project and all projects that depend on it." />
@@ -2969,9 +2990,9 @@
                 <option name="name" value="prepareComAndroidSupportAppcompatV72510Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.0" />
+                <option name="description" value="Prepare com.github.pyamsoft.pydroid:pydroid:5.4.1" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/wordwiz-presenter" />
-                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid540Library" />
+                <option name="name" value="prepareComGithubPyamsoftPydroidPydroid541Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Prepare com.android.support:support-core-ui:25.1.0" />
@@ -3308,7 +3329,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="7412296717260" />
+        <entry key="$PROJECT_DIR$" value="7412301775153" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -3965,7 +3986,6 @@
         <option value="$PROJECT_DIR$/wordwiz/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/wordwiz-presenter/src/main/res/values/preferences.xml" />
         <option value="$PROJECT_DIR$/wordwiz-presenter/src/main/java/com/pyamsoft/wordwizpresenter/word/WordProcessResult.java" />
-        <option value="$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWizSingleInitProvider.java" />
         <option value="$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/app/word/WordProcessActivity.java" />
         <option value="$PROJECT_DIR$/wordwiz-model/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/wordwiz-model/build.gradle" />
@@ -3977,6 +3997,7 @@
         <option value="$PROJECT_DIR$/wordwiz/build.gradle" />
         <option value="$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWiz.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWizSingleInitProvider.java" />
       </list>
     </option>
   </component>
@@ -4012,14 +4033,42 @@
     <panes>
       <pane id="Scratches" />
       <pane id="ProjectPane" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="WordWiz" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordWiz" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordwiz" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordWiz" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordwiz" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wordwiz" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -4291,7 +4340,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1920" height="1055" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943678" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -4310,7 +4359,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34726688" sideWeight="0.50426894" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18729989" sideWeight="0.4679803" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18729989" sideWeight="0.4679803" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924226" sideWeight="0.49417636" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924226" sideWeight="0.5058236" order="6" side_tool="true" content_ui="tabs" />
@@ -4389,14 +4438,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wordwiz/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="616">
           <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wordwiz-presenter/src/main/AndroidManifest.xml">
@@ -4428,13 +4477,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWizSingleInitProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -4610,6 +4652,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
           <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wordwiz/src/main/java/com/pyamsoft/wordwiz/WordWizSingleInitProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="55" column="28" selection-start-line="55" selection-start-column="28" selection-end-line="55" selection-end-column="28" />
           <folding />
         </state>
       </provider>
