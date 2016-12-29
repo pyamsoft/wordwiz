@@ -23,10 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.view.MenuItem;
-import com.pyamsoft.pydroid.util.AppUtil;
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment;
 import com.pyamsoft.pydroid.ui.rating.RatingDialog;
 import com.pyamsoft.pydroid.ui.sec.TamperActivity;
+import com.pyamsoft.pydroid.util.AppUtil;
 import com.pyamsoft.wordwiz.BuildConfig;
 import com.pyamsoft.wordwiz.R;
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding;
@@ -99,8 +99,10 @@ public class MainActivity extends TamperActivity {
   }
 
   @NonNull @Override protected String[] getChangeLogLines() {
-    final String line1 = "CHANGE: Some new settings to play with";
-    return new String[] { line1 };
+    final String line1 = "BUGFIX: Fixes related to in app billing code";
+    final String line2 = "BUGFIX: Smaller memory footprint";
+    final String line3 = "BUGFIX: Correctly close word count and letter count screens";
+    return new String[] { line1, line2, line3 };
   }
 
   @NonNull @Override protected String getVersionName() {
