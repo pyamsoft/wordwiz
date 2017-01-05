@@ -22,10 +22,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 import com.pyamsoft.pydroid.app.PersistLoader;
-import com.pyamsoft.pydroid.util.PersistentCache;
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase;
-import com.pyamsoft.wordwiz.presenter.word.WordProcessPresenter;
-import com.pyamsoft.wordwiz.presenter.word.WordProcessPresenterLoader;
+import com.pyamsoft.pydroid.util.PersistentCache;
 import java.util.Locale;
 import timber.log.Timber;
 

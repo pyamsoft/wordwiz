@@ -9,8 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/wordwiz" />
+            <option value="$PROJECT_DIR$/wordwiz-base" />
             <option value="$PROJECT_DIR$/wordwiz-model" />
-            <option value="$PROJECT_DIR$/wordwiz-presenter" />
+            <option value="$PROJECT_DIR$/wordwiz-word" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
