@@ -20,16 +20,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.BuildConfigChecker;
-import com.pyamsoft.pydroid.IPYDroidApp;
-import com.pyamsoft.pydroid.SingleInitContentProvider;
 import com.pyamsoft.pydroid.ui.UiLicenses;
-import com.pyamsoft.wordwiz.presenter.Injector;
-import com.pyamsoft.wordwiz.presenter.WordWizModule;
+import com.pyamsoft.wordwiz.base.BaseInitProvider;
 
-public class WordWizSingleInitProvider extends SingleInitContentProvider
-    implements IPYDroidApp<WordWizModule> {
-
-  @Nullable private WordWizModule module;
+public class WordWizSingleInitProvider extends BaseInitProvider {
 
   @NonNull @Override protected BuildConfigChecker initializeBuildConfigChecker() {
     return new BuildConfigChecker() {
@@ -39,27 +33,11 @@ public class WordWizSingleInitProvider extends SingleInitContentProvider
     };
   }
 
-  @Override protected void onInstanceCreated(@NonNull Context context) {
-    Injector.set(module);
-  }
-
-  @Override protected void onFirstCreate(@NonNull Context context) {
-    super.onFirstCreate(context);
-    module = new WordWizModule(context);
-  }
-
   @Nullable @Override public String provideGoogleOpenSourceLicenses(@NonNull Context context) {
     return null;
   }
 
   @Override public void insertCustomLicensesIntoMap() {
     UiLicenses.addLicenses();
-  }
-
-  @NonNull @Override public WordWizModule provideComponent() {
-    if (module == null) {
-      throw new NullPointerException("WordWiz module is NULL");
-    }
-    return module;
   }
 }

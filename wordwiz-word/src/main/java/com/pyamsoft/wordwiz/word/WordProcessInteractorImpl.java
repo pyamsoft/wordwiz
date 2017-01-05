@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.presenter.word;
+package com.pyamsoft.wordwiz.word;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,7 +27,6 @@ import com.pyamsoft.pydroid.tool.AsyncOffloader;
 import com.pyamsoft.pydroid.tool.Offloader;
 import com.pyamsoft.wordwiz.model.ProcessType;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import com.pyamsoft.wordwiz.presenter.R;
 import timber.log.Timber;
 
 class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
@@ -80,11 +79,9 @@ class WordProcessInteractorImpl extends WordProcessCommonInteractorImpl
       @NonNull CharSequence label, @NonNull CharSequence text) {
     final WordProcessResult result;
     if (label.equals(LABEL_TYPE_WORD_COUNT)) {
-      result =
-          WordProcessResult.create(ProcessType.WORD_COUNT, getWordCount(text));
+      result = WordProcessResult.create(ProcessType.WORD_COUNT, getWordCount(text));
     } else if (label.equals(LABEL_TYPE_LETTER_COUNT)) {
-      result = WordProcessResult.create(ProcessType.LETTER_COUNT,
-          getLetterCount(text));
+      result = WordProcessResult.create(ProcessType.LETTER_COUNT, getLetterCount(text));
     } else if (label.equals(LABEL_TYPE_OCCURRENCES)) {
       throw new RuntimeException("Not ready yet");
     } else {

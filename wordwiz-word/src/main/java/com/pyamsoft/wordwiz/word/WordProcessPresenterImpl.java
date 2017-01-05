@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.presenter.word;
+package com.pyamsoft.wordwiz.word;
 
 import android.content.ComponentName;
 import android.os.Bundle;

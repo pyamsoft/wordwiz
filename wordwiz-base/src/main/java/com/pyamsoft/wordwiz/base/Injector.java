@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.presenter;
+package com.pyamsoft.wordwiz.base;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
@@ -30,7 +30,7 @@ public class Injector implements IPYDroidApp<WordWizModule> {
     this.component = component;
   }
 
-  public static void set(@Nullable WordWizModule component) {
+  static void set(@Nullable WordWizModule component) {
     if (component == null) {
       throw new NullPointerException("Cannot set a NULL component");
     }

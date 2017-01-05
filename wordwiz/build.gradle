@@ -34,8 +34,8 @@ android {
     applicationId "com.pyamsoft.wordwiz"
     minSdkVersion 23
     targetSdkVersion 25
-    versionCode 39
-    versionName "1.3.6"
+    versionCode 40
+    versionName "1.3.7pre1"
 
     // For vector drawables
     vectorDrawables.useSupportLibrary = true
@@ -100,7 +100,7 @@ dependencies {
     transitive = true
   }
 
-  compile project(":wordwiz-presenter")
+  compile project(":wordwiz-word")
 }
 
 // AdView
