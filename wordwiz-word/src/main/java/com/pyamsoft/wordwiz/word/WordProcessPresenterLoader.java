@@ -17,12 +17,12 @@
 package com.pyamsoft.wordwiz.word;
 
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.app.PersistLoader;
+import com.pyamsoft.pydroid.FuncNone;
 import com.pyamsoft.wordwiz.base.Injector;
 
-class WordProcessPresenterLoader extends PersistLoader<WordProcessPresenter> {
+class WordProcessPresenterLoader implements FuncNone<WordProcessPresenter> {
 
-  @NonNull @Override public WordProcessPresenter loadPersistent() {
+  @NonNull @Override public WordProcessPresenter call() {
     return new WordProcessModule(Injector.get().provideComponent().getProvider()).getPresenter();
   }
 }
