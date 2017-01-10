@@ -74,7 +74,7 @@ public class MainActivity extends TamperActivity {
     final FragmentManager fragmentManager = getSupportFragmentManager();
     final int backStackCount = fragmentManager.getBackStackEntryCount();
     if (backStackCount > 0) {
-      fragmentManager.popBackStack();
+      fragmentManager.popBackStackImmediate();
     } else {
       super.onBackPressed();
     }
