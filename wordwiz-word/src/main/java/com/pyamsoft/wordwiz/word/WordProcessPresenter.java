@@ -21,12 +21,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.presenter.Presenter;
 
-interface WordProcessPresenter extends Presenter<WordProcessPresenter.View> {
+interface WordProcessPresenter extends Presenter<Presenter.Empty> {
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
-      @NonNull Bundle extras);
+      @NonNull Bundle extras, @NonNull ProcessCallback callback);
 
-  interface View {
+  interface ProcessCallback {
 
     void onProcessError();
 

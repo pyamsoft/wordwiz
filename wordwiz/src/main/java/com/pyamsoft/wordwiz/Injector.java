@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.base;
+package com.pyamsoft.wordwiz;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.IPYDroidApp;
 
-public class Injector implements IPYDroidApp<WordWizModule> {
+public class Injector implements IPYDroidApp<WordWizComponent> {
 
   @Nullable private static volatile Injector instance = null;
-  @NonNull private final WordWizModule component;
+  @NonNull private final WordWizComponent component;
 
-  private Injector(@NonNull WordWizModule component) {
+  private Injector(@NonNull WordWizComponent component) {
     this.component = component;
   }
 
-  static void set(@Nullable WordWizModule component) {
+  static void set(@Nullable WordWizComponent component) {
     if (component == null) {
       throw new NullPointerException("Cannot set a NULL component");
     }
@@ -46,7 +46,7 @@ public class Injector implements IPYDroidApp<WordWizModule> {
     return instance;
   }
 
-  @NonNull @Override public WordWizModule provideComponent() {
+  @NonNull @Override public WordWizComponent provideComponent() {
     return component;
   }
 }

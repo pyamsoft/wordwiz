@@ -19,13 +19,14 @@ package com.pyamsoft.wordwiz.word;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.presenter.Presenter;
 import com.pyamsoft.pydroid.presenter.PresenterBase;
 import com.pyamsoft.pydroid.tool.ExecutedOffloader;
 import com.pyamsoft.pydroid.tool.OffloaderHelper;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import timber.log.Timber;
 
-class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
+class WordProcessPresenterImpl extends PresenterBase<Presenter.Empty>
     implements WordProcessPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
@@ -42,26 +43,31 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
   }
 
   @Override public void handleActivityLaunchType(@NonNull ComponentName componentName,
-      @NonNull CharSequence text, @NonNull Bundle extras) {
+      @NonNull CharSequence text, @NonNull Bundle extras, @NonNull ProcessCallback callback) {
     OffloaderHelper.cancel(activityLaunchTypeSubscription);
     activityLaunchTypeSubscription =
-        interactor.getProcessType(componentName, text, extras).onError(throwable -> {
-          Timber.e(throwable, "onError handleActivityLaunchType");
-          getView(View::onProcessError);
-        }).onResult(this::handleProcessType).onFinish(() -> {
-          OffloaderHelper.cancel(activityLaunchTypeSubscription);
-          getView(View::onProcessComplete);
-        }).execute();
+        interactor.getProcessType(componentName, text, extras)
+            .onError(throwable -> {
+              Timber.e(throwable, "onError handleActivityLaunchType");
+              callback.onProcessError();
+            })
+            .onResult(wordProcessResult -> handleProcessType(wordProcessResult, callback))
+            .onFinish(() -> {
+              OffloaderHelper.cancel(activityLaunchTypeSubscription);
+              callback.onProcessComplete();
+            })
+            .execute();
   }
 
-  @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType) {
+  @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType,
+      @NonNull ProcessCallback callback) {
     final Bundle extras = processType.extras();
     switch (processType.type()) {
       case WORD_COUNT:
-        getView(view -> view.onProcessTypeWordCount(processType.count()));
+        callback.onProcessTypeWordCount(processType.count());
         break;
       case LETTER_COUNT:
-        getView(view -> view.onProcessTypeLetterCount(processType.count()));
+        callback.onProcessTypeLetterCount(processType.count());
         break;
       case OCCURRENCES:
         if (extras == null) {
@@ -73,10 +79,10 @@ class WordProcessPresenterImpl extends PresenterBase<WordProcessPresenter.View>
           throw new NullPointerException("Snippet is NULL");
         }
 
-        getView(view -> view.onProcessTypeOccurrences(processType.count(), snippet));
+        callback.onProcessTypeOccurrences(processType.count(), snippet);
         break;
       case ERROR:
-        getView(View::onProcessError);
+        callback.onProcessError();
     }
   }
 }

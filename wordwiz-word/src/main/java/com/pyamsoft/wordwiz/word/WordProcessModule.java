@@ -22,15 +22,13 @@ import com.pyamsoft.wordwiz.base.WordWizModule;
 
 class WordProcessModule {
 
-  @NonNull private final WordProcessPresenter presenter;
+  @NonNull private final WordProcessInteractorImpl interactor;
 
-  WordProcessModule(@NonNull WordWizModule.Provider wordWizModule) {
-    final WordProcessInteractor interactor =
-        new WordProcessInteractorImpl(wordWizModule.provideContext());
-    presenter = new WordProcessPresenterImpl(interactor);
+  WordProcessModule(@NonNull WordWizModule wordWizModule) {
+    interactor = new WordProcessInteractorImpl(wordWizModule.provideContext());
   }
 
-  @NonNull @CheckResult public WordProcessPresenter getPresenter() {
-    return presenter;
+  @NonNull @CheckResult WordProcessPresenter getPresenter() {
+    return new WordProcessPresenterImpl(interactor);
   }
 }

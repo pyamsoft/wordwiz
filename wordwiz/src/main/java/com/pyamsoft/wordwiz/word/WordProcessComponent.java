@@ -17,12 +17,17 @@
 package com.pyamsoft.wordwiz.word;
 
 import android.support.annotation.NonNull;
-import com.pyamsoft.pydroid.FuncNone;
-import com.pyamsoft.wordwiz.base.Injector;
+import com.pyamsoft.wordwiz.base.WordWizModule;
 
-class WordProcessPresenterLoader implements FuncNone<WordProcessPresenter> {
+public class WordProcessComponent {
 
-  @NonNull @Override public WordProcessPresenter call() {
-    return new WordProcessModule(Injector.get().provideComponent().getProvider()).getPresenter();
+  @NonNull private final WordProcessModule wordProcessModule;
+
+  public WordProcessComponent(@NonNull WordWizModule module) {
+    wordProcessModule = new WordProcessModule(module);
+  }
+
+  void inject(WordProcessActivity activity) {
+    activity.presenter = wordProcessModule.getPresenter();
   }
 }
