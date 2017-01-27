@@ -22,25 +22,13 @@ import android.support.annotation.NonNull;
 
 public class WordWizModule {
 
-  @NonNull private final Provider provider;
+  @NonNull private final Context appContext;
 
-  WordWizModule(@NonNull Context context) {
-    this.provider = new Provider(context);
+  public WordWizModule(@NonNull Context context) {
+    this.appContext = context.getApplicationContext();
   }
 
-  @NonNull @CheckResult public Provider getProvider() {
-    return provider;
-  }
-
-  public static class Provider {
-    @NonNull private final Context appContext;
-
-    Provider(@NonNull Context context) {
-      this.appContext = context.getApplicationContext();
-    }
-
-    @CheckResult @NonNull public Context provideContext() {
-      return appContext;
-    }
+  @CheckResult @NonNull public Context provideContext() {
+    return appContext;
   }
 }
