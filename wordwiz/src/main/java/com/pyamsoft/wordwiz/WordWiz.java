@@ -38,6 +38,10 @@ public class WordWiz extends PYDroidApplication {
     }
   }
 
+  @Override protected boolean exitBeforeInitialization() {
+    return LeakCanary.isInAnalyzerProcess(this);
+  }
+
   @Override protected void onCreateInDebugMode() {
     super.onCreateInDebugMode();
     refWatcher = LeakCanary.install(this);
