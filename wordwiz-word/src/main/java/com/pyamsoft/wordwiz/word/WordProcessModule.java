@@ -20,15 +20,15 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.base.WordWizModule;
 
-class WordProcessModule {
+public class WordProcessModule {
 
-  @NonNull private final WordProcessInteractorImpl interactor;
+  @NonNull private final WordProcessInteractor interactor;
 
-  WordProcessModule(@NonNull WordWizModule wordWizModule) {
-    interactor = new WordProcessInteractorImpl(wordWizModule.provideContext());
+  public WordProcessModule(@NonNull WordWizModule wordWizModule) {
+    interactor = new WordProcessInteractor(wordWizModule.provideContext());
   }
 
   @NonNull @CheckResult WordProcessPresenter getPresenter() {
-    return new WordProcessPresenterImpl(interactor);
+    return new WordProcessPresenter(interactor);
   }
 }

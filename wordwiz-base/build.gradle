@@ -35,6 +35,8 @@ android {
   defaultConfig {
     minSdkVersion rootProject.ext.minSdk
     targetSdkVersion rootProject.ext.maxSdk
+
+    publishNonDefault true
   }
 
   compileOptions {
@@ -63,6 +65,7 @@ dependencies {
     transitive = true
   }
 
-  compile project(":wordwiz-model")
+  debugCompile project(path: ":wordwiz-model", configuration: "debug")
+  releaseCompile project(path: ":wordwiz-model", configuration: "release")
 }
 

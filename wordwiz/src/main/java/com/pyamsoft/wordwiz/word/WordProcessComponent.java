@@ -17,14 +17,13 @@
 package com.pyamsoft.wordwiz.word;
 
 import android.support.annotation.NonNull;
-import com.pyamsoft.wordwiz.base.WordWizModule;
 
 public class WordProcessComponent {
 
   @NonNull private final WordProcessModule wordProcessModule;
 
-  public WordProcessComponent(@NonNull WordWizModule module) {
-    wordProcessModule = new WordProcessModule(module);
+  public WordProcessComponent(@NonNull WordProcessModule wordProcessModule) {
+    this.wordProcessModule = wordProcessModule;
   }
 
   void inject(WordProcessActivity activity) {

@@ -20,41 +20,22 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.base.WordWizModule;
 import com.pyamsoft.wordwiz.word.WordProcessComponent;
+import com.pyamsoft.wordwiz.word.WordProcessModule;
 
 public class WordWizComponent {
 
   @NonNull private final WordProcessComponent wordProcessComponent;
 
-  WordWizComponent(@NonNull WordWizModule module) {
-    wordProcessComponent = new WordProcessComponent(module);
+  private WordWizComponent(@NonNull WordWizModule module) {
+    WordProcessModule wordProcessModule = new WordProcessModule(module);
+    wordProcessComponent = new WordProcessComponent(wordProcessModule);
   }
 
-  @CheckResult @NonNull static Builder builder() {
-    return new Builder();
+  @CheckResult @NonNull static WordWizComponent withModule(@NonNull WordWizModule module) {
+    return new WordWizComponent(module);
   }
 
   @CheckResult @NonNull public WordProcessComponent plusWordProcessComponent() {
     return wordProcessComponent;
-  }
-
-  static class Builder {
-
-    private WordWizModule module;
-
-    Builder() {
-    }
-
-    @CheckResult @NonNull Builder wordWizModule(@NonNull WordWizModule module) {
-      this.module = module;
-      return this;
-    }
-
-    @CheckResult @NonNull WordWizComponent build() {
-      if (module == null) {
-        throw new IllegalStateException("WordWizModule cannot be NULL");
-      }
-
-      return new WordWizComponent(module);
-    }
   }
 }

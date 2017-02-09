@@ -21,7 +21,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import com.android.annotations.Nullable;
-import com.pyamsoft.pydroid.PYDroidApplication;
+import com.pyamsoft.pydroid.ui.PYDroidApplication;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 

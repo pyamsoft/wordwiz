@@ -101,7 +101,8 @@ dependencies {
     transitive = true
   }
 
-  compile project(":wordwiz-word")
+  debugCompile project(path: ":wordwiz-word", configuration: "debug")
+  releaseCompile project(path: ":wordwiz-word", configuration: "release")
 }
 
 // AdView

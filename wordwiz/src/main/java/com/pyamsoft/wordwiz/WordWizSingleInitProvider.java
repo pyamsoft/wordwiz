@@ -20,8 +20,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.pyamsoft.pydroid.BuildConfigChecker;
-import com.pyamsoft.pydroid.SingleInitContentProvider;
-import com.pyamsoft.pydroid.ui.UiLicenses;
+import com.pyamsoft.pydroid.ui.SingleInitContentProvider;
 import com.pyamsoft.wordwiz.base.WordWizModule;
 
 public class WordWizSingleInitProvider extends SingleInitContentProvider {
@@ -35,16 +34,11 @@ public class WordWizSingleInitProvider extends SingleInitContentProvider {
   }
 
   @Override protected void onInstanceCreated(@NonNull Context context) {
-    final WordWizComponent component =
-        WordWizComponent.builder().wordWizModule(new WordWizModule(context)).build();
+    final WordWizComponent component = WordWizComponent.withModule(new WordWizModule(context));
     Injector.set(component);
   }
 
   @Nullable @Override public String provideGoogleOpenSourceLicenses(@NonNull Context context) {
     return null;
-  }
-
-  @Override public void insertCustomLicensesIntoMap() {
-    UiLicenses.addLicenses();
   }
 }

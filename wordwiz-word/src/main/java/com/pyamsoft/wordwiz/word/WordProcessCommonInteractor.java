@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import timber.log.Timber;
 
-abstract class WordProcessCommonInteractorImpl {
+abstract class WordProcessCommonInteractor {
 
   @NonNull private static final String SPLIT_BY_WHITESPACE = "\\s+";
 
