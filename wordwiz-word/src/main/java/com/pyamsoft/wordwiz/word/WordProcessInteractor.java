@@ -17,14 +17,76 @@
 package com.pyamsoft.wordwiz.word;
 
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.tool.AsyncOffloader;
 import com.pyamsoft.pydroid.tool.Offloader;
+import com.pyamsoft.wordwiz.model.ProcessType;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
+import timber.log.Timber;
 
-interface WordProcessInteractor {
+class WordProcessInteractor extends WordProcessCommonInteractor {
 
-  @CheckResult @NonNull Offloader<WordProcessResult> getProcessType(
-      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras);
+  @SuppressWarnings("WeakerAccess") @NonNull final PackageManager packageManager;
+  @NonNull private final String LABEL_TYPE_WORD_COUNT;
+  @NonNull private final String LABEL_TYPE_LETTER_COUNT;
+  @NonNull private final String LABEL_TYPE_OCCURRENCES;
+
+  WordProcessInteractor(@NonNull Context context) {
+    packageManager = context.getPackageManager();
+
+    // Label constants
+    LABEL_TYPE_WORD_COUNT = context.getString(R.string.label_word_count);
+    LABEL_TYPE_LETTER_COUNT = context.getString(R.string.label_letter_count);
+    LABEL_TYPE_OCCURRENCES = context.getString(R.string.label_occurrence_count);
+  }
+
+  //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
+  //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
+  //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
+  //}
+
+  @NonNull @CheckResult
+  public Offloader<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
+      @NonNull CharSequence text, @NonNull Bundle extras) {
+    return AsyncOffloader.newInstance(() -> {
+      WordProcessResult result;
+      try {
+        Timber.d("Attempt to load the label this activity launched with");
+        final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
+        if (activityInfo == null) {
+          Timber.e("Activity info is NULL");
+          result = WordProcessResult.error();
+        } else {
+          final CharSequence label = activityInfo.loadLabel(packageManager);
+          result = getProcessTypeForLabel(label, text);
+        }
+      } catch (PackageManager.NameNotFoundException e) {
+        Timber.e(e, "Name not found ERROR");
+        result = WordProcessResult.error();
+      }
+
+      return result;
+    });
+  }
+
+  @SuppressWarnings("WeakerAccess") @CheckResult @NonNull WordProcessResult getProcessTypeForLabel(
+      @NonNull CharSequence label, @NonNull CharSequence text) {
+    final WordProcessResult result;
+    if (label.equals(LABEL_TYPE_WORD_COUNT)) {
+      result = WordProcessResult.create(ProcessType.WORD_COUNT, getWordCount(text));
+    } else if (label.equals(LABEL_TYPE_LETTER_COUNT)) {
+      result = WordProcessResult.create(ProcessType.LETTER_COUNT, getLetterCount(text));
+    } else if (label.equals(LABEL_TYPE_OCCURRENCES)) {
+      throw new RuntimeException("Not ready yet");
+    } else {
+      result = WordProcessResult.error();
+    }
+
+    return result;
+  }
 }

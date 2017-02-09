@@ -19,12 +19,74 @@ package com.pyamsoft.wordwiz.word;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RestrictTo;
 import com.pyamsoft.pydroid.presenter.Presenter;
+import com.pyamsoft.pydroid.tool.ExecutedOffloader;
+import com.pyamsoft.pydroid.tool.OffloaderHelper;
+import com.pyamsoft.wordwiz.model.WordProcessResult;
+import timber.log.Timber;
 
-interface WordProcessPresenter extends Presenter<Presenter.Empty> {
+class WordProcessPresenter extends Presenter<Presenter.Empty> {
+
+  @NonNull private final WordProcessInteractor interactor;
+  @SuppressWarnings("WeakerAccess") @NonNull ExecutedOffloader activityLaunchTypeSubscription =
+      new ExecutedOffloader.Empty();
+
+  WordProcessPresenter(@NonNull WordProcessInteractor interactor) {
+    this.interactor = interactor;
+  }
+
+  @Override protected void onUnbind() {
+    super.onUnbind();
+    OffloaderHelper.cancel(activityLaunchTypeSubscription);
+  }
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
-      @NonNull Bundle extras, @NonNull ProcessCallback callback);
+      @NonNull Bundle extras, @NonNull ProcessCallback callback) {
+    OffloaderHelper.cancel(activityLaunchTypeSubscription);
+    activityLaunchTypeSubscription =
+        interactor.getProcessType(componentName, text, extras)
+            .onError(throwable -> {
+              Timber.e(throwable, "onError handleActivityLaunchType");
+              callback.onProcessError();
+            })
+            .onResult(wordProcessResult -> handleProcessType(wordProcessResult, callback))
+            .onFinish(() -> {
+              OffloaderHelper.cancel(activityLaunchTypeSubscription);
+              callback.onProcessComplete();
+            })
+            .execute();
+  }
+
+  /**
+   * @hide
+   */
+  @RestrictTo(RestrictTo.Scope.SUBCLASSES) @SuppressWarnings("WeakerAccess") void handleProcessType(
+      @NonNull WordProcessResult processType, @NonNull ProcessCallback callback) {
+    final Bundle extras = processType.extras();
+    switch (processType.type()) {
+      case WORD_COUNT:
+        callback.onProcessTypeWordCount(processType.count());
+        break;
+      case LETTER_COUNT:
+        callback.onProcessTypeLetterCount(processType.count());
+        break;
+      case OCCURRENCES:
+        if (extras == null) {
+          throw new NullPointerException("Extras is NULL");
+        }
+
+        final String snippet = extras.getString(WordProcessResult.KEY_EXTRA_SNIPPET, null);
+        if (snippet == null) {
+          throw new NullPointerException("Snippet is NULL");
+        }
+
+        callback.onProcessTypeOccurrences(processType.count(), snippet);
+        break;
+      case ERROR:
+        callback.onProcessError();
+    }
+  }
 
   interface ProcessCallback {
 
