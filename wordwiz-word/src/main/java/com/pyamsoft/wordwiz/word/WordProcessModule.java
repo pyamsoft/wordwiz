@@ -19,16 +19,21 @@ package com.pyamsoft.wordwiz.word;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.base.WordWizModule;
+import rx.Scheduler;
 
 public class WordProcessModule {
 
   @NonNull private final WordProcessInteractor interactor;
+  @NonNull private final Scheduler obsScheduler;
+  @NonNull private final Scheduler subScheduler;
 
   public WordProcessModule(@NonNull WordWizModule wordWizModule) {
     interactor = new WordProcessInteractor(wordWizModule.provideContext());
+    obsScheduler = wordWizModule.provideObsScheduler();
+    subScheduler = wordWizModule.provideSubScheduler();
   }
 
   @NonNull @CheckResult WordProcessPresenter getPresenter() {
-    return new WordProcessPresenter(interactor);
+    return new WordProcessPresenter(interactor, obsScheduler, subScheduler);
   }
 }
