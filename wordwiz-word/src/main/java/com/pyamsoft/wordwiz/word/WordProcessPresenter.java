@@ -20,42 +20,44 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
+import com.pyamsoft.pydroid.helper.SubscriptionHelper;
 import com.pyamsoft.pydroid.presenter.Presenter;
-import com.pyamsoft.pydroid.tool.ExecutedOffloader;
-import com.pyamsoft.pydroid.tool.OffloaderHelper;
+import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
+import rx.Scheduler;
+import rx.Subscription;
 import timber.log.Timber;
 
-class WordProcessPresenter extends Presenter<Presenter.Empty> {
+class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @NonNull private final WordProcessInteractor interactor;
-  @SuppressWarnings("WeakerAccess") @NonNull ExecutedOffloader activityLaunchTypeSubscription =
-      new ExecutedOffloader.Empty();
+  @SuppressWarnings("WeakerAccess") Subscription subscription;
 
-  WordProcessPresenter(@NonNull WordProcessInteractor interactor) {
+  WordProcessPresenter(@NonNull WordProcessInteractor interactor,
+      @NonNull Scheduler observeScheduler, @NonNull Scheduler subscribeScheduler) {
+    super(observeScheduler, subscribeScheduler);
     this.interactor = interactor;
   }
 
   @Override protected void onUnbind() {
     super.onUnbind();
-    OffloaderHelper.cancel(activityLaunchTypeSubscription);
+    SubscriptionHelper.unsubscribe(subscription);
   }
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
-    OffloaderHelper.cancel(activityLaunchTypeSubscription);
-    activityLaunchTypeSubscription =
-        interactor.getProcessType(componentName, text, extras)
-            .onError(throwable -> {
+    SubscriptionHelper.unsubscribe(subscription);
+    subscription = interactor.getProcessType(componentName, text, extras)
+        .subscribeOn(getSubscribeScheduler())
+        .observeOn(getObserveScheduler())
+        .subscribe(wordProcessResult -> handleProcessType(wordProcessResult, callback),
+            throwable -> {
               Timber.e(throwable, "onError handleActivityLaunchType");
               callback.onProcessError();
-            })
-            .onResult(wordProcessResult -> handleProcessType(wordProcessResult, callback))
-            .onFinish(() -> {
-              OffloaderHelper.cancel(activityLaunchTypeSubscription);
+            }, () -> {
               callback.onProcessComplete();
-            })
-            .execute();
+              SubscriptionHelper.unsubscribe(subscription);
+            });
   }
 
   /**

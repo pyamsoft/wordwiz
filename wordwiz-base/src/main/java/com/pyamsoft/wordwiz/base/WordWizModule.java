@@ -19,6 +19,9 @@ package com.pyamsoft.wordwiz.base;
 import android.content.Context;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class WordWizModule {
 
@@ -30,5 +33,13 @@ public class WordWizModule {
 
   @CheckResult @NonNull public Context provideContext() {
     return appContext;
+  }
+
+  @CheckResult @NonNull public Scheduler provideObsScheduler() {
+    return AndroidSchedulers.mainThread();
+  }
+
+  @CheckResult @NonNull public Scheduler provideSubScheduler() {
+    return Schedulers.io();
   }
 }
