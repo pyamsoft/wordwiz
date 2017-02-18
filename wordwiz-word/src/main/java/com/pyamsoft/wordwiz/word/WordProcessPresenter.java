@@ -26,12 +26,13 @@ import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import rx.Scheduler;
 import rx.Subscription;
+import rx.subscriptions.Subscriptions;
 import timber.log.Timber;
 
 class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @NonNull private final WordProcessInteractor interactor;
-  @SuppressWarnings("WeakerAccess") Subscription subscription;
+  @NonNull private Subscription subscription = Subscriptions.empty();
 
   WordProcessPresenter(@NonNull WordProcessInteractor interactor,
       @NonNull Scheduler observeScheduler, @NonNull Scheduler subscribeScheduler) {
@@ -41,22 +42,20 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @Override protected void onUnbind() {
     super.onUnbind();
-    SubscriptionHelper.unsubscribe(subscription);
+    subscription = SubscriptionHelper.unsubscribe(subscription);
   }
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
-    SubscriptionHelper.unsubscribe(subscription);
+    subscription = SubscriptionHelper.unsubscribe(subscription);
     subscription = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
+        .doAfterTerminate(callback::onProcessComplete)
         .subscribe(wordProcessResult -> handleProcessType(wordProcessResult, callback),
             throwable -> {
               Timber.e(throwable, "onError handleActivityLaunchType");
               callback.onProcessError();
-            }, () -> {
-              callback.onProcessComplete();
-              SubscriptionHelper.unsubscribe(subscription);
             });
   }
 
