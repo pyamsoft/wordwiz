@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.word;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.base.WordWizModule;
-import rx.Scheduler;
+import io.reactivex.Scheduler;
 
 public class WordProcessModule {
 
