@@ -20,19 +20,19 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
-import com.pyamsoft.pydroid.helper.SubscriptionHelper;
+import com.pyamsoft.pydroid.helper.DisposableHelper;
 import com.pyamsoft.pydroid.presenter.Presenter;
 import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import rx.Scheduler;
-import rx.Subscription;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import timber.log.Timber;
 
 class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @NonNull private final WordProcessInteractor interactor;
-  @NonNull private Subscription subscription = Subscriptions.empty();
+  @NonNull private Disposable disposable = Disposables.empty();
 
   WordProcessPresenter(@NonNull WordProcessInteractor interactor,
       @NonNull Scheduler observeScheduler, @NonNull Scheduler subscribeScheduler) {
@@ -42,13 +42,13 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @Override protected void onUnbind() {
     super.onUnbind();
-    subscription = SubscriptionHelper.unsubscribe(subscription);
+    disposable = DisposableHelper.unsubscribe(disposable);
   }
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
-    subscription = SubscriptionHelper.unsubscribe(subscription);
-    subscription = interactor.getProcessType(componentName, text, extras)
+    disposable = DisposableHelper.unsubscribe(disposable);
+    disposable = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
         .doAfterTerminate(callback::onProcessComplete)

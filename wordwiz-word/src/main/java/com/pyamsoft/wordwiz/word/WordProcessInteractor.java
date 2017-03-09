@@ -25,7 +25,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.pyamsoft.wordwiz.model.ProcessType;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import rx.Observable;
+import io.reactivex.Observable;
 import timber.log.Timber;
 
 class WordProcessInteractor extends WordProcessCommonInteractor {
