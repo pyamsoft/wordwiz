@@ -42,12 +42,12 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   @Override protected void onUnbind() {
     super.onUnbind();
-    disposable = DisposableHelper.unsubscribe(disposable);
+    disposable = DisposableHelper.dispose(disposable);
   }
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
-    disposable = DisposableHelper.unsubscribe(disposable);
+    disposable = DisposableHelper.dispose(disposable);
     disposable = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
