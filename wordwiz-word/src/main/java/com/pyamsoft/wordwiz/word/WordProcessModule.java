@@ -18,6 +18,7 @@ package com.pyamsoft.wordwiz.word;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.wordwiz.base.WordWizModule;
 import io.reactivex.Scheduler;
 
@@ -28,7 +29,7 @@ public class WordProcessModule {
   @NonNull private final Scheduler subScheduler;
 
   public WordProcessModule(@NonNull WordWizModule wordWizModule) {
-    interactor = new WordProcessInteractor(wordWizModule.provideContext());
+    interactor = new WordProcessInteractor(Checker.checkNonNull(wordWizModule).provideContext());
     obsScheduler = wordWizModule.provideObsScheduler();
     subScheduler = wordWizModule.provideSubScheduler();
   }
