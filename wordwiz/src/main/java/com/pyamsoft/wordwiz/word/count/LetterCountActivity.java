@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.wordwiz.word.WordProcessActivity;
 import timber.log.Timber;
 
@@ -30,6 +31,7 @@ public class LetterCountActivity extends WordProcessActivity {
 
   public static void enable(@NonNull Context context, boolean enable) {
     Timber.d("set LetterCountActivity enabled state: %s", enable);
+    context = Checker.checkNonNull(context);
     final ComponentName cmp =
         new ComponentName(context.getApplicationContext(), LetterCountActivity.class);
     final int componentState = enable ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -39,7 +41,8 @@ public class LetterCountActivity extends WordProcessActivity {
         .setComponentEnabledSetting(cmp, componentState, PackageManager.DONT_KILL_APP);
   }
 
-  public static boolean isEnabled(final Context context) {
+  public static boolean isEnabled(@NonNull Context context) {
+    context = Checker.checkNonNull(context);
     final ComponentName cmp =
         new ComponentName(context.getApplicationContext(), LetterCountActivity.class);
     final int componentState =

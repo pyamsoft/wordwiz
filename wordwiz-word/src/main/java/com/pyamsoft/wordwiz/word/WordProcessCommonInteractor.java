@@ -18,6 +18,7 @@ package com.pyamsoft.wordwiz.word;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ abstract class WordProcessCommonInteractor {
 
   @NonNull @CheckResult private String[] tokenizeString(@NonNull CharSequence text) {
     Timber.d("Convert text to a string");
-    final String string = text.toString();
+    final String string = Checker.checkNonNull(text).toString();
 
     Timber.d("Tokenize string by spaces");
     return string.split(SPLIT_BY_WHITESPACE);
