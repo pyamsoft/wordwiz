@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.wordwiz.model.ProcessType;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import io.reactivex.Observable;
@@ -36,6 +37,7 @@ class WordProcessInteractor extends WordProcessCommonInteractor {
   @NonNull private final String LABEL_TYPE_OCCURRENCES;
 
   WordProcessInteractor(@NonNull Context context) {
+    context = Checker.checkNonNull(context);
     packageManager = context.getPackageManager();
 
     // Label constants
@@ -56,13 +58,14 @@ class WordProcessInteractor extends WordProcessCommonInteractor {
       WordProcessResult result;
       try {
         Timber.d("Attempt to load the label this activity launched with");
-        final ActivityInfo activityInfo = packageManager.getActivityInfo(componentName, 0);
+        final ActivityInfo activityInfo =
+            packageManager.getActivityInfo(Checker.checkNonNull(componentName), 0);
         if (activityInfo == null) {
           Timber.e("Activity info is NULL");
           result = WordProcessResult.error();
         } else {
           final CharSequence label = activityInfo.loadLabel(packageManager);
-          result = getProcessTypeForLabel(label, text);
+          result = getProcessTypeForLabel(label, Checker.checkNonNull(text));
         }
       } catch (PackageManager.NameNotFoundException e) {
         Timber.e(e, "Name not found ERROR");

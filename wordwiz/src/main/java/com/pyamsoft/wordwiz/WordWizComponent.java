@@ -18,6 +18,7 @@ package com.pyamsoft.wordwiz;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.wordwiz.base.WordWizModule;
 import com.pyamsoft.wordwiz.word.WordProcessComponent;
 import com.pyamsoft.wordwiz.word.WordProcessModule;
@@ -27,12 +28,13 @@ public class WordWizComponent {
   @NonNull private final WordProcessComponent wordProcessComponent;
 
   private WordWizComponent(@NonNull WordWizModule module) {
+    module = Checker.checkNonNull(module);
     WordProcessModule wordProcessModule = new WordProcessModule(module);
     wordProcessComponent = new WordProcessComponent(wordProcessModule);
   }
 
   @CheckResult @NonNull static WordWizComponent withModule(@NonNull WordWizModule module) {
-    return new WordWizComponent(module);
+    return new WordWizComponent(Checker.checkNonNull(module));
   }
 
   @CheckResult @NonNull public WordProcessComponent plusWordProcessComponent() {

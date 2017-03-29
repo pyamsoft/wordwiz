@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.pydroid.ui.IPYDroidApp;
 
 public class Injector implements IPYDroidApp<WordWizComponent> {
@@ -27,23 +28,15 @@ public class Injector implements IPYDroidApp<WordWizComponent> {
   @NonNull private final WordWizComponent component;
 
   private Injector(@NonNull WordWizComponent component) {
-    this.component = component;
+    this.component = Checker.checkNonNull(component);
   }
 
-  static void set(@Nullable WordWizComponent component) {
-    if (component == null) {
-      throw new NullPointerException("Cannot set a NULL component");
-    }
-    instance = new Injector(component);
+  static void set(WordWizComponent component) {
+    instance = new Injector(Checker.checkNonNull(component));
   }
 
   @NonNull @CheckResult public static Injector get() {
-    if (instance == null) {
-      throw new NullPointerException("Instance is NULL");
-    }
-
-    //noinspection ConstantConditions
-    return instance;
+    return Checker.checkNonNull(instance);
   }
 
   @NonNull @Override public WordWizComponent provideComponent() {

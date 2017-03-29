@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz.base;
 import android.content.Context;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.pyamsoft.pydroid.helper.Checker;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -28,7 +29,7 @@ public class WordWizModule {
   @NonNull private final Context appContext;
 
   public WordWizModule(@NonNull Context context) {
-    this.appContext = context.getApplicationContext();
+    this.appContext = Checker.checkNonNull(context).getApplicationContext();
   }
 
   @CheckResult @NonNull public Context provideContext() {
