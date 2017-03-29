@@ -29,7 +29,8 @@ public class WordProcessModule {
   @NonNull private final Scheduler subScheduler;
 
   public WordProcessModule(@NonNull WordWizModule wordWizModule) {
-    interactor = new WordProcessInteractor(Checker.checkNonNull(wordWizModule).provideContext());
+    wordWizModule = Checker.checkNonNull(wordWizModule);
+    interactor = new WordProcessInteractor(wordWizModule.provideContext());
     obsScheduler = wordWizModule.provideObsScheduler();
     subScheduler = wordWizModule.provideSubScheduler();
   }
