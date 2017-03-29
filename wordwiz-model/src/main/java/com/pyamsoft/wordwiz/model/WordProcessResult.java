@@ -31,9 +31,9 @@ import com.google.auto.value.AutoValue;
     return create(type, wordCount, null);
   }
 
-  @SuppressWarnings("WeakerAccess") @CheckResult @NonNull
+  @CheckResult @NonNull
   public static WordProcessResult create(@NonNull ProcessType type, int wordCount,
-      @SuppressWarnings("SameParameterValue") @Nullable Bundle extras) {
+      @Nullable Bundle extras) {
     return new AutoValue_WordProcessResult(type, wordCount, extras);
   }
 
@@ -41,9 +41,9 @@ import com.google.auto.value.AutoValue;
     return create(ProcessType.ERROR, -1);
   }
 
-  public abstract ProcessType type();
+  @CheckResult public abstract ProcessType type();
 
-  public abstract int count();
+  @CheckResult public abstract int count();
 
-  @Nullable public abstract Bundle extras();
+  @CheckResult @Nullable public abstract Bundle extras();
 }
