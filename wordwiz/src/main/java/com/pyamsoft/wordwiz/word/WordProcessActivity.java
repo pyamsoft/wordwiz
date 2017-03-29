@@ -31,6 +31,7 @@ public abstract class WordProcessActivity extends ActivityBase {
   @SuppressWarnings("WeakerAccess") WordProcessPresenter presenter;
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    overridePendingTransition(0, 0);
     super.onCreate(savedInstanceState);
     Injector.get().provideComponent().plusWordProcessComponent().inject(this);
 
@@ -52,11 +53,21 @@ public abstract class WordProcessActivity extends ActivityBase {
     presenter.unbindView();
   }
 
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    overridePendingTransition(0, 0);
+  }
+
   private void handleIntent(@NonNull Intent intent) {
     Timber.d("Handle a process text intent");
     final CharSequence text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
     presenter.handleActivityLaunchType(getComponentName(), text, getIntent().getExtras(),
         new WordProcessPresenter.ProcessCallback() {
+
+          @Override public void onProcessBegin() {
+            // Start
+          }
+
           @Override public void onProcessError() {
             Timber.e("An error occurred while attempting to process text");
             Toast.makeText(getApplicationContext(),

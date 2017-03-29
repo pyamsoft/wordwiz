@@ -30,8 +30,7 @@
   </style>
 
   <!-- Transparent App Theme -->
-  <style name="Theme.WordWiz.Light.Transparent" parent="@style/Base.Theme.WordWiz.Light">
-    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+  <style name="Theme.WordWiz.Light.Transparent" parent="@style/Theme.WordWiz.Light">
     <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowBackground">@android:color/transparent</item>
     <item name="android:windowContentOverlay">@null</item>
@@ -41,7 +40,7 @@
   </style>
 
   <!-- Splash screen-->
-  <style name="Theme.WordWiz.Light.Splash" parent="@style/Base.Theme.WordWiz.Light">
+  <style name="Theme.WordWiz.Light.Splash" parent="@style/Theme.WordWiz.Light">
     <item name="android:windowBackground">@drawable/splash_screen</item>
   </style>
 

@@ -47,6 +47,7 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
+    callback.onProcessBegin();
     disposable = DisposableHelper.dispose(disposable);
     disposable = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
@@ -90,6 +91,8 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
   }
 
   interface ProcessCallback {
+
+    void onProcessBegin();
 
     void onProcessError();
 
