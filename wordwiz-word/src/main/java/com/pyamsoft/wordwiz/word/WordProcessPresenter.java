@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
+import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.pydroid.helper.DisposableHelper;
 import com.pyamsoft.pydroid.presenter.Presenter;
 import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
@@ -47,16 +48,18 @@ class WordProcessPresenter extends SchedulerPresenter<Presenter.Empty> {
 
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
-    callback.onProcessBegin();
+    ProcessCallback processCallback = Checker.checkNonNull(callback);
+
+    processCallback.onProcessBegin();
     disposable = DisposableHelper.dispose(disposable);
     disposable = interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
-        .doAfterTerminate(callback::onProcessComplete)
-        .subscribe(wordProcessResult -> handleProcessType(wordProcessResult, callback),
+        .doAfterTerminate(processCallback::onProcessComplete)
+        .subscribe(wordProcessResult -> handleProcessType(wordProcessResult, processCallback),
             throwable -> {
               Timber.e(throwable, "onError handleActivityLaunchType");
-              callback.onProcessError();
+              processCallback.onProcessError();
             });
   }
 
