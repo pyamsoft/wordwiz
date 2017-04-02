@@ -43,19 +43,15 @@ public abstract class WordProcessActivity extends ActivityBase {
     handleIntent(intent);
   }
 
-  @Override protected void onStart() {
-    super.onStart();
-    presenter.bindView(null);
-  }
-
   @Override protected void onStop() {
     super.onStop();
-    presenter.unbindView();
+    presenter.stop();
   }
 
   @Override protected void onDestroy() {
     super.onDestroy();
     overridePendingTransition(0, 0);
+    presenter.destroy();
   }
 
   private void handleIntent(@NonNull Intent intent) {
