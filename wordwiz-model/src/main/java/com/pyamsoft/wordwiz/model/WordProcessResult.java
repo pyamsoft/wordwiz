@@ -37,10 +37,6 @@ import com.google.auto.value.AutoValue;
     return new AutoValue_WordProcessResult(type, wordCount, extras);
   }
 
-  @CheckResult @NonNull public static WordProcessResult error() {
-    return create(ProcessType.ERROR, -1);
-  }
-
   @CheckResult public abstract ProcessType type();
 
   @CheckResult public abstract int count();

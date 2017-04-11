@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz.word;
 import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.pydroid.helper.DisposableHelper;
 import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
@@ -29,7 +28,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import timber.log.Timber;
 
-class WordProcessPresenter extends SchedulerPresenter{
+class WordProcessPresenter extends SchedulerPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
   @NonNull private Disposable disposable = Disposables.empty();
@@ -44,6 +43,9 @@ class WordProcessPresenter extends SchedulerPresenter{
     disposable = DisposableHelper.dispose(disposable);
   }
 
+  /**
+   * public
+   */
   void handleActivityLaunchType(@NonNull ComponentName componentName, @NonNull CharSequence text,
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
     ProcessCallback processCallback = Checker.checkNonNull(callback);
@@ -61,11 +63,8 @@ class WordProcessPresenter extends SchedulerPresenter{
             });
   }
 
-  /**
-   * @hide
-   */
-  @RestrictTo(RestrictTo.Scope.SUBCLASSES) @SuppressWarnings("WeakerAccess") void handleProcessType(
-      @NonNull WordProcessResult processType, @NonNull ProcessCallback callback) {
+  @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType,
+      @NonNull ProcessCallback callback) {
     final Bundle extras = processType.extras();
     switch (processType.type()) {
       case WORD_COUNT:
@@ -86,8 +85,6 @@ class WordProcessPresenter extends SchedulerPresenter{
 
         callback.onProcessTypeOccurrences(processType.count(), snippet);
         break;
-      case ERROR:
-        callback.onProcessError();
     }
   }
 

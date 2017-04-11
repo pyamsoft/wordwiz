@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.helper.Checker;
 import com.pyamsoft.wordwiz.model.ProcessType;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 class WordProcessInteractor extends WordProcessCommonInteractor {
@@ -51,10 +51,12 @@ class WordProcessInteractor extends WordProcessCommonInteractor {
   //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
   //}
 
-  @NonNull @CheckResult
-  public Observable<WordProcessResult> getProcessType(@NonNull ComponentName componentName,
-      @NonNull CharSequence text, @NonNull Bundle extras) {
-    return Observable.fromCallable(() -> {
+  /**
+   * public
+   */
+  @NonNull @CheckResult Single<WordProcessResult> getProcessType(
+      @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras) {
+    return Single.fromCallable(() -> {
       WordProcessResult result;
       try {
         Timber.d("Attempt to load the label this activity launched with");
@@ -62,14 +64,14 @@ class WordProcessInteractor extends WordProcessCommonInteractor {
             packageManager.getActivityInfo(Checker.checkNonNull(componentName), 0);
         if (activityInfo == null) {
           Timber.e("Activity info is NULL");
-          result = WordProcessResult.error();
+          throw new RuntimeException("ActivityInfo is NULL");
         } else {
           final CharSequence label = activityInfo.loadLabel(packageManager);
           result = getProcessTypeForLabel(label, Checker.checkNonNull(text));
         }
       } catch (PackageManager.NameNotFoundException e) {
         Timber.e(e, "Name not found ERROR");
-        result = WordProcessResult.error();
+        throw new RuntimeException("Name not found for ComponentName: " + componentName);
       }
 
       return result;
@@ -86,7 +88,7 @@ class WordProcessInteractor extends WordProcessCommonInteractor {
     } else if (label.equals(LABEL_TYPE_OCCURRENCES)) {
       throw new RuntimeException("Not ready yet");
     } else {
-      result = WordProcessResult.error();
+      throw new IllegalArgumentException("Invalid label: " + label);
     }
 
     return result;
