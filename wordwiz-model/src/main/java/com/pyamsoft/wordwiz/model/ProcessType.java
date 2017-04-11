@@ -17,7 +17,6 @@
 package com.pyamsoft.wordwiz.model;
 
 public enum ProcessType {
-  ERROR,
   WORD_COUNT,
   LETTER_COUNT,
   OCCURRENCES,
