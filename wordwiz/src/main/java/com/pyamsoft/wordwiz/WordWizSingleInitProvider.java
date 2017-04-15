@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.pyamsoft.pydroid.about.Licenses;
 import com.pyamsoft.pydroid.helper.BuildConfigChecker;
 import com.pyamsoft.pydroid.ui.SingleInitContentProvider;
 import com.pyamsoft.wordwiz.base.WordWizModule;
@@ -40,5 +41,9 @@ public class WordWizSingleInitProvider extends SingleInitContentProvider {
 
   @Nullable @Override public String provideGoogleOpenSourceLicenses(@NonNull Context context) {
     return null;
+  }
+
+  @Override public void insertCustomLicensesIntoMap() {
+    Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase");
   }
 }
