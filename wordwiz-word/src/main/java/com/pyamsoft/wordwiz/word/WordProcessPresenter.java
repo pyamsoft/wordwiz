@@ -20,27 +20,19 @@ import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.pyamsoft.pydroid.helper.Checker;
-import com.pyamsoft.pydroid.helper.DisposableHelper;
 import com.pyamsoft.pydroid.presenter.SchedulerPresenter;
 import com.pyamsoft.wordwiz.model.WordProcessResult;
 import io.reactivex.Scheduler;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.disposables.Disposables;
 import timber.log.Timber;
 
 class WordProcessPresenter extends SchedulerPresenter {
 
   @NonNull private final WordProcessInteractor interactor;
-  @NonNull private Disposable disposable = Disposables.empty();
 
   WordProcessPresenter(@NonNull WordProcessInteractor interactor,
       @NonNull Scheduler observeScheduler, @NonNull Scheduler subscribeScheduler) {
     super(observeScheduler, subscribeScheduler);
     this.interactor = interactor;
-  }
-
-  @Override protected void onStop() {
-    disposable = DisposableHelper.dispose(disposable);
   }
 
   /**
@@ -50,17 +42,16 @@ class WordProcessPresenter extends SchedulerPresenter {
       @NonNull Bundle extras, @NonNull ProcessCallback callback) {
     ProcessCallback processCallback = Checker.checkNonNull(callback);
 
-    processCallback.onProcessBegin();
-    disposable = DisposableHelper.dispose(disposable);
-    disposable = interactor.getProcessType(componentName, text, extras)
+    disposeOnStop(interactor.getProcessType(componentName, text, extras)
         .subscribeOn(getSubscribeScheduler())
         .observeOn(getObserveScheduler())
         .doAfterTerminate(processCallback::onProcessComplete)
+        .doOnSubscribe(disposable -> processCallback.onProcessBegin())
         .subscribe(wordProcessResult -> handleProcessType(wordProcessResult, processCallback),
             throwable -> {
               Timber.e(throwable, "onError handleActivityLaunchType");
               processCallback.onProcessError();
-            });
+            }));
   }
 
   @SuppressWarnings("WeakerAccess") void handleProcessType(@NonNull WordProcessResult processType,
