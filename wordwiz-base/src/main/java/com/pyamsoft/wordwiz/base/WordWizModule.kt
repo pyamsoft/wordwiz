@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.word;
+package com.pyamsoft.wordwiz.base
 
-import android.support.annotation.NonNull;
+import android.content.Context
+import android.support.annotation.CheckResult
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-public class WordProcessComponent {
+class WordWizModule(context: Context) {
 
-  @NonNull private final WordProcessModule wordProcessModule;
+  private val appContext: Context = context.applicationContext
 
-  public WordProcessComponent(@NonNull WordProcessModule wordProcessModule) {
-    this.wordProcessModule = wordProcessModule;
+  @CheckResult fun provideContext(): Context {
+    return appContext
   }
 
-  void inject(WordProcessActivity activity) {
-    activity.presenter = wordProcessModule.getPresenter();
+  @CheckResult fun provideObsScheduler(): Scheduler {
+    return AndroidSchedulers.mainThread()
+  }
+
+  @CheckResult fun provideSubScheduler(): Scheduler {
+    return Schedulers.io()
   }
 }
