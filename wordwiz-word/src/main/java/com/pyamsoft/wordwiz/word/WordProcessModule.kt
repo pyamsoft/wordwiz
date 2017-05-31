@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.model;
+package com.pyamsoft.wordwiz.word
 
-public enum ProcessType {
-  WORD_COUNT,
-  LETTER_COUNT,
-  OCCURRENCES,
+import android.support.annotation.CheckResult
+import com.pyamsoft.wordwiz.base.WordWizModule
+import io.reactivex.Scheduler
+
+class WordProcessModule(wordWizModule: WordWizModule) {
+
+  private val interactor: WordProcessInteractor = WordProcessInteractor(
+      wordWizModule.provideContext())
+  private val obsScheduler: Scheduler = wordWizModule.provideObsScheduler()
+  private val subScheduler: Scheduler = wordWizModule.provideSubScheduler()
+
+  val presenter: WordProcessPresenter
+    @CheckResult get() = WordProcessPresenter(interactor, obsScheduler, subScheduler)
 }
