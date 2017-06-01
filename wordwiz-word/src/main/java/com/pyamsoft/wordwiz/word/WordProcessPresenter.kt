@@ -33,45 +33,35 @@ class WordProcessPresenter internal constructor(
    * public
    */
   fun handleActivityLaunchType(componentName: ComponentName, text: CharSequence,
-      extras: Bundle, callback: ProcessCallback) {
+      extras: Bundle, onProcessBegin: () -> Unit, onProcessError: (Throwable) -> Unit,
+      onProcessTypeWordCount: (Int) -> Unit, onProcessTypeLetterCount: (Int) -> Unit,
+      onProcessTypeOccurrences: (Int, String) -> Unit, onProcessComplete: () -> Unit) {
     disposeOnStop(interactor.getProcessType(componentName, text, extras)
         .subscribeOn(subscribeScheduler)
         .observeOn(observeScheduler)
-        .doAfterTerminate { callback.onProcessComplete() }
-        .doOnSubscribe { callback.onProcessBegin() }
-        .subscribe({ wordProcessResult -> handleProcessType(wordProcessResult, callback) }
-            , {
+        .doAfterTerminate { onProcessComplete() }
+        .doOnSubscribe { onProcessBegin() }
+        .subscribe({
+          handleProcessType(it, onProcessTypeWordCount = onProcessTypeWordCount,
+              onProcessTypeLetterCount = onProcessTypeLetterCount,
+              onProcessTypeOccurrences = onProcessTypeOccurrences)
+        }, {
           Timber.e(it, "onError handleActivityLaunchType")
-          callback.onProcessError()
+          onProcessError(it)
         }))
   }
 
-  fun handleProcessType(processType: WordProcessResult,
-      callback: ProcessCallback) {
+  fun handleProcessType(processType: WordProcessResult, onProcessTypeWordCount: (Int) -> Unit,
+      onProcessTypeLetterCount: (Int) -> Unit, onProcessTypeOccurrences: (Int, String) -> Unit) {
     when (processType.type) {
-      ProcessType.WORD_COUNT -> callback.onProcessTypeWordCount(processType.count)
-      ProcessType.LETTER_COUNT -> callback.onProcessTypeLetterCount(processType.count)
+      ProcessType.WORD_COUNT -> onProcessTypeWordCount(processType.count)
+      ProcessType.LETTER_COUNT -> onProcessTypeLetterCount(processType.count)
       ProcessType.OCCURRENCES -> {
         val extras: Bundle = processType.extras ?: throw NullPointerException("Extras is NULL")
         val snippet = extras.getString(WordProcessResult.KEY_EXTRA_SNIPPET,
             null) ?: throw NullPointerException("Snippet is NULL")
-        callback.onProcessTypeOccurrences(processType.count, snippet)
+        onProcessTypeOccurrences(processType.count, snippet)
       }
     }
-  }
-
-  interface ProcessCallback {
-
-    fun onProcessBegin()
-
-    fun onProcessError()
-
-    fun onProcessComplete()
-
-    fun onProcessTypeWordCount(wordCount: Int)
-
-    fun onProcessTypeLetterCount(letterCount: Int)
-
-    fun onProcessTypeOccurrences(occurrences: Int, snip: String)
   }
 }
