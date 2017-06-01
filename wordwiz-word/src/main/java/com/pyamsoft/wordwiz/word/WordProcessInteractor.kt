@@ -29,7 +29,7 @@ import timber.log.Timber
 internal class WordProcessInteractor internal constructor(
     context: Context) : WordProcessCommonInteractor() {
 
-  private val packageManager: PackageManager = context.applicationContext.packageManager
+  internal val packageManager: PackageManager = context.applicationContext.packageManager
   private val LABEL_TYPE_WORD_COUNT: String = context.applicationContext.getString(
       R.string.label_word_count)
   private val LABEL_TYPE_LETTER_COUNT: String = context.applicationContext.getString(
