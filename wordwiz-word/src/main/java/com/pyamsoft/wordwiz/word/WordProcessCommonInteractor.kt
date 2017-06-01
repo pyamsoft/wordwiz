@@ -57,6 +57,6 @@ internal abstract class WordProcessCommonInteractor internal constructor() {
 
   companion object {
 
-    private val SPLIT_BY_WHITESPACE = "\\s+"
+    private const val SPLIT_BY_WHITESPACE = "\\s+"
   }
 }

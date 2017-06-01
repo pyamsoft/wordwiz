@@ -18,11 +18,9 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.pydroid.ui.helper.Toasty
 import com.pyamsoft.wordwiz.Injector
-import java.util.Locale
 import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase() {
@@ -56,42 +54,26 @@ abstract class WordProcessActivity : ActivityBase() {
   private fun handleIntent(intent: Intent) {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    presenter.handleActivityLaunchType(componentName, text, getIntent().extras,
-        object : WordProcessPresenter.ProcessCallback {
+    presenter.handleActivityLaunchType(componentName, text, getIntent().extras, onProcessBegin = {
+      Timber.d("Start processing")
+    }
+        , onProcessError = {
+      Timber.e(it, "An error occurred while attempting to process text")
+      Toasty.makeText(applicationContext,
+          "An error occurred while attempting to process text", Toasty.LENGTH_SHORT).show()
+    }, onProcessTypeWordCount = {
+      Toasty.makeText(applicationContext, "Word count: $it", Toasty.LENGTH_SHORT)
+          .show()
+    }, onProcessTypeLetterCount = {
+      Toasty.makeText(applicationContext, "Letter count: $it",
+          Toasty.LENGTH_SHORT).show()
 
-          override fun onProcessBegin() {
-            // Start
-          }
-
-          override fun onProcessError() {
-            Timber.e("An error occurred while attempting to process text")
-            Toasty.makeText(applicationContext,
-                "An error occurred while attempting to process text", Toasty.LENGTH_SHORT).show()
-          }
-
-          override fun onProcessComplete() {
-            Timber.d("Process complete")
-            finish()
-          }
-
-          override fun onProcessTypeWordCount(wordCount: Int) {
-            Timber.d("Word count: %d", wordCount)
-            Toasty.makeText(applicationContext, "Word count: " + wordCount, Toasty.LENGTH_SHORT)
-                .show()
-          }
-
-          override fun onProcessTypeLetterCount(letterCount: Int) {
-            Timber.d("Letter count: %d", letterCount)
-            Toasty.makeText(applicationContext, "Letter count: " + letterCount,
-                Toasty.LENGTH_SHORT).show()
-          }
-
-          override fun onProcessTypeOccurrences(occurrences: Int, snip: String) {
-            Timber.d("Occurrence count of snippet %s: %d", snip, occurrences)
-            Toasty.makeText(applicationContext,
-                String.format(Locale.getDefault(), "Occurrence count of snippet %s: %d", snip,
-                    occurrences), Toasty.LENGTH_SHORT).show()
-          }
-        })
+    }, onProcessTypeOccurrences = { occurrences, snippet ->
+      Toasty.makeText(applicationContext, "Occurrence count of snippet '$snippet': $occurrences",
+          Toasty.LENGTH_SHORT).show()
+    }, onProcessComplete = {
+      Timber.d("Process complete")
+      finish()
+    })
   }
 }
