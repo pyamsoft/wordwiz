@@ -23,6 +23,7 @@ import com.pyamsoft.wordwiz.word.WordProcessActivity
 import timber.log.Timber
 
 class LetterCountActivity : WordProcessActivity() {
+
   companion object {
 
     @JvmStatic
