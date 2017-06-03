@@ -27,6 +27,7 @@ class WordProcessModule(wordWizModule: WordWizModule) {
   private val obsScheduler: Scheduler = wordWizModule.provideObsScheduler()
   private val subScheduler: Scheduler = wordWizModule.provideSubScheduler()
 
-  val presenter: WordProcessPresenter
-    @CheckResult get() = WordProcessPresenter(interactor, obsScheduler, subScheduler)
+  @CheckResult fun getPresenter(): WordProcessPresenter {
+    return WordProcessPresenter(interactor, obsScheduler, subScheduler)
+  }
 }

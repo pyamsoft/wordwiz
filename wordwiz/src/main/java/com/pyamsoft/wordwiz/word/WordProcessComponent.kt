@@ -19,6 +19,6 @@ package com.pyamsoft.wordwiz.word
 class WordProcessComponent(private val wordProcessModule: WordProcessModule) {
 
   internal fun inject(activity: WordProcessActivity) {
-    activity.presenter = wordProcessModule.presenter
+    activity.presenter = wordProcessModule.getPresenter()
   }
 }
