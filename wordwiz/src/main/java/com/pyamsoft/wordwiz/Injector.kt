@@ -16,7 +16,10 @@
 
 package com.pyamsoft.wordwiz
 
+import android.content.Context
 import android.support.annotation.CheckResult
+import com.pyamsoft.pydroid.helper.ThreadSafe.MutableSingleton
+import com.pyamsoft.wordwiz.base.WordWizModule
 
 class Injector private constructor(private val component: WordWizComponent) {
 
@@ -26,25 +29,17 @@ class Injector private constructor(private val component: WordWizComponent) {
 
   companion object {
 
-    @Volatile private var instance: Injector? = null
+    private val singleton = MutableSingleton<Injector>(null)
 
     @JvmStatic
-    internal fun set(component: WordWizComponent) {
-      synchronized(Injector::class.java) {
-        instance = Injector(component)
-      }
+    internal fun set(context: Context) {
+      singleton.assign(
+          Injector(WordWizComponent.withModule(WordWizModule(context.applicationContext))))
     }
 
     @JvmStatic
     @CheckResult fun get(): Injector {
-      if (instance == null) {
-        synchronized(Injector::class.java) {
-          if (instance == null) {
-            throw IllegalStateException("Injector component is NULL")
-          }
-        }
-      }
-      return instance!!
+      return singleton.access()
     }
   }
 }

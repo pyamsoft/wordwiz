@@ -21,7 +21,6 @@ import android.support.annotation.CheckResult
 import android.support.v4.app.Fragment
 import com.pyamsoft.pydroid.about.Licenses
 import com.pyamsoft.pydroid.ui.PYDroid
-import com.pyamsoft.wordwiz.base.WordWizModule
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
@@ -37,8 +36,7 @@ class WordWiz : Application() {
 
     Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
     PYDroid.initialize(this, BuildConfig.DEBUG)
-    val component = WordWizComponent.withModule(WordWizModule(this))
-    Injector.set(component)
+    Injector.set(this)
 
     if (BuildConfig.DEBUG) {
       refWatcher = LeakCanary.install(this)
