@@ -17,29 +17,15 @@
 package com.pyamsoft.wordwiz
 
 import android.content.Context
-import android.support.annotation.CheckResult
-import com.pyamsoft.pydroid.helper.ThreadSafe.MutableSingleton
-import com.pyamsoft.wordwiz.base.WordWizModule
 
-class Injector private constructor(private val component: WordWizComponent) {
+object Injector {
 
-  @CheckResult fun provideComponent(): WordWizComponent {
-    return component
-  }
-
-  companion object {
-
-    private val singleton = MutableSingleton<Injector>(null)
-
-    @JvmStatic
-    internal fun set(context: Context) {
-      singleton.assign(
-          Injector(WordWizComponent.withModule(WordWizModule(context.applicationContext))))
-    }
-
-    @JvmStatic
-    @CheckResult fun get(): Injector {
-      return singleton.access()
+  fun with(context: Context, func: (WordWizComponent) -> Unit) {
+    val app = context.applicationContext
+    if (app is WordWiz) {
+      func(app.getComponent())
+    } else {
+      throw ClassCastException("Application is not WordWiz")
     }
   }
 }

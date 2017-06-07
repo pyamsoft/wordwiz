@@ -21,12 +21,24 @@ import android.support.annotation.CheckResult
 import android.support.v4.app.Fragment
 import com.pyamsoft.pydroid.about.Licenses
 import com.pyamsoft.pydroid.ui.PYDroid
+import com.pyamsoft.wordwiz.base.WordWizModule
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
 class WordWiz : Application() {
 
   private var refWatcher: RefWatcher? = null
+
+  private var component: WordWizComponent? = null
+
+  @CheckResult fun getComponent(): WordWizComponent {
+    val obj = component
+    if (obj == null) {
+      throw IllegalStateException("WordWizComponent must be initialized before use")
+    } else {
+      return obj
+    }
+  }
 
   override fun onCreate() {
     super.onCreate()
@@ -36,7 +48,8 @@ class WordWiz : Application() {
 
     Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
     PYDroid.initialize(this, BuildConfig.DEBUG)
-    Injector.set(this)
+
+    component = WordWizComponent.withModule(WordWizModule(applicationContext))
 
     if (BuildConfig.DEBUG) {
       refWatcher = LeakCanary.install(this)
