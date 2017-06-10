@@ -36,22 +36,25 @@ class WordProcessPresenter internal constructor(
       extras: Bundle, onProcessBegin: () -> Unit, onProcessError: (Throwable) -> Unit,
       onProcessTypeWordCount: (Int) -> Unit, onProcessTypeLetterCount: (Int) -> Unit,
       onProcessTypeOccurrences: (Int, String) -> Unit, onProcessComplete: () -> Unit) {
-    disposeOnStop(interactor.getProcessType(componentName, text, extras)
-        .subscribeOn(subscribeScheduler)
-        .observeOn(observeScheduler)
-        .doAfterTerminate { onProcessComplete() }
-        .doOnSubscribe { onProcessBegin() }
-        .subscribe({
-          handleProcessType(it, onProcessTypeWordCount = onProcessTypeWordCount,
-              onProcessTypeLetterCount = onProcessTypeLetterCount,
-              onProcessTypeOccurrences = onProcessTypeOccurrences)
-        }, {
-          Timber.e(it, "onError handleActivityLaunchType")
-          onProcessError(it)
-        }))
+    disposeOnStop {
+      interactor.getProcessType(componentName, text, extras)
+          .subscribeOn(subscribeScheduler)
+          .observeOn(observeScheduler)
+          .doAfterTerminate { onProcessComplete() }
+          .doOnSubscribe { onProcessBegin() }
+          .subscribe({
+            handleProcessType(it, onProcessTypeWordCount = onProcessTypeWordCount,
+                onProcessTypeLetterCount = onProcessTypeLetterCount,
+                onProcessTypeOccurrences = onProcessTypeOccurrences)
+          }, {
+            Timber.e(it, "onError handleActivityLaunchType")
+            onProcessError(it)
+          })
+    }
   }
 
-  fun handleProcessType(processType: WordProcessResult, onProcessTypeWordCount: (Int) -> Unit,
+  private fun handleProcessType(processType: WordProcessResult,
+      onProcessTypeWordCount: (Int) -> Unit,
       onProcessTypeLetterCount: (Int) -> Unit, onProcessTypeOccurrences: (Int, String) -> Unit) {
     when (processType.type) {
       ProcessType.WORD_COUNT -> onProcessTypeWordCount(processType.count)
