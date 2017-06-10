@@ -69,7 +69,7 @@ internal class WordProcessInteractor internal constructor(
     }
   }
 
-  @CheckResult fun getProcessTypeForLabel(
+  @CheckResult private fun getProcessTypeForLabel(
       label: CharSequence, text: CharSequence): WordProcessResult {
     val result: WordProcessResult
     if (label == LABEL_TYPE_WORD_COUNT) {

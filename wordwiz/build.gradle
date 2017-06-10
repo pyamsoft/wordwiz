@@ -40,8 +40,8 @@ android {
     resConfigs "en"
   }
 
-  dataBinding {
-    enabled true
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
   }
 
   compileOptions {
