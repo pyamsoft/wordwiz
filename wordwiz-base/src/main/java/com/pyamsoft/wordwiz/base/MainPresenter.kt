@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.word
+package com.pyamsoft.wordwiz.base
 
-class WordProcessComponent(private val wordProcessModule: WordProcessModule) {
+import com.pyamsoft.pydroid.presenter.PreferencePresenter
 
-}
+// TODO move into -main module
+class MainPresenter : PreferencePresenter()
+

@@ -21,12 +21,18 @@ import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.app.fragment.ActionBarSettingsPreferenceFragment
+import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
+import com.pyamsoft.wordwiz.base.MainPresenter
 import com.pyamsoft.wordwiz.word.count.LetterCountActivity
 import com.pyamsoft.wordwiz.word.count.WordCountActivity
 
 class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
+
+  private lateinit var wordCountPreference: SwitchPreferenceCompat
+  private lateinit var letterCountPreference: SwitchPreferenceCompat
+  internal lateinit var presenter: MainPresenter
 
   override val isLastOnBackStack: AboutLibrariesFragment.BackStackState
     get() = AboutLibrariesFragment.BackStackState.LAST
@@ -40,33 +46,49 @@ class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
   override val preferenceXmlResId: Int
     get() = R.xml.preferences
 
-  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-
-    val wordCountPreference = findPreference(
-        getString(R.string.word_count_key)) as SwitchPreferenceCompat
-    wordCountPreference.isChecked = WordCountActivity.isEnabled(context)
-    wordCountPreference.setOnPreferenceClickListener {
-      val enabled = WordCountActivity.isEnabled(context)
-      WordCountActivity.enable(context, !enabled)
-      true
-    }
-
-    val letterCountPreference = findPreference(
-        getString(R.string.letter_count_key)) as SwitchPreferenceCompat
-    letterCountPreference.isChecked = LetterCountActivity.isEnabled(context)
-    letterCountPreference.setOnPreferenceClickListener {
-      val enabled = LetterCountActivity.isEnabled(context)
-      LetterCountActivity.enable(context, !enabled)
-      true
-    }
-  }
-
   override val hideClearAll: Boolean
     get() = true
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    Injector.with(context) {
+      it.inject(this)
+    }
+  }
+
+  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    wordCountPreference = findPreference(
+        getString(R.string.word_count_key)) as SwitchPreferenceCompat
+
+    letterCountPreference = findPreference(
+        getString(R.string.letter_count_key)) as SwitchPreferenceCompat
+  }
+
+  override fun onStart() {
+    super.onStart()
+    wordCountPreference.isChecked = WordCountActivity.isEnabled(context)
+    presenter.clickEvent(wordCountPreference, {
+      val enabled = WordCountActivity.isEnabled(context)
+      WordCountActivity.enable(context, !enabled)
+    })
+
+    letterCountPreference.isChecked = LetterCountActivity.isEnabled(context)
+    presenter.clickEvent(letterCountPreference, {
+      val enabled = LetterCountActivity.isEnabled(context)
+      LetterCountActivity.enable(context, !enabled)
+    })
+  }
+
+  override fun onStop() {
+    super.onStop()
+    presenter.stop()
+  }
+
   override fun onDestroy() {
     super.onDestroy()
+    presenter.destroy()
     WordWiz.getRefWatcher(this).watch(this)
   }
 

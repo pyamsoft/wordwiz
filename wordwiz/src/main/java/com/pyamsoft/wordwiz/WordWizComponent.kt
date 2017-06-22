@@ -16,25 +16,20 @@
 
 package com.pyamsoft.wordwiz
 
-import android.support.annotation.CheckResult
 import com.pyamsoft.wordwiz.base.WordWizModule
-import com.pyamsoft.wordwiz.word.WordProcessComponent
+import com.pyamsoft.wordwiz.main.MainPreferenceFragment
+import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
-class WordWizComponent private constructor(module: WordWizModule) {
+class WordWizComponent(private val module: WordWizModule) {
 
-  private val wordProcessComponent: WordProcessComponent = WordProcessComponent(
-      WordProcessModule(module))
+  private val wordProcessModule = WordProcessModule(module)
 
-  @CheckResult fun plusWordProcessComponent(): WordProcessComponent {
-    return wordProcessComponent
+  internal fun inject(fragment: MainPreferenceFragment) {
+    fragment.presenter = module.getMainPresenter()
   }
 
-  companion object {
-
-    @JvmStatic
-    @CheckResult internal fun withModule(module: WordWizModule): WordWizComponent {
-      return WordWizComponent(module)
-    }
+  internal fun inject(activity: WordProcessActivity) {
+    activity.presenter = wordProcessModule.getPresenter()
   }
 }
