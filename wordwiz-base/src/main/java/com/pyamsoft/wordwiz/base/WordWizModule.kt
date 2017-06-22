@@ -37,4 +37,9 @@ class WordWizModule(context: Context) {
   @CheckResult fun provideSubScheduler(): Scheduler {
     return Schedulers.io()
   }
+
+  // TODO move into -main module
+  @CheckResult fun getMainPresenter(): MainPresenter {
+    return MainPresenter()
+  }
 }

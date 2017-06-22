@@ -28,7 +28,6 @@ import com.squareup.leakcanary.RefWatcher
 class WordWiz : Application() {
 
   private var refWatcher: RefWatcher? = null
-
   private var component: WordWizComponent? = null
 
   @CheckResult fun getComponent(): WordWizComponent {
@@ -49,7 +48,7 @@ class WordWiz : Application() {
     Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
     PYDroid.initialize(this, BuildConfig.DEBUG)
 
-    component = WordWizComponent.withModule(WordWizModule(applicationContext))
+    component = WordWizComponent(WordWizModule(applicationContext))
 
     if (BuildConfig.DEBUG) {
       refWatcher = LeakCanary.install(this)

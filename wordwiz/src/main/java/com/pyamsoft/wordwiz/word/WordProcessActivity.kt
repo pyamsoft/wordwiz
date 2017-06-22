@@ -31,7 +31,7 @@ abstract class WordProcessActivity : ActivityBase() {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
     Injector.with(this) {
-      it.plusWordProcessComponent().inject(this)
+      it.inject(this)
     }
 
     handleIntent(intent)

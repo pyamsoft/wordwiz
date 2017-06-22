@@ -38,8 +38,8 @@ class WordProcessPresenter internal constructor(
       onProcessTypeOccurrences: (Int, String) -> Unit, onProcessComplete: () -> Unit) {
     disposeOnStop {
       interactor.getProcessType(componentName, text, extras)
-          .subscribeOn(subscribeScheduler)
-          .observeOn(observeScheduler)
+          .subscribeOn(backgroundScheduler)
+          .observeOn(foregroundScheduler)
           .doAfterTerminate { onProcessComplete() }
           .doOnSubscribe { onProcessBegin() }
           .subscribe({
