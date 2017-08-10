@@ -26,7 +26,7 @@ import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
     private val interactor: WordProcessInteractor,
-    observeScheduler: Scheduler, subscribeScheduler: Scheduler) : SchedulerPresenter(
+    observeScheduler: Scheduler, subscribeScheduler: Scheduler) : SchedulerPresenter<Unit>(
     observeScheduler, subscribeScheduler) {
 
   /**

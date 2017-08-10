@@ -30,6 +30,7 @@ abstract class WordProcessActivity : ActivityBase() {
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
+
     Injector.with(this) {
       it.inject(this)
     }
@@ -50,7 +51,6 @@ abstract class WordProcessActivity : ActivityBase() {
   override fun onDestroy() {
     super.onDestroy()
     overridePendingTransition(0, 0)
-    presenter.destroy()
   }
 
   private fun handleIntent(intent: Intent) {

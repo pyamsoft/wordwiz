@@ -22,7 +22,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.preference.PreferenceManager
 import android.view.MenuItem
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
-import com.pyamsoft.pydroid.ui.rating.RatingDialog
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
 import com.pyamsoft.pydroid.util.AppUtil
 import com.pyamsoft.wordwiz.BuildConfig
@@ -31,7 +30,7 @@ import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
 class MainActivity : TamperActivity() {
 
-  private lateinit var binding : ActivityMainBinding
+  private lateinit var binding: ActivityMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.Theme_WordWiz_Light)
@@ -98,11 +97,6 @@ class MainActivity : TamperActivity() {
 
   override val versionName: String
     get() = BuildConfig.VERSION_NAME
-
-  override fun onPostResume() {
-    super.onPostResume()
-    RatingDialog.showRatingDialog(this, this, false)
-  }
 
   override val safePackageName: String
     get() = "com.pyamsoft.wordwiz"

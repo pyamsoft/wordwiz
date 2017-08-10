@@ -88,7 +88,6 @@ class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
 
   override fun onDestroy() {
     super.onDestroy()
-    presenter.destroy()
     WordWiz.getRefWatcher(this).watch(this)
   }
 
