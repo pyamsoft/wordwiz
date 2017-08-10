@@ -16,8 +16,9 @@
 
 package com.pyamsoft.wordwiz.base
 
-import com.pyamsoft.pydroid.presenter.PreferencePresenter
+import com.pyamsoft.pydroid.util.presenter.PreferencePresenter
+
 
 // TODO move into -main module
-class MainPresenter : PreferencePresenter()
+class MainPresenter : PreferencePresenter<Unit>()
 
