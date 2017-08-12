@@ -17,17 +17,12 @@
 package com.pyamsoft.wordwiz
 
 import com.pyamsoft.wordwiz.base.WordWizModule
-import com.pyamsoft.wordwiz.main.MainPreferenceFragment
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
-class WordWizComponent(private val module: WordWizModule) {
+class WordWizComponent(module: WordWizModule) {
 
   private val wordProcessModule = WordProcessModule(module)
-
-  internal fun inject(fragment: MainPreferenceFragment) {
-    fragment.presenter = module.getMainPresenter()
-  }
 
   internal fun inject(activity: WordProcessActivity) {
     activity.presenter = wordProcessModule.getPresenter()

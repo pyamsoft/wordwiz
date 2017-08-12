@@ -83,10 +83,6 @@ class MainActivity : TamperActivity() {
     return handled || super.onOptionsItemSelected(item)
   }
 
-  override fun provideApplicationName(): String {
-    return "WordWiz"
-  }
-
   override val changeLogLines: Array<String>
     get() {
       val line1 = "BUGFIX: Bugfixes and improvements"
@@ -106,4 +102,7 @@ class MainActivity : TamperActivity() {
 
   override val currentApplicationVersion: Int
     get() = BuildConfig.VERSION_CODE
+
+  override val applicationName: String
+    get() = getString(R.string.app_name)
 }

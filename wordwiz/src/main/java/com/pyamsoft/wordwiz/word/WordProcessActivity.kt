@@ -43,6 +43,11 @@ abstract class WordProcessActivity : ActivityBase() {
     handleIntent(intent)
   }
 
+  override fun onStart() {
+    super.onStart()
+    presenter.start(Unit)
+  }
+
   override fun onStop() {
     super.onStop()
     presenter.stop()
