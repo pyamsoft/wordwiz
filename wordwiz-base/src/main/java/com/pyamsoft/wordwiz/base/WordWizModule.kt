@@ -30,16 +30,15 @@ class WordWizModule(context: Context) {
     return appContext
   }
 
-  @CheckResult fun provideObsScheduler(): Scheduler {
+  @CheckResult fun provideMainScheduler(): Scheduler {
     return AndroidSchedulers.mainThread()
   }
 
-  @CheckResult fun provideSubScheduler(): Scheduler {
+  @CheckResult fun provideIoScheduler(): Scheduler {
     return Schedulers.io()
   }
 
-  // TODO move into -main module
-  @CheckResult fun getMainPresenter(): MainPresenter {
-    return MainPresenter()
+  @CheckResult fun provideComputationScheduler(): Scheduler {
+    return Schedulers.computation()
   }
 }

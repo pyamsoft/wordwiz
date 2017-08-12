@@ -26,8 +26,9 @@ import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
     private val interactor: WordProcessInteractor,
-    observeScheduler: Scheduler, subscribeScheduler: Scheduler) : SchedulerPresenter<Unit>(
-    observeScheduler, subscribeScheduler) {
+    computationScheduler: Scheduler, ioScheduler: Scheduler,
+    mainThreadScheduler: Scheduler) : SchedulerPresenter<Unit>(
+    computationScheduler, ioScheduler, mainThreadScheduler) {
 
   /**
    * public
@@ -38,8 +39,8 @@ class WordProcessPresenter internal constructor(
       onProcessTypeOccurrences: (Int, String) -> Unit, onProcessComplete: () -> Unit) {
     disposeOnStop {
       interactor.getProcessType(componentName, text, extras)
-          .subscribeOn(backgroundScheduler)
-          .observeOn(foregroundScheduler)
+          .subscribeOn(computationScheduler)
+          .observeOn(mainThreadScheduler)
           .doAfterTerminate { onProcessComplete() }
           .doOnSubscribe { onProcessBegin() }
           .subscribe({

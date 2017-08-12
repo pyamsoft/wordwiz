@@ -21,7 +21,7 @@ import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
 
-internal abstract class WordProcessCommonInteractor protected constructor() {
+internal abstract class WordProcessCommonInteractor protected constructor() : WordProcessInteractor {
 
   @CheckResult private fun tokenizeString(text: CharSequence): Array<String> {
     Timber.d("Tokenize string by spaces")
