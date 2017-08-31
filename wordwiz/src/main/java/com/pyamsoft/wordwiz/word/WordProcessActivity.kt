@@ -18,14 +18,20 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
-import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
+import com.pyamsoft.pydroid.presenter.Presenter
+import com.pyamsoft.pydroid.ui.app.activity.DisposableActivity
 import com.pyamsoft.pydroid.ui.helper.Toasty
 import com.pyamsoft.wordwiz.Injector
 import timber.log.Timber
 
-abstract class WordProcessActivity : ActivityBase() {
+abstract class WordProcessActivity : DisposableActivity() {
 
   internal lateinit var presenter: WordProcessPresenter
+
+  override fun provideBoundPresenters(): List<Presenter<*, *>> = listOf(presenter)
+
+  override val shouldConfirmBackPress: Boolean
+    get() = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
@@ -34,6 +40,8 @@ abstract class WordProcessActivity : ActivityBase() {
     Injector.with(this) {
       it.inject(this)
     }
+
+    presenter.create(Unit)
 
     handleIntent(intent)
   }
@@ -46,11 +54,6 @@ abstract class WordProcessActivity : ActivityBase() {
   override fun onStart() {
     super.onStart()
     presenter.start(Unit)
-  }
-
-  override fun onStop() {
-    super.onStop()
-    presenter.stop()
   }
 
   override fun onDestroy() {

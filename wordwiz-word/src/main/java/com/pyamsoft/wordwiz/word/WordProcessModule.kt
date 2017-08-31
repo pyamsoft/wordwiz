@@ -31,7 +31,6 @@ class WordProcessModule(wordWizModule: WordWizModule) {
     interactor = WordProcessInteractorImpl(wordWizModule.provideContext())
   }
 
-  @CheckResult fun getPresenter(): WordProcessPresenter {
-    return WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
-  }
+  @CheckResult fun getPresenter(): WordProcessPresenter =
+      WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
 }

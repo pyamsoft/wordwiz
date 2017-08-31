@@ -21,7 +21,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.CheckResult
-import com.pyamsoft.wordwiz.model.ProcessType
+import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
+import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.Single
 import timber.log.Timber
@@ -65,18 +66,10 @@ internal class WordProcessInteractorImpl internal constructor(
   }
 
   @CheckResult private fun getProcessTypeForLabel(
-      label: CharSequence, text: CharSequence): WordProcessResult {
-    val result: WordProcessResult
-    if (label == LABEL_TYPE_WORD_COUNT) {
-      result = WordProcessResult(ProcessType.WORD_COUNT, getWordCount(text))
-    } else if (label == LABEL_TYPE_LETTER_COUNT) {
-      result = WordProcessResult(ProcessType.LETTER_COUNT, getLetterCount(text))
-    } else if (label == LABEL_TYPE_OCCURRENCES) {
-      throw RuntimeException("Not ready yet")
-    } else {
-      throw IllegalArgumentException("Invalid label: " + label)
-    }
-
-    return result
-  }
+      label: CharSequence, text: CharSequence): WordProcessResult = when (label) {
+        LABEL_TYPE_WORD_COUNT -> WordProcessResult(WORD_COUNT, getWordCount(text))
+        LABEL_TYPE_LETTER_COUNT -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+        LABEL_TYPE_OCCURRENCES -> throw RuntimeException("Not ready yet")
+        else -> throw IllegalArgumentException("Invalid label: " + label)
+      }
 }

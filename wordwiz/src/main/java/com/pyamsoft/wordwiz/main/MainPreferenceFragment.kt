@@ -72,6 +72,11 @@ class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
     letterCountPreference.isChecked = LetterCountActivity.isEnabled(context)
   }
 
+  override fun onResume() {
+    super.onResume()
+    setActionBarTitle(R.string.app_name)
+  }
+
   override fun onDestroy() {
     super.onDestroy()
     WordWiz.getRefWatcher(this).watch(this)

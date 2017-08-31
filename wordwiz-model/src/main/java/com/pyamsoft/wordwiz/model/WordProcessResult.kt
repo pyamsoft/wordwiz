@@ -23,6 +23,6 @@ data class WordProcessResult @JvmOverloads constructor(val type: ProcessType, va
 
   companion object {
 
-    const val KEY_EXTRA_SNIPPET = "key_extra_snipper"
+    const val KEY_EXTRA_SNIPPET = "key_extra_snippet"
   }
 }
