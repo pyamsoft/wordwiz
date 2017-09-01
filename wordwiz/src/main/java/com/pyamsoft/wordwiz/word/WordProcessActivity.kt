@@ -28,7 +28,7 @@ abstract class WordProcessActivity : DisposableActivity() {
 
   internal lateinit var presenter: WordProcessPresenter
 
-  override fun provideBoundPresenters(): List<Presenter<*, *>> = listOf(presenter)
+  override fun provideBoundPresenters(): List<Presenter<*>> = listOf(presenter)
 
   override val shouldConfirmBackPress: Boolean
     get() = false
@@ -41,7 +41,7 @@ abstract class WordProcessActivity : DisposableActivity() {
       it.inject(this)
     }
 
-    presenter.create(Unit)
+    presenter.bind(Unit)
 
     handleIntent(intent)
   }
@@ -49,11 +49,6 @@ abstract class WordProcessActivity : DisposableActivity() {
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
     handleIntent(intent)
-  }
-
-  override fun onStart() {
-    super.onStart()
-    presenter.start(Unit)
   }
 
   override fun onDestroy() {
