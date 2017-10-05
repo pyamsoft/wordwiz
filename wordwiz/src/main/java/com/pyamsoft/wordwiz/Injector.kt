@@ -19,15 +19,19 @@
 package com.pyamsoft.wordwiz
 
 import android.content.Context
+import com.pyamsoft.pydroid.SimpleInjector
 
-object Injector {
+object Injector : SimpleInjector {
 
-  fun with(context: Context, func: (WordWizComponent) -> Unit) {
-    val app = context.applicationContext
-    if (app is WordWiz) {
-      func(app.getComponent())
+  override val name: String = "com.pyamsoft.wordwiz.INJECTOR"
+
+  override fun obtain(context: Context): Any {
+    val service: Any? = context.getSystemService(name)
+    if (service == null) {
+      throw IllegalStateException("Injector service was NULL")
     } else {
-      throw ClassCastException("Application is not WordWiz")
+      return service
     }
   }
+
 }
