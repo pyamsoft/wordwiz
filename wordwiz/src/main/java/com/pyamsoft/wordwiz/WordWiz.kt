@@ -32,15 +32,6 @@ class WordWiz : Application() {
   private var refWatcher: RefWatcher? = null
   private var component: WordWizComponent? = null
 
-  @CheckResult fun getComponent(): WordWizComponent {
-    val obj = component
-    if (obj == null) {
-      throw IllegalStateException("WordWizComponent must be initialized before use")
-    } else {
-      return obj
-    }
-  }
-
   override fun onCreate() {
     super.onCreate()
     if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -59,10 +50,19 @@ class WordWiz : Application() {
     }
   }
 
+  override fun getSystemService(name: String?): Any {
+    return if (Injector.name == name) {
+      component ?: throw IllegalStateException("WordWizComponent is NULL")
+    } else {
+      super.getSystemService(name)
+    }
+  }
+
   companion object {
 
     @JvmStatic
-    @CheckResult fun getRefWatcher(fragment: Fragment): RefWatcher {
+    @CheckResult
+    fun getRefWatcher(fragment: Fragment): RefWatcher {
       val application = fragment.activity.application
       if (application is WordWiz) {
         return application.refWatcher!!

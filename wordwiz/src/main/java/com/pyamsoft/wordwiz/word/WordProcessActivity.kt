@@ -24,6 +24,7 @@ import com.pyamsoft.pydroid.presenter.Presenter
 import com.pyamsoft.pydroid.ui.app.activity.DisposableActivity
 import com.pyamsoft.pydroid.ui.helper.Toasty
 import com.pyamsoft.wordwiz.Injector
+import com.pyamsoft.wordwiz.WordWizComponent
 import timber.log.Timber
 
 abstract class WordProcessActivity : DisposableActivity() {
@@ -38,13 +39,8 @@ abstract class WordProcessActivity : DisposableActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
-
-    Injector.with(this) {
-      it.inject(this)
-    }
-
+    (Injector.obtain(applicationContext) as WordWizComponent).inject(this)
     presenter.bind(Unit)
-
     handleIntent(intent)
   }
 
