@@ -18,9 +18,15 @@
 
 package com.pyamsoft.wordwiz
 
+import com.pyamsoft.wordwiz.base.WordWizModule
 import com.pyamsoft.wordwiz.word.WordProcessActivity
+import com.pyamsoft.wordwiz.word.WordProcessModule
 
-interface WordWizComponent {
+class WordWizComponentImpl(module: WordWizModule) : WordWizComponent {
 
-  fun inject(activity: WordProcessActivity)
+  private val wordProcessModule = WordProcessModule(module)
+
+  override fun inject(activity: WordProcessActivity) {
+    activity.presenter = wordProcessModule.getPresenter()
+  }
 }
