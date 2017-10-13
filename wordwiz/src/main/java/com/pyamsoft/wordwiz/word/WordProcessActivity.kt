@@ -39,7 +39,7 @@ abstract class WordProcessActivity : DisposableActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
-    (Injector.obtain(applicationContext) as WordWizComponent).inject(this)
+    Injector.obtain<WordWizComponent>(applicationContext).inject(this)
     presenter.bind(Unit)
     handleIntent(intent)
   }
