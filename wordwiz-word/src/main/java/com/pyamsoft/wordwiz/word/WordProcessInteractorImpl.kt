@@ -20,9 +20,11 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.CheckResult
+import com.pyamsoft.pydroid.helper.notNull
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
@@ -33,11 +35,11 @@ internal class WordProcessInteractorImpl internal constructor(
     context: Context) : WordProcessCommonInteractor() {
 
   private val packageManager: PackageManager = context.applicationContext.packageManager
-  private val LABEL_TYPE_WORD_COUNT: String = context.applicationContext.getString(
+  private val labelTypeWordCount: String = context.applicationContext.getString(
       R.string.label_word_count)
-  private val LABEL_TYPE_LETTER_COUNT: String = context.applicationContext.getString(
+  private val labelTypeLetterCount: String = context.applicationContext.getString(
       R.string.label_letter_count)
-  private val LABEL_TYPE_OCCURRENCES: String = context.applicationContext.getString(
+  private val labelTypeOccurrences: String = context.applicationContext.getString(
       R.string.label_occurrence_count)
 
   //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
@@ -51,14 +53,9 @@ internal class WordProcessInteractorImpl internal constructor(
       val result: WordProcessResult
       try {
         Timber.d("Attempt to load the label this activity launched with")
-        val activityInfo = packageManager.getActivityInfo(componentName, 0)
-        if (activityInfo == null) {
-          Timber.e("Activity info is NULL")
-          throw RuntimeException("ActivityInfo is NULL")
-        } else {
-          val label = activityInfo.loadLabel(packageManager)
-          result = getProcessTypeForLabel(label, text)
-        }
+        val activityInfo: ActivityInfo? = packageManager.getActivityInfo(componentName, 0)
+        val label = activityInfo.notNull("activityInfo").loadLabel(packageManager)
+        result = getProcessTypeForLabel(label, text)
       } catch (e: PackageManager.NameNotFoundException) {
         Timber.e(e, "Name not found ERROR")
         throw RuntimeException("Name not found for ComponentName: " + componentName)
@@ -69,9 +66,9 @@ internal class WordProcessInteractorImpl internal constructor(
 
   @CheckResult private fun getProcessTypeForLabel(
       label: CharSequence, text: CharSequence): WordProcessResult = when (label) {
-        LABEL_TYPE_WORD_COUNT -> WordProcessResult(WORD_COUNT, getWordCount(text))
-        LABEL_TYPE_LETTER_COUNT -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
-        LABEL_TYPE_OCCURRENCES -> throw RuntimeException("Not ready yet")
-        else -> throw IllegalArgumentException("Invalid label: " + label)
-      }
+    labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
+    labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+    labelTypeOccurrences -> throw RuntimeException("Not ready yet")
+    else -> throw IllegalArgumentException("Invalid label: " + label)
+  }
 }

@@ -20,19 +20,16 @@ package com.pyamsoft.wordwiz
 
 import android.content.Context
 import com.pyamsoft.pydroid.SimpleInjector
+import com.pyamsoft.pydroid.helper.notNull
 
 object Injector : SimpleInjector {
 
   override val name: String = "com.pyamsoft.wordwiz.INJECTOR"
 
-  override fun <T: Any> obtain(context: Context): T {
+  override fun <T : Any> obtain(context: Context): T {
     val service: Any? = context.getSystemService(name)
-    if (service == null) {
-      throw IllegalStateException("Injector service was NULL")
-    } else {
-      @Suppress("UNCHECKED_CAST")
-      return service as T
-    }
+    @Suppress("UNCHECKED_CAST")
+    return service.notNull("service") as T
   }
 
 }

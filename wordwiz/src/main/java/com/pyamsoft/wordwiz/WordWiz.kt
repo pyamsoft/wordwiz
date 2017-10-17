@@ -39,9 +39,7 @@ class WordWiz : Application() {
     }
 
     Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-    PYDroid.initialize(this, BuildConfig.DEBUG)
-
-    component = WordWizComponentImpl(WordWizModule(applicationContext))
+    PYDroid.init(this, BuildConfig.DEBUG)
 
     refWatcher = if (BuildConfig.DEBUG) {
       LeakCanary.install(this)
@@ -50,10 +48,24 @@ class WordWiz : Application() {
     }
   }
 
+  private fun buildComponent(): WordWizComponent =
+      WordWizComponentImpl(WordWizModule(applicationContext))
+
   override fun getSystemService(name: String?): Any {
     return if (Injector.name == name) {
-      component ?: throw IllegalStateException("WordWizComponent is NULL")
+      val wordWiz: WordWizComponent
+      val obj = component
+      if (obj == null) {
+        wordWiz = buildComponent()
+        component = wordWiz
+      } else {
+        wordWiz = obj
+      }
+
+      // Return
+      wordWiz
     } else {
+      // Return
       super.getSystemService(name)
     }
   }
