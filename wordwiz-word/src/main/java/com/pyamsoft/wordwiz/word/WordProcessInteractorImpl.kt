@@ -24,7 +24,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.CheckResult
-import com.pyamsoft.pydroid.helper.notNull
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
@@ -53,8 +52,8 @@ internal class WordProcessInteractorImpl internal constructor(
       val result: WordProcessResult
       try {
         Timber.d("Attempt to load the label this activity launched with")
-        val activityInfo: ActivityInfo? = packageManager.getActivityInfo(componentName, 0)
-        val label = activityInfo.notNull("activityInfo").loadLabel(packageManager)
+        val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
+        val label = activityInfo.loadLabel(packageManager)
         result = getProcessTypeForLabel(label, text)
       } catch (e: PackageManager.NameNotFoundException) {
         Timber.e(e, "Name not found ERROR")

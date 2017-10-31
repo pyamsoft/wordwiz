@@ -20,7 +20,6 @@ package com.pyamsoft.wordwiz
 
 import android.content.Context
 import com.pyamsoft.pydroid.SimpleInjector
-import com.pyamsoft.pydroid.helper.notNull
 
 object Injector : SimpleInjector {
 
@@ -29,7 +28,7 @@ object Injector : SimpleInjector {
   override fun <T : Any> obtain(context: Context): T {
     val service: Any? = context.getSystemService(name)
     @Suppress("UNCHECKED_CAST")
-    return service.notNull("service") as T
+    return service as T
   }
 
 }

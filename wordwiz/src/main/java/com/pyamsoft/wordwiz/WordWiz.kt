@@ -21,7 +21,9 @@ package com.pyamsoft.wordwiz
 import android.app.Application
 import android.support.annotation.CheckResult
 import android.support.v4.app.Fragment
+import com.pyamsoft.pydroid.PYDroidModule
 import com.pyamsoft.pydroid.about.Licenses
+import com.pyamsoft.pydroid.loader.LoaderModule
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.wordwiz.base.WordWizModule
 import com.squareup.leakcanary.LeakCanary
@@ -31,6 +33,8 @@ class WordWiz : Application() {
 
   private lateinit var refWatcher: RefWatcher
   private var component: WordWizComponent? = null
+  private lateinit var pydroidModule: PYDroidModule
+  private lateinit var loaderModule: LoaderModule
 
   override fun onCreate() {
     super.onCreate()
@@ -39,7 +43,9 @@ class WordWiz : Application() {
     }
 
     Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-    PYDroid.init(this, BuildConfig.DEBUG)
+    pydroidModule = PYDroidModule(this, BuildConfig.DEBUG)
+    loaderModule = LoaderModule(this)
+    PYDroid.init(pydroidModule, loaderModule)
 
     refWatcher = if (BuildConfig.DEBUG) {
       LeakCanary.install(this)
@@ -49,7 +55,7 @@ class WordWiz : Application() {
   }
 
   private fun buildComponent(): WordWizComponent =
-      WordWizComponentImpl(WordWizModule(applicationContext))
+      WordWizComponentImpl(WordWizModule(pydroidModule))
 
   override fun getSystemService(name: String?): Any {
     return if (Injector.name == name) {
@@ -75,7 +81,7 @@ class WordWiz : Application() {
     @JvmStatic
     @CheckResult
     fun getRefWatcher(fragment: Fragment): RefWatcher {
-      val application = fragment.activity.application
+      val application = fragment.activity!!.application
       if (application is WordWiz) {
         return application.refWatcher
       } else {

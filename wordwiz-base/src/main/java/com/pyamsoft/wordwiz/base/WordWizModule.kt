@@ -20,19 +20,20 @@ package com.pyamsoft.wordwiz.base
 
 import android.content.Context
 import android.support.annotation.CheckResult
+import com.pyamsoft.pydroid.PYDroidModule
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
-class WordWizModule(context: Context) {
+class WordWizModule(private val pyDroidModule: PYDroidModule) {
 
-  private val appContext: Context = context.applicationContext
+  @CheckResult
+  fun provideContext(): Context = pyDroidModule.provideContext()
 
-  @CheckResult fun provideContext(): Context = appContext
+  @CheckResult
+  fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
 
-  @CheckResult fun provideMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
+  @CheckResult
+  fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
 
-  @CheckResult fun provideIoScheduler(): Scheduler = Schedulers.io()
-
-  @CheckResult fun provideComputationScheduler(): Scheduler = Schedulers.computation()
+  @CheckResult
+  fun provideComputationScheduler(): Scheduler = pyDroidModule.provideComputationScheduler()
 }
