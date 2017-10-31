@@ -18,6 +18,7 @@
 
 package com.pyamsoft.wordwiz.main
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
@@ -33,24 +34,21 @@ class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
   private lateinit var wordCountPreference: SwitchPreferenceCompat
   private lateinit var letterCountPreference: SwitchPreferenceCompat
 
-  override val isLastOnBackStack: AboutLibrariesFragment.BackStackState
-    get() = AboutLibrariesFragment.BackStackState.LAST
-
-  override val rootViewContainer: Int
-    get() = R.id.main_view_container
-
   override val applicationName: String
     get() = getString(R.string.app_name)
 
-  override val preferenceXmlResId: Int
-    get() = R.xml.preferences
+  override val isLastOnBackStack: AboutLibrariesFragment.BackStackState = AboutLibrariesFragment.BackStackState.LAST
 
-  override val hideClearAll: Boolean
-    get() = true
+  override val rootViewContainer: Int = R.id.main_view_container
 
-  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+  override val preferenceXmlResId: Int = R.xml.preferences
+
+  override val hideClearAll: Boolean = true
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    val context: Context = view.context
     wordCountPreference = findPreference(
         getString(R.string.word_count_key)) as SwitchPreferenceCompat
     wordCountPreference.setOnPreferenceClickListener {
@@ -70,8 +68,10 @@ class MainPreferenceFragment : ActionBarSettingsPreferenceFragment() {
 
   override fun onStart() {
     super.onStart()
-    wordCountPreference.isChecked = WordCountActivity.isEnabled(context)
-    letterCountPreference.isChecked = LetterCountActivity.isEnabled(context)
+    context?.let {
+      wordCountPreference.isChecked = WordCountActivity.isEnabled(it)
+      letterCountPreference.isChecked = LetterCountActivity.isEnabled(it)
+    }
   }
 
   override fun onResume() {

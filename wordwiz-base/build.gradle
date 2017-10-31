@@ -24,14 +24,11 @@ apply plugin: "com.getkeepsafe.dexcount"
 //noinspection GroovyMissingReturnStatement
 android {
   compileSdkVersion rootProject.ext.maxSdk
-  buildToolsVersion "$buildTools"
 
   //noinspection GroovyMissingReturnStatement
   defaultConfig {
     minSdkVersion rootProject.ext.minSdk
     targetSdkVersion rootProject.ext.maxSdk
-
-    publishNonDefault true
 
     resConfigs "en"
   }
@@ -43,16 +40,12 @@ android {
 }
 
 dependencies {
-  compile fileTree(dir: "libs", include: ["*.jar"])
-
   // PYDroid
-  compile("com.github.pyamsoft.pydroid:pydroid-util:$pydroid@aar") {
+  api("com.github.pyamsoft.pydroid:pydroid-util:$pydroid@aar") {
     transitive = true
   }
 
-  debugCompile project(path: ":wordwiz-model", configuration: "debug")
-  releaseCompile project(path: ":wordwiz-model", configuration: "release")
-
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  api project(":wordwiz-model")
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
