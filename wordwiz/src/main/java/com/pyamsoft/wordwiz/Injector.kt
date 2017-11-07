@@ -18,15 +18,20 @@
 
 package com.pyamsoft.wordwiz
 
+import android.annotation.SuppressLint
 import android.content.Context
-import com.pyamsoft.pydroid.SimpleInjector
+import android.support.annotation.CheckResult
 
-object Injector : SimpleInjector {
+object Injector {
 
-  override val name: String = "com.pyamsoft.wordwiz.INJECTOR"
+  const val name: String = "com.pyamsoft.wordwiz.INJECTOR"
 
-  override fun <T : Any> obtain(context: Context): T {
+  @SuppressLint("WrongConstant")
+  @JvmStatic
+  @CheckResult
+  fun <T : Any> obtain(context: Context): T {
     val service: Any? = context.getSystemService(name)
+
     @Suppress("UNCHECKED_CAST")
     return service as T
   }
