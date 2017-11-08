@@ -54,11 +54,10 @@ class MainActivity : TamperActivity() {
   private fun showPreferenceFragment() {
     val fragmentManager = supportFragmentManager
     if (fragmentManager.findFragmentByTag(
-        MainPreferenceFragment.TAG) == null && fragmentManager.findFragmentByTag(
+        MainFragment.TAG) == null && fragmentManager.findFragmentByTag(
         AboutLibrariesFragment.TAG) == null) {
-      fragmentManager.beginTransaction()
-          .add(R.id.main_view_container, MainPreferenceFragment(), MainPreferenceFragment.TAG)
-          .commit()
+      fragmentManager.beginTransaction().add(R.id.main_view_container, MainFragment(),
+          MainFragment.TAG).commit()
     }
   }
 
