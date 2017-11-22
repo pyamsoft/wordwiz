@@ -28,52 +28,53 @@ import io.reactivex.Scheduler
 import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
-    private val interactor: WordProcessInteractor,
-    computationScheduler: Scheduler, ioScheduler: Scheduler,
-    mainThreadScheduler: Scheduler) : SchedulerPresenter<View>(
-    computationScheduler, ioScheduler, mainThreadScheduler) {
+        private val interactor: WordProcessInteractor,
+        computationScheduler: Scheduler, ioScheduler: Scheduler,
+        mainThreadScheduler: Scheduler) : SchedulerPresenter<View>(
+        computationScheduler, ioScheduler, mainThreadScheduler) {
 
-  fun handleActivityLaunchType(componentName: ComponentName, text: CharSequence,
-      extras: Bundle) {
-    dispose {
-      interactor.getProcessType(componentName, text, extras)
-          .subscribeOn(computationScheduler)
-          .observeOn(mainThreadScheduler)
-          .doAfterTerminate { view?.onProcessComplete() }
-          .doOnSubscribe { view?.onProcessBegin() }
-          .subscribe({ handleProcessType(it) }, {
-            Timber.e(it, "onError handleActivityLaunchType")
-            view?.onProcessError(it)
-          })
+    fun handleActivityLaunchType(componentName: ComponentName, text: CharSequence,
+            extras: Bundle) {
+        dispose {
+            interactor.getProcessType(componentName, text, extras)
+                    .subscribeOn(computationScheduler)
+                    .observeOn(mainThreadScheduler)
+                    .doAfterTerminate { view?.onProcessComplete() }
+                    .doOnSubscribe { view?.onProcessBegin() }
+                    .subscribe({ handleProcessType(it) }, {
+                        Timber.e(it, "onError handleActivityLaunchType")
+                        view?.onProcessError(it)
+                    })
+        }
     }
-  }
 
-  private fun handleProcessType(processType: WordProcessResult) {
-    when (processType.type) {
-      ProcessType.WORD_COUNT -> view?.onProcessTypeWordCount(processType.count)
-      ProcessType.LETTER_COUNT -> view?.onProcessTypeLetterCount(processType.count)
-      ProcessType.OCCURRENCES -> {
-        val extras: Bundle = processType.extras ?: throw NullPointerException("Extras is NULL")
-        val snippet = extras.getString(WordProcessResult.KEY_EXTRA_SNIPPET,
-            null) ?: throw NullPointerException("Snippet is NULL")
-        view?.onProcessTypeOccurrences(processType.count, snippet)
-      }
+    private fun handleProcessType(processType: WordProcessResult) {
+        when (processType.type) {
+            ProcessType.WORD_COUNT -> view?.onProcessTypeWordCount(processType.count)
+            ProcessType.LETTER_COUNT -> view?.onProcessTypeLetterCount(processType.count)
+            ProcessType.OCCURRENCES -> {
+                val extras: Bundle = processType.extras ?: throw NullPointerException(
+                        "Extras is NULL")
+                val snippet = extras.getString(WordProcessResult.KEY_EXTRA_SNIPPET,
+                        null) ?: throw NullPointerException("Snippet is NULL")
+                view?.onProcessTypeOccurrences(processType.count, snippet)
+            }
+        }
     }
-  }
 
-  interface View : WordProcessCallback
+    interface View : WordProcessCallback
 
-  interface WordProcessCallback {
+    interface WordProcessCallback {
 
-    fun onProcessBegin()
+        fun onProcessBegin()
 
-    fun onProcessComplete()
+        fun onProcessComplete()
 
-    fun onProcessError(throwable: Throwable)
+        fun onProcessError(throwable: Throwable)
 
-    fun onProcessTypeWordCount(count: Int)
-    fun onProcessTypeLetterCount(count: Int)
-    fun onProcessTypeOccurrences(count: Int, snippet: String)
+        fun onProcessTypeWordCount(count: Int)
+        fun onProcessTypeLetterCount(count: Int)
+        fun onProcessTypeOccurrences(count: Int, snippet: String)
 
-  }
+    }
 }

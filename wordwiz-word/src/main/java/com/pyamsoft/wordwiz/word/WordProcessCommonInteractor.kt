@@ -23,42 +23,46 @@ import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
 
-internal abstract class WordProcessCommonInteractor protected constructor() : WordProcessInteractor {
+internal abstract class WordProcessCommonInteractor protected constructor() :
+        WordProcessInteractor {
 
-  @CheckResult private fun tokenizeString(text: CharSequence): Array<String> {
-    Timber.d("Tokenize string by spaces")
-    return text.toString().split(
-        SPLIT_BY_WHITESPACE.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-  }
-
-  @CheckResult fun getWordCount(text: CharSequence): Int {
-    val tokens = tokenizeString(text)
-
-    Timber.d("String tokenized: %s", Arrays.toString(tokens))
-    return tokens.size
-  }
-
-  @CheckResult fun getLetterCount(text: CharSequence): Int {
-    val tokens = tokenizeString(text)
-
-    Timber.d("Get a sub of letter counts")
-    return tokens.sumBy { it.length }
-  }
-
-  @CheckResult fun getOccurrences(text: CharSequence, snip: String): Int {
-    Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
-    val pattern = Pattern.compile(snip, Pattern.LITERAL)
-    val matcher = pattern.matcher(text)
-    var count = 0
-    while (matcher.find()) {
-      ++count
+    @CheckResult private fun tokenizeString(text: CharSequence): Array<String> {
+        Timber.d("Tokenize string by spaces")
+        return text.toString().split(
+                SPLIT_BY_WHITESPACE.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
-    return count
-  }
+    @CheckResult
+    fun getWordCount(text: CharSequence): Int {
+        val tokens = tokenizeString(text)
 
-  companion object {
+        Timber.d("String tokenized: %s", Arrays.toString(tokens))
+        return tokens.size
+    }
 
-    private const val SPLIT_BY_WHITESPACE = "\\s+"
-  }
+    @CheckResult
+    fun getLetterCount(text: CharSequence): Int {
+        val tokens = tokenizeString(text)
+
+        Timber.d("Get a sub of letter counts")
+        return tokens.sumBy { it.length }
+    }
+
+    @CheckResult
+    fun getOccurrences(text: CharSequence, snip: String): Int {
+        Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
+        val pattern = Pattern.compile(snip, Pattern.LITERAL)
+        val matcher = pattern.matcher(text)
+        var count = 0
+        while (matcher.find()) {
+            ++count
+        }
+
+        return count
+    }
+
+    companion object {
+
+        private const val SPLIT_BY_WHITESPACE = "\\s+"
+    }
 }

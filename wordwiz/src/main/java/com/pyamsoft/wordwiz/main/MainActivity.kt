@@ -32,72 +32,72 @@ import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
 class MainActivity : TamperActivity() {
 
-  private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
-  override val changeLogLines: Array<String> = arrayOf(
-      "BUGFIX: Better support for small screen devices"
-  )
+    override val changeLogLines: Array<String> = arrayOf(
+            "BUGFIX: Better support for small screen devices"
+    )
 
-  override val versionName: String = BuildConfig.VERSION_NAME
+    override val versionName: String = BuildConfig.VERSION_NAME
 
-  override val safePackageName: String = "com.pyamsoft.wordwiz"
+    override val safePackageName: String = "com.pyamsoft.wordwiz"
 
-  override val applicationIcon: Int = R.mipmap.ic_launcher
+    override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val currentApplicationVersion: Int = BuildConfig.VERSION_CODE
+    override val currentApplicationVersion: Int = BuildConfig.VERSION_CODE
 
-  override val applicationName: String
-    get() = getString(R.string.app_name)
+    override val applicationName: String
+        get() = getString(R.string.app_name)
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.Theme_WordWiz_Light)
-    super.onCreate(savedInstanceState)
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_WordWiz_Light)
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
 
-    setupToolbarAsActionBar()
-    showPreferenceFragment()
-  }
-
-  private fun setupToolbarAsActionBar() {
-    setSupportActionBar(binding.toolbar)
-    binding.toolbar.setTitle(R.string.app_name)
-    ViewCompat.setElevation(binding.toolbar, AppUtil.convertToDP(this, 4f))
-  }
-
-  private fun showPreferenceFragment() {
-    val fragmentManager = supportFragmentManager
-    if (fragmentManager.findFragmentByTag(
-        MainFragment.TAG) == null && fragmentManager.findFragmentByTag(
-        AboutLibrariesFragment.TAG) == null) {
-      fragmentManager.beginTransaction().add(R.id.main_view_container, MainFragment(),
-          MainFragment.TAG).commit()
+        setupToolbarAsActionBar()
+        showPreferenceFragment()
     }
-  }
 
-  override fun onBackPressed() {
-    val fragmentManager = supportFragmentManager
-    val backStackCount = fragmentManager.backStackEntryCount
-    if (backStackCount > 0) {
-      fragmentManager.popBackStackImmediate()
-    } else {
-      super.onBackPressed()
+    private fun setupToolbarAsActionBar() {
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setTitle(R.string.app_name)
+        ViewCompat.setElevation(binding.toolbar, AppUtil.convertToDP(this, 4f))
     }
-  }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    val itemId = item.itemId
-    val handled: Boolean = when (itemId) {
-      android.R.id.home -> {
-        onBackPressed()
-
-        // Assign
-        true
-      }
-      else -> false
+    private fun showPreferenceFragment() {
+        val fragmentManager = supportFragmentManager
+        if (fragmentManager.findFragmentByTag(
+                MainFragment.TAG) == null && fragmentManager.findFragmentByTag(
+                AboutLibrariesFragment.TAG) == null) {
+            fragmentManager.beginTransaction().add(R.id.main_view_container, MainFragment(),
+                    MainFragment.TAG).commit()
+        }
     }
-    return handled || super.onOptionsItemSelected(item)
-  }
+
+    override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        val backStackCount = fragmentManager.backStackEntryCount
+        if (backStackCount > 0) {
+            fragmentManager.popBackStackImmediate()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        val handled: Boolean = when (itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+
+                // Assign
+                true
+            }
+            else -> false
+        }
+        return handled || super.onOptionsItemSelected(item)
+    }
 
 }

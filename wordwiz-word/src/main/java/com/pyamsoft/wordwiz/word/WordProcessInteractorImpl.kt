@@ -31,43 +31,43 @@ import io.reactivex.Single
 import timber.log.Timber
 
 internal class WordProcessInteractorImpl internal constructor(
-    context: Context) : WordProcessCommonInteractor() {
+        context: Context) : WordProcessCommonInteractor() {
 
-  private val packageManager: PackageManager = context.applicationContext.packageManager
-  private val labelTypeWordCount: String = context.applicationContext.getString(
-      R.string.label_word_count)
-  private val labelTypeLetterCount: String = context.applicationContext.getString(
-      R.string.label_letter_count)
-  private val labelTypeOccurrences: String = context.applicationContext.getString(
-      R.string.label_occurrence_count)
+    private val packageManager: PackageManager = context.applicationContext.packageManager
+    private val labelTypeWordCount: String = context.applicationContext.getString(
+            R.string.label_word_count)
+    private val labelTypeLetterCount: String = context.applicationContext.getString(
+            R.string.label_letter_count)
+    private val labelTypeOccurrences: String = context.applicationContext.getString(
+            R.string.label_occurrence_count)
 
-  //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
-  //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
-  //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
-  //}
+    //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
+    //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
+    //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
+    //}
 
-  override fun getProcessType(componentName: ComponentName, text: CharSequence,
-      extras: Bundle?): Single<WordProcessResult> {
-    return Single.fromCallable {
-      val result: WordProcessResult
-      try {
-        Timber.d("Attempt to load the label this activity launched with")
-        val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
-        val label = activityInfo.loadLabel(packageManager)
-        result = getProcessTypeForLabel(label, text)
-      } catch (e: PackageManager.NameNotFoundException) {
-        Timber.e(e, "Name not found ERROR")
-        throw RuntimeException("Name not found for ComponentName: " + componentName)
-      }
-      return@fromCallable result
+    override fun getProcessType(componentName: ComponentName, text: CharSequence,
+            extras: Bundle?): Single<WordProcessResult> {
+        return Single.fromCallable {
+            val result: WordProcessResult
+            try {
+                Timber.d("Attempt to load the label this activity launched with")
+                val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
+                val label = activityInfo.loadLabel(packageManager)
+                result = getProcessTypeForLabel(label, text)
+            } catch (e: PackageManager.NameNotFoundException) {
+                Timber.e(e, "Name not found ERROR")
+                throw RuntimeException("Name not found for ComponentName: " + componentName)
+            }
+            return@fromCallable result
+        }
     }
-  }
 
-  @CheckResult private fun getProcessTypeForLabel(
-      label: CharSequence, text: CharSequence): WordProcessResult = when (label) {
-    labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
-    labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
-    labelTypeOccurrences -> throw RuntimeException("Not ready yet")
-    else -> throw IllegalArgumentException("Invalid label: " + label)
-  }
+    @CheckResult private fun getProcessTypeForLabel(
+            label: CharSequence, text: CharSequence): WordProcessResult = when (label) {
+        labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
+        labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+        labelTypeOccurrences -> throw RuntimeException("Not ready yet")
+        else -> throw IllegalArgumentException("Invalid label: " + label)
+    }
 }

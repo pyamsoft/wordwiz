@@ -25,15 +25,15 @@ import io.reactivex.Scheduler
 
 class WordWizModule(private val pyDroidModule: PYDroidModule) {
 
-  @CheckResult
-  fun provideContext(): Context = pyDroidModule.provideContext()
+    @CheckResult
+    fun provideContext(): Context = pyDroidModule.provideContext()
 
-  @CheckResult
-  fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
+    @CheckResult
+    fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
 
-  @CheckResult
-  fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
+    @CheckResult
+    fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
 
-  @CheckResult
-  fun provideComputationScheduler(): Scheduler = pyDroidModule.provideComputationScheduler()
+    @CheckResult
+    fun provideComputationScheduler(): Scheduler = pyDroidModule.provideComputationScheduler()
 }

@@ -24,15 +24,15 @@ import com.pyamsoft.pydroid.ui.app.fragment.AppSettingsFragment
 
 class MainFragment : AppSettingsFragment() {
 
-  override fun provideBoundPresenters(): List<Presenter<*>> = emptyList()
+    override fun provideBoundPresenters(): List<Presenter<*>> = emptyList()
 
-  override fun provideSettingsFragment(): ActionBarSettingsPreferenceFragment = MainPreferenceFragment()
+    override fun provideSettingsFragment(): ActionBarSettingsPreferenceFragment = MainPreferenceFragment()
 
-  override fun provideSettingsTag(): String = MainPreferenceFragment.TAG
+    override fun provideSettingsTag(): String = MainPreferenceFragment.TAG
 
-  companion object {
-    const val TAG = "MainFragment"
-  }
+    companion object {
+        const val TAG = "MainFragment"
+    }
 
 }
 
