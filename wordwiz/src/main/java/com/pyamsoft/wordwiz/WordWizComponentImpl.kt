@@ -24,9 +24,9 @@ import com.pyamsoft.wordwiz.word.WordProcessModule
 
 class WordWizComponentImpl(module: WordWizModule) : WordWizComponent {
 
-  private val wordProcessModule = WordProcessModule(module)
+    private val wordProcessModule = WordProcessModule(module)
 
-  override fun inject(activity: WordProcessActivity) {
-    activity.presenter = wordProcessModule.getPresenter()
-  }
+    override fun inject(activity: WordProcessActivity) {
+        activity.presenter = wordProcessModule.getPresenter()
+    }
 }
