@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.preference.PreferenceManager
 import android.view.MenuItem
+import com.pyamsoft.backstack.BackStack
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
 import com.pyamsoft.pydroid.util.AppUtil
@@ -49,9 +50,12 @@ class MainActivity : TamperActivity() {
     override val applicationName: String
         get() = getString(R.string.app_name)
 
+    private lateinit var backstack: BackStack
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_WordWiz_Light)
         super.onCreate(savedInstanceState)
+        backstack = BackStack.create(this, R.id.main_view_container)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
@@ -68,20 +72,14 @@ class MainActivity : TamperActivity() {
 
     private fun showPreferenceFragment() {
         val fragmentManager = supportFragmentManager
-        if (fragmentManager.findFragmentByTag(
-                MainFragment.TAG) == null && fragmentManager.findFragmentByTag(
-                AboutLibrariesFragment.TAG) == null) {
-            fragmentManager.beginTransaction().add(R.id.main_view_container, MainFragment(),
-                    MainFragment.TAG).commit()
+        if (fragmentManager.findFragmentByTag(MainFragment.TAG) == null
+                && fragmentManager.findFragmentByTag(AboutLibrariesFragment.TAG) == null) {
+            backstack.set(MainFragment.TAG) { MainFragment() }
         }
     }
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        val backStackCount = fragmentManager.backStackEntryCount
-        if (backStackCount > 0) {
-            fragmentManager.popBackStackImmediate()
-        } else {
+        if (!backstack.back()) {
             super.onBackPressed()
         }
     }
