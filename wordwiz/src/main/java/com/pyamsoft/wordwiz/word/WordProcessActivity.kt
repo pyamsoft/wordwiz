@@ -34,8 +34,6 @@ abstract class WordProcessActivity : DisposableActivity(), View {
 
     override fun provideBoundPresenters(): List<Presenter<*>> = listOf(presenter)
 
-    override val shouldConfirmBackPress: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)

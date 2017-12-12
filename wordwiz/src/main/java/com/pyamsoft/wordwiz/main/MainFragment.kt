@@ -19,14 +19,14 @@
 package com.pyamsoft.wordwiz.main
 
 import com.pyamsoft.pydroid.presenter.Presenter
-import com.pyamsoft.pydroid.ui.app.fragment.ActionBarSettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.app.fragment.AppSettingsFragment
+import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 
 class MainFragment : AppSettingsFragment() {
 
     override fun provideBoundPresenters(): List<Presenter<*>> = emptyList()
 
-    override fun provideSettingsFragment(): ActionBarSettingsPreferenceFragment = MainPreferenceFragment()
+    override fun provideSettingsFragment(): SettingsPreferenceFragment = MainPreferenceFragment()
 
     override fun provideSettingsTag(): String = MainPreferenceFragment.TAG
 
