@@ -22,9 +22,9 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.preference.PreferenceManager
-import android.view.MenuItem
 import com.pyamsoft.backstack.BackStack
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
+import com.pyamsoft.pydroid.ui.helper.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
 import com.pyamsoft.pydroid.util.AppUtil
 import com.pyamsoft.wordwiz.BuildConfig
@@ -65,9 +65,15 @@ class MainActivity : TamperActivity() {
     }
 
     private fun setupToolbarAsActionBar() {
-        setSupportActionBar(binding.toolbar)
-        binding.toolbar.setTitle(R.string.app_name)
-        ViewCompat.setElevation(binding.toolbar, AppUtil.convertToDP(this, 4f))
+        binding.toolbar.apply {
+            setToolbar(this)
+            setTitle(R.string.app_name)
+            ViewCompat.setElevation(this, AppUtil.convertToDP(context, 4f))
+
+            setNavigationOnClickListener(DebouncedOnClickListener.create {
+                onBackPressed()
+            })
+        }
     }
 
     private fun showPreferenceFragment() {
@@ -82,20 +88,6 @@ class MainActivity : TamperActivity() {
         if (!backstack.back()) {
             super.onBackPressed()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        val handled: Boolean = when (itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-
-                // Assign
-                true
-            }
-            else -> false
-        }
-        return handled || super.onOptionsItemSelected(item)
     }
 
 }
