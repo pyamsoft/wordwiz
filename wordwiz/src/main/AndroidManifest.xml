@@ -52,7 +52,7 @@
     <activity
         android:name=".word.count.WordCountActivity"
         android:enabled="false"
-        android:excludeFromRecents="false"
+        android:excludeFromRecents="true"
         android:exported="true"
         android:label="@string/label_word_count"
         android:launchMode="singleTop"
@@ -70,7 +70,7 @@
     <activity
         android:name=".word.count.LetterCountActivity"
         android:enabled="false"
-        android:excludeFromRecents="false"
+        android:excludeFromRecents="true"
         android:exported="true"
         android:label="@string/label_letter_count"
         android:launchMode="singleTop"
