@@ -30,6 +30,4 @@ class MainFragment : AppSettingsFragment() {
     companion object {
         const val TAG = "MainFragment"
     }
-
 }
-

@@ -75,6 +75,5 @@ class WordProcessPresenter internal constructor(
         fun onProcessTypeWordCount(count: Int)
         fun onProcessTypeLetterCount(count: Int)
         fun onProcessTypeOccurrences(count: Int, snippet: String)
-
     }
 }

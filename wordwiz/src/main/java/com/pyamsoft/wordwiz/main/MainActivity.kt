@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.preference.PreferenceManager
 import com.pyamsoft.backstack.BackStack
+import com.pyamsoft.backstack.BackStacks
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.helper.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
@@ -55,7 +56,7 @@ class MainActivity : TamperActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_WordWiz_Light)
         super.onCreate(savedInstanceState)
-        backstack = BackStack.create(this, R.id.main_view_container)
+        backstack = BackStacks.create(this, R.id.main_view_container)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
@@ -89,5 +90,4 @@ class MainActivity : TamperActivity() {
             super.onBackPressed()
         }
     }
-
 }
