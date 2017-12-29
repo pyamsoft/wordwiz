@@ -41,6 +41,9 @@ android {
 
 dependencies {
   // PYDroid
+  api("com.github.pyamsoft.pydroid:pydroid-base:$pydroid@aar") {
+    transitive = true
+  }
   api("com.github.pyamsoft.pydroid:pydroid-util:$pydroid@aar") {
     transitive = true
   }
