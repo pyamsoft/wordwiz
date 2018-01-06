@@ -16,31 +16,23 @@
  *     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-apply plugin: "com.android.library"
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: "com.getkeepsafe.dexcount"
+package com.pyamsoft.wordwiz.api
 
-//noinspection GroovyMissingReturnStatement
-android {
-  compileSdkVersion rootProject.ext.maxSdk
+import android.content.Context
+import android.support.annotation.CheckResult
+import io.reactivex.Scheduler
 
-  //noinspection GroovyMissingReturnStatement
-  defaultConfig {
-    minSdkVersion rootProject.ext.minSdk
-    targetSdkVersion rootProject.ext.maxSdk
+interface WordWizModule {
 
-    resConfigs "en"
-  }
+    @CheckResult
+    fun provideContext(): Context
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_7
-    targetCompatibility JavaVersion.VERSION_1_7
-  }
+    @CheckResult
+    fun provideMainScheduler(): Scheduler
+
+    @CheckResult
+    fun provideIoScheduler(): Scheduler
+
+    @CheckResult
+    fun provideComputationScheduler(): Scheduler
 }
-
-dependencies {
-  api project(":wordwiz-api")
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-}
-

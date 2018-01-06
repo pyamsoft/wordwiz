@@ -19,6 +19,7 @@
 package com.pyamsoft.wordwiz.word
 
 import android.support.annotation.CheckResult
+import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern

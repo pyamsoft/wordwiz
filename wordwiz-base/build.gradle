@@ -44,11 +44,8 @@ dependencies {
   api("com.github.pyamsoft.pydroid:pydroid-base:$pydroid@aar") {
     transitive = true
   }
-  api("com.github.pyamsoft.pydroid:pydroid-util:$pydroid@aar") {
-    transitive = true
-  }
 
-  api project(":wordwiz-model")
+  api project(":wordwiz-api")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 
