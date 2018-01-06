@@ -19,7 +19,8 @@
 package com.pyamsoft.wordwiz.word
 
 import android.support.annotation.CheckResult
-import com.pyamsoft.wordwiz.base.WordWizModule
+import com.pyamsoft.wordwiz.api.WordProcessInteractor
+import com.pyamsoft.wordwiz.api.WordWizModule
 import io.reactivex.Scheduler
 
 class WordProcessModule(wordWizModule: WordWizModule) {

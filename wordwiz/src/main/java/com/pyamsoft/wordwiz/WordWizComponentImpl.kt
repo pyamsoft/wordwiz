@@ -18,11 +18,11 @@
 
 package com.pyamsoft.wordwiz
 
-import com.pyamsoft.wordwiz.base.WordWizModule
+import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
-class WordWizComponentImpl(module: WordWizModule) : WordWizComponent {
+class WordWizComponentImpl(module: WordWizModuleImpl) : WordWizComponent {
 
     private val wordProcessModule = WordProcessModule(module)
 

@@ -16,24 +16,17 @@
  *     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.pyamsoft.wordwiz.base
+package com.pyamsoft.wordwiz.api
 
-import android.content.Context
+import android.content.ComponentName
+import android.os.Bundle
 import android.support.annotation.CheckResult
-import com.pyamsoft.pydroid.base.PYDroidModule
-import io.reactivex.Scheduler
+import com.pyamsoft.wordwiz.model.WordProcessResult
+import io.reactivex.Single
 
-class WordWizModule(private val pyDroidModule: PYDroidModule) {
-
-    @CheckResult
-    fun provideContext(): Context = pyDroidModule.provideContext()
+interface WordProcessInteractor {
 
     @CheckResult
-    fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
-
-    @CheckResult
-    fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
-
-    @CheckResult
-    fun provideComputationScheduler(): Scheduler = pyDroidModule.provideComputationScheduler()
+    fun getProcessType(componentName: ComponentName, text: CharSequence,
+            extras: Bundle?): Single<WordProcessResult>
 }

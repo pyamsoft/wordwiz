@@ -25,7 +25,7 @@ import com.pyamsoft.pydroid.base.PYDroidModule
 import com.pyamsoft.pydroid.base.about.Licenses
 import com.pyamsoft.pydroid.loader.LoaderModule
 import com.pyamsoft.pydroid.ui.PYDroid
-import com.pyamsoft.wordwiz.base.WordWizModule
+import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
@@ -54,8 +54,8 @@ class WordWiz : Application() {
         }
     }
 
-    private fun buildComponent(): WordWizComponent =
-            WordWizComponentImpl(WordWizModule(pydroidModule))
+    private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
+            WordWizModuleImpl(pydroidModule))
 
     override fun getSystemService(name: String?): Any {
         return if (Injector.name == name) {
