@@ -20,7 +20,7 @@ package com.pyamsoft.wordwiz.base
 
 import android.content.Context
 import android.support.annotation.CheckResult
-import com.pyamsoft.pydroid.base.PYDroidModule
+import com.pyamsoft.pydroid.PYDroidModule
 import com.pyamsoft.wordwiz.api.WordWizModule
 import io.reactivex.Scheduler
 
