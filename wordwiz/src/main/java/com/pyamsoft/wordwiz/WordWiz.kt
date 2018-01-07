@@ -21,9 +21,11 @@ package com.pyamsoft.wordwiz
 import android.app.Application
 import android.support.annotation.CheckResult
 import android.support.v4.app.Fragment
-import com.pyamsoft.pydroid.base.PYDroidModule
+import com.pyamsoft.pydroid.PYDroidModule
+import com.pyamsoft.pydroid.PYDroidModuleImpl
 import com.pyamsoft.pydroid.base.about.Licenses
 import com.pyamsoft.pydroid.loader.LoaderModule
+import com.pyamsoft.pydroid.loader.LoaderModuleImpl
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.squareup.leakcanary.LeakCanary
@@ -43,8 +45,8 @@ class WordWiz : Application() {
         }
 
         Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-        pydroidModule = PYDroidModule(this, BuildConfig.DEBUG)
-        loaderModule = LoaderModule(this)
+        pydroidModule = PYDroidModuleImpl(this, BuildConfig.DEBUG)
+        loaderModule = LoaderModuleImpl(pydroidModule)
         PYDroid.init(pydroidModule, loaderModule)
 
         refWatcher = if (BuildConfig.DEBUG) {

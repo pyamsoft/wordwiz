@@ -20,6 +20,7 @@ package com.pyamsoft.wordwiz.main
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
@@ -42,6 +43,9 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
     override val preferenceXmlResId: Int = R.xml.preferences
 
     override val hideClearAll: Boolean = true
+
+    override val aboutReplaceFragment: Fragment?
+        get() = activity?.supportFragmentManager?.findFragmentByTag(MainFragment.TAG)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
