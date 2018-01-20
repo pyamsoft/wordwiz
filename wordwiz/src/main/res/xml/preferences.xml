@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright (C) 2017 Peter Kenji Yamanaka
   ~
   ~     This program is free software; you can redistribute it and/or modify
@@ -17,33 +16,29 @@
   ~     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory
-      android:title="Text Selection Actions">
+    <PreferenceCategory android:title="Text Selection Actions">
 
-    <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
-        android:key="@string/word_count_key"
-        android:summary="@string/word_count_summary"
-        android:title="@string/label_word_count"
-        />
+        <!--suppress AndroidElementNotAllowed -->
+        <SwitchPreferenceCompat
+            android:key="@string/word_count_key"
+            android:summary="@string/word_count_summary"
+            android:title="@string/label_word_count" />
 
-    <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
-        android:key="@string/letter_count_key"
-        android:summary="@string/letter_count_summary"
-        android:title="@string/label_letter_count"
-        />
+        <!--suppress AndroidElementNotAllowed -->
+        <SwitchPreferenceCompat
+            android:key="@string/letter_count_key"
+            android:summary="@string/letter_count_summary"
+            android:title="@string/label_letter_count" />
 
-    <!--suppress AndroidElementNotAllowed -->
-    <!--<SwitchPreferenceCompat-->
-    <!--android:key="@string/occurrence_count_key"-->
-    <!--android:summary="@string/occurrence_count_summary"-->
-    <!--android:title="@string/label_occurrence_count"-->
-    <!--/>-->
+        <!--suppress AndroidElementNotAllowed -->
+        <!--<SwitchPreferenceCompat-->
+        <!--android:key="@string/occurrence_count_key"-->
+        <!--android:summary="@string/occurrence_count_summary"-->
+        <!--android:title="@string/label_occurrence_count"-->
+        <!--/>-->
 
-  </PreferenceCategory>
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -27,6 +27,8 @@ import io.reactivex.Single
 interface WordProcessInteractor {
 
     @CheckResult
-    fun getProcessType(componentName: ComponentName, text: CharSequence,
-            extras: Bundle?): Single<WordProcessResult>
+    fun getProcessType(
+        componentName: ComponentName, text: CharSequence,
+        extras: Bundle?
+    ): Single<WordProcessResult>
 }

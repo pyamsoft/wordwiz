@@ -35,7 +35,7 @@ class MainActivity : TamperActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override val changeLogLines: Array<String> = arrayOf(
-            "BUGFIX: Bugfixes and optimizations"
+        "BUGFIX: Bugfixes and optimizations"
     )
 
     override val versionName: String = BuildConfig.VERSION_NAME
@@ -75,9 +75,11 @@ class MainActivity : TamperActivity() {
     private fun showPreferenceFragment() {
         val fragmentManager = supportFragmentManager
         if (fragmentManager.findFragmentByTag(MainFragment.TAG) == null
-                && fragmentManager.findFragmentByTag(AboutLibrariesFragment.TAG) == null) {
-            fragmentManager.beginTransaction().add(R.id.main_view_container, MainFragment(),
-                    MainFragment.TAG).commit()
+            && fragmentManager.findFragmentByTag(AboutLibrariesFragment.TAG) == null) {
+            fragmentManager.beginTransaction().add(
+                R.id.main_view_container, MainFragment(),
+                MainFragment.TAG
+            ).commit()
         }
     }
 }

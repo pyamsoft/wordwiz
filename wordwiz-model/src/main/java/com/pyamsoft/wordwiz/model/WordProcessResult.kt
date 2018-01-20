@@ -20,8 +20,10 @@ package com.pyamsoft.wordwiz.model
 
 import android.os.Bundle
 
-data class WordProcessResult @JvmOverloads constructor(val type: ProcessType, val count: Int,
-        val extras: Bundle? = null) {
+data class WordProcessResult @JvmOverloads constructor(
+    val type: ProcessType, val count: Int,
+    val extras: Bundle? = null
+) {
 
     companion object {
 

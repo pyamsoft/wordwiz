@@ -57,7 +57,8 @@ class WordWiz : Application() {
     }
 
     private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
-            WordWizModuleImpl(pydroidModule))
+        WordWizModuleImpl(pydroidModule)
+    )
 
     override fun getSystemService(name: String?): Any {
         return if (Injector.name == name) {

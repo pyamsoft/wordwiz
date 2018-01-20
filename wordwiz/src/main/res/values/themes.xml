@@ -20,30 +20,30 @@
 
 <resources>
 
-  <style name="Base.Theme.WordWiz.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
-    <item name="colorPrimary">@color/purple500</item>
-    <item name="colorPrimaryDark">@color/purple700</item>
-    <item name="colorAccent">@color/lightblueA200</item>
-  </style>
+    <style name="Base.Theme.WordWiz.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/purple500</item>
+        <item name="colorPrimaryDark">@color/purple700</item>
+        <item name="colorAccent">@color/lightblueA200</item>
+    </style>
 
-  <!-- Normal App Theme -->
-  <style name="Theme.WordWiz.Light" parent="@style/Base.Theme.WordWiz.Light">
-    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-  </style>
+    <!-- Normal App Theme -->
+    <style name="Theme.WordWiz.Light" parent="@style/Base.Theme.WordWiz.Light">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
 
-  <!-- Transparent App Theme -->
-  <style name="Theme.WordWiz.Light.Transparent" parent="@style/Theme.WordWiz.Light">
-    <item name="android:windowIsTranslucent">true</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowIsFloating">true</item>
-    <item name="android:backgroundDimEnabled">false</item>
-  </style>
+    <!-- Transparent App Theme -->
+    <style name="Theme.WordWiz.Light.Transparent" parent="@style/Theme.WordWiz.Light">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 
-  <!-- Splash screen-->
-  <style name="Theme.WordWiz.Light.Splash" parent="@style/Theme.WordWiz.Light">
-    <item name="android:windowBackground">@drawable/splash_screen</item>
-  </style>
+    <!-- Splash screen-->
+    <style name="Theme.WordWiz.Light.Splash" parent="@style/Theme.WordWiz.Light">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
 
 </resources>

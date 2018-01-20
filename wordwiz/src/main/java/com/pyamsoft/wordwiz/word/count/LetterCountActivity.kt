@@ -37,15 +37,16 @@ class LetterCountActivity : WordProcessActivity() {
             else
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED
             context.applicationContext
-                    .packageManager
-                    .setComponentEnabledSetting(cmp, componentState, PackageManager.DONT_KILL_APP)
+                .packageManager
+                .setComponentEnabledSetting(cmp, componentState, PackageManager.DONT_KILL_APP)
         }
 
         @JvmStatic
         fun isEnabled(context: Context): Boolean {
             val cmp = ComponentName(context.applicationContext, LetterCountActivity::class.java)
             val componentState = context.applicationContext.packageManager.getComponentEnabledSetting(
-                    cmp)
+                cmp
+            )
             return componentState == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         }
     }
