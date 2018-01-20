@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Copyright (C) 2017 Peter Kenji Yamanaka
   ~
   ~     This program is free software; you can redistribute it and/or modify
@@ -19,8 +18,8 @@
 
 <resources>
 
-  <string name="label_word_count">Word Count</string>
-  <string name="label_letter_count">Letter Count</string>
-  <string name="label_occurrence_count">Text Occurrences</string>
+    <string name="label_word_count">Word Count</string>
+    <string name="label_letter_count">Letter Count</string>
+    <string name="label_occurrence_count">Text Occurrences</string>
 
 </resources>

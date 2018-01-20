@@ -36,5 +36,5 @@ class WordProcessModule(wordWizModule: WordWizModule) {
 
     @CheckResult
     fun getPresenter(): WordProcessPresenter =
-            WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
+        WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
 }

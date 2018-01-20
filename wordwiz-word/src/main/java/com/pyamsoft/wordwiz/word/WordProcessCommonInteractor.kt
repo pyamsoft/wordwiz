@@ -25,12 +25,14 @@ import java.util.Arrays
 import java.util.regex.Pattern
 
 internal abstract class WordProcessCommonInteractor protected constructor() :
-        WordProcessInteractor {
+    WordProcessInteractor {
 
-    @CheckResult private fun tokenizeString(text: CharSequence): Array<String> {
+    @CheckResult
+    private fun tokenizeString(text: CharSequence): Array<String> {
         Timber.d("Tokenize string by spaces")
         return text.toString().split(
-                SPLIT_BY_WHITESPACE.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            SPLIT_BY_WHITESPACE.toRegex()
+        ).dropLastWhile { it.isEmpty() }.toTypedArray()
     }
 
     @CheckResult

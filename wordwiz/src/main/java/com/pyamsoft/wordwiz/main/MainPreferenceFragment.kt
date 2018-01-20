@@ -52,7 +52,8 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
         val context: Context = view.context
         wordCountPreference = findPreference(
-                getString(R.string.word_count_key)) as SwitchPreferenceCompat
+            getString(R.string.word_count_key)
+        ) as SwitchPreferenceCompat
         wordCountPreference.setOnPreferenceClickListener {
             val enabled = WordCountActivity.isEnabled(context)
             WordCountActivity.enable(context, !enabled)
@@ -60,7 +61,8 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
         }
 
         letterCountPreference = findPreference(
-                getString(R.string.letter_count_key)) as SwitchPreferenceCompat
+            getString(R.string.letter_count_key)
+        ) as SwitchPreferenceCompat
         letterCountPreference.setOnPreferenceClickListener {
             val enabled = LetterCountActivity.isEnabled(context)
             LetterCountActivity.enable(context, !enabled)

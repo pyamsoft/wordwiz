@@ -68,8 +68,10 @@ abstract class WordProcessActivity : ActivityBase(), View {
 
     override fun onProcessError(throwable: Throwable) {
         Timber.e(throwable, "An error occurred while attempting to process text")
-        Toasty.makeText(applicationContext,
-                "An error occurred while attempting to process text", Toasty.LENGTH_SHORT).show()
+        Toasty.makeText(
+            applicationContext,
+            "An error occurred while attempting to process text", Toasty.LENGTH_SHORT
+        ).show()
     }
 
     override fun onProcessTypeWordCount(count: Int) {
@@ -81,7 +83,9 @@ abstract class WordProcessActivity : ActivityBase(), View {
     }
 
     override fun onProcessTypeOccurrences(count: Int, snippet: String) {
-        Toasty.makeText(applicationContext, "Occurrence count of snippet '$snippet': $count",
-                Toasty.LENGTH_SHORT).show()
+        Toasty.makeText(
+            applicationContext, "Occurrence count of snippet '$snippet': $count",
+            Toasty.LENGTH_SHORT
+        ).show()
     }
 }

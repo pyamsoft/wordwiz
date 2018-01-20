@@ -31,23 +31,29 @@ import io.reactivex.Single
 import timber.log.Timber
 
 internal class WordProcessInteractorImpl internal constructor(
-        context: Context) : WordProcessCommonInteractor() {
+    context: Context
+) : WordProcessCommonInteractor() {
 
     private val packageManager: PackageManager = context.applicationContext.packageManager
     private val labelTypeWordCount: String = context.applicationContext.getString(
-            R.string.label_word_count)
+        R.string.label_word_count
+    )
     private val labelTypeLetterCount: String = context.applicationContext.getString(
-            R.string.label_letter_count)
+        R.string.label_letter_count
+    )
     private val labelTypeOccurrences: String = context.applicationContext.getString(
-            R.string.label_occurrence_count)
+        R.string.label_occurrence_count
+    )
 
     //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
     //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
     //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
     //}
 
-    override fun getProcessType(componentName: ComponentName, text: CharSequence,
-            extras: Bundle?): Single<WordProcessResult> {
+    override fun getProcessType(
+        componentName: ComponentName, text: CharSequence,
+        extras: Bundle?
+    ): Single<WordProcessResult> {
         return Single.fromCallable {
             val result: WordProcessResult
             try {
@@ -63,8 +69,10 @@ internal class WordProcessInteractorImpl internal constructor(
         }
     }
 
-    @CheckResult private fun getProcessTypeForLabel(
-            label: CharSequence, text: CharSequence): WordProcessResult = when (label) {
+    @CheckResult
+    private fun getProcessTypeForLabel(
+        label: CharSequence, text: CharSequence
+    ): WordProcessResult = when (label) {
         labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
         labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
         labelTypeOccurrences -> throw RuntimeException("Not ready yet")
