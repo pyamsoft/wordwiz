@@ -19,7 +19,7 @@
 package com.pyamsoft.wordwiz.model
 
 enum class ProcessType {
-    WORD_COUNT,
-    LETTER_COUNT,
-    OCCURRENCES
+  WORD_COUNT,
+  LETTER_COUNT,
+  OCCURRENCES
 }

@@ -26,15 +26,16 @@ import io.reactivex.Scheduler
 
 class WordWizModuleImpl(private val pyDroidModule: PYDroidModule) : WordWizModule {
 
-    @CheckResult
-    override fun provideContext(): Context = pyDroidModule.provideContext()
+  @CheckResult
+  override fun provideContext(): Context = pyDroidModule.provideContext()
 
-    @CheckResult
-    override fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
+  @CheckResult
+  override fun provideMainScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
 
-    @CheckResult
-    override fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
+  @CheckResult
+  override fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
 
-    @CheckResult
-    override fun provideComputationScheduler(): Scheduler = pyDroidModule.provideComputationScheduler()
+  @CheckResult
+  override fun provideComputationScheduler(): Scheduler =
+    pyDroidModule.provideComputationScheduler()
 }

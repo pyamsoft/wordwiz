@@ -25,16 +25,16 @@ import io.reactivex.Scheduler
 
 class WordProcessModule(wordWizModule: WordWizModule) {
 
-    private val interactor: WordProcessInteractor
-    private val computationScheduler: Scheduler = wordWizModule.provideComputationScheduler()
-    private val ioScheduler: Scheduler = wordWizModule.provideIoScheduler()
-    private val mainScheduler: Scheduler = wordWizModule.provideMainScheduler()
+  private val interactor: WordProcessInteractor
+  private val computationScheduler: Scheduler = wordWizModule.provideComputationScheduler()
+  private val ioScheduler: Scheduler = wordWizModule.provideIoScheduler()
+  private val mainScheduler: Scheduler = wordWizModule.provideMainScheduler()
 
-    init {
-        interactor = WordProcessInteractorImpl(wordWizModule.provideContext())
-    }
+  init {
+    interactor = WordProcessInteractorImpl(wordWizModule.provideContext())
+  }
 
-    @CheckResult
-    fun getPresenter(): WordProcessPresenter =
-        WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
+  @CheckResult
+  fun getPresenter(): WordProcessPresenter =
+    WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
 }

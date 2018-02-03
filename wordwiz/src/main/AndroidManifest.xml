@@ -19,67 +19,67 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pyamsoft.wordwiz">
 
-    <application
-        android:name=".WordWiz"
-        android:icon="@mipmap/ic_launcher"
+  <application
+      android:name=".WordWiz"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher"
+      android:theme="@style/Theme.WordWiz.Light">
+
+    <!-- Support widescreen DPI -->
+    <meta-data
+        android:name="android.max_aspect"
+        android:value="2.1"/>
+
+    <activity
+        android:name=".main.MainActivity"
+        android:excludeFromRecents="false"
+        android:exported="true"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@style/Theme.WordWiz.Light">
+        android:launchMode="singleTask"
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Splash">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
 
-        <!-- Support widescreen DPI -->
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.1" />
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".main.MainActivity"
-            android:excludeFromRecents="false"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:noHistory="false"
-            android:theme="@style/Theme.WordWiz.Light.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+    <activity
+        android:name=".word.count.WordCountActivity"
+        android:enabled="false"
+        android:excludeFromRecents="true"
+        android:exported="true"
+        android:label="@string/label_word_count"
+        android:launchMode="singleTop"
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+      <intent-filter>
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".word.count.WordCountActivity"
-            android:enabled="false"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:label="@string/label_word_count"
-            android:launchMode="singleTop"
-            android:noHistory="false"
-            android:theme="@style/Theme.WordWiz.Light.Transparent">
+    <activity
+        android:name=".word.count.LetterCountActivity"
+        android:enabled="false"
+        android:excludeFromRecents="true"
+        android:exported="true"
+        android:label="@string/label_letter_count"
+        android:launchMode="singleTop"
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent">
 
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
+      <intent-filter>
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
 
-        <activity
-            android:name=".word.count.LetterCountActivity"
-            android:enabled="false"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:label="@string/label_letter_count"
-            android:launchMode="singleTop"
-            android:noHistory="false"
-            android:theme="@style/Theme.WordWiz.Light.Transparent">
-
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-
-    </application>
+  </application>
 
 </manifest>

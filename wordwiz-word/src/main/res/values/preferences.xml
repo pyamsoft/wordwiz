@@ -18,8 +18,8 @@
 
 <resources>
 
-    <string name="label_word_count">Word Count</string>
-    <string name="label_letter_count">Letter Count</string>
-    <string name="label_occurrence_count">Text Occurrences</string>
+  <string name="label_word_count">Word Count</string>
+  <string name="label_letter_count">Letter Count</string>
+  <string name="label_occurrence_count">Text Occurrences</string>
 
 </resources>

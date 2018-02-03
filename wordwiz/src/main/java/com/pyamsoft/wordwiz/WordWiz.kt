@@ -33,63 +33,63 @@ import com.squareup.leakcanary.RefWatcher
 
 class WordWiz : Application() {
 
-    private lateinit var refWatcher: RefWatcher
-    private var component: WordWizComponent? = null
-    private lateinit var pydroidModule: PYDroidModule
-    private lateinit var loaderModule: LoaderModule
+  private lateinit var refWatcher: RefWatcher
+  private var component: WordWizComponent? = null
+  private lateinit var pydroidModule: PYDroidModule
+  private lateinit var loaderModule: LoaderModule
 
-    override fun onCreate() {
-        super.onCreate()
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-
-        Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-        pydroidModule = PYDroidModuleImpl(this, BuildConfig.DEBUG)
-        loaderModule = LoaderModuleImpl(pydroidModule)
-        PYDroid.init(pydroidModule, loaderModule)
-
-        refWatcher = if (BuildConfig.DEBUG) {
-            LeakCanary.install(this)
-        } else {
-            RefWatcher.DISABLED
-        }
+  override fun onCreate() {
+    super.onCreate()
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      return
     }
 
-    private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
-        WordWizModuleImpl(pydroidModule)
-    )
+    Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
+    pydroidModule = PYDroidModuleImpl(this, BuildConfig.DEBUG)
+    loaderModule = LoaderModuleImpl(pydroidModule)
+    PYDroid.init(pydroidModule, loaderModule)
 
-    override fun getSystemService(name: String?): Any {
-        return if (Injector.name == name) {
-            val wordWiz: WordWizComponent
-            val obj = component
-            if (obj == null) {
-                wordWiz = buildComponent()
-                component = wordWiz
-            } else {
-                wordWiz = obj
-            }
-
-            // Return
-            wordWiz
-        } else {
-            // Return
-            super.getSystemService(name)
-        }
+    refWatcher = if (BuildConfig.DEBUG) {
+      LeakCanary.install(this)
+    } else {
+      RefWatcher.DISABLED
     }
+  }
 
-    companion object {
+  private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
+      WordWizModuleImpl(pydroidModule)
+  )
 
-        @JvmStatic
-        @CheckResult
-        fun getRefWatcher(fragment: Fragment): RefWatcher {
-            val application = fragment.activity!!.application
-            if (application is WordWiz) {
-                return application.refWatcher
-            } else {
-                throw IllegalStateException("Application is not WordWiz")
-            }
-        }
+  override fun getSystemService(name: String?): Any {
+    return if (Injector.name == name) {
+      val wordWiz: WordWizComponent
+      val obj = component
+      if (obj == null) {
+        wordWiz = buildComponent()
+        component = wordWiz
+      } else {
+        wordWiz = obj
+      }
+
+      // Return
+      wordWiz
+    } else {
+      // Return
+      super.getSystemService(name)
     }
+  }
+
+  companion object {
+
+    @JvmStatic
+    @CheckResult
+    fun getRefWatcher(fragment: Fragment): RefWatcher {
+      val application = fragment.activity!!.application
+      if (application is WordWiz) {
+        return application.refWatcher
+      } else {
+        throw IllegalStateException("Application is not WordWiz")
+      }
+    }
+  }
 }
