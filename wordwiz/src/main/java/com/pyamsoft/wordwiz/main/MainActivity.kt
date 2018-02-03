@@ -26,6 +26,8 @@ import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.helper.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
 import com.pyamsoft.pydroid.util.AppUtil
+import com.pyamsoft.wordwiz.BuildConfig
+import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
 class MainActivity : TamperActivity() {
