@@ -27,45 +27,51 @@ import java.util.regex.Pattern
 internal abstract class WordProcessCommonInteractor protected constructor() :
     WordProcessInteractor {
 
-    @CheckResult
-    private fun tokenizeString(text: CharSequence): Array<String> {
-        Timber.d("Tokenize string by spaces")
-        return text.toString().split(
+  @CheckResult
+  private fun tokenizeString(text: CharSequence): Array<String> {
+    Timber.d("Tokenize string by spaces")
+    return text.toString()
+        .split(
             SPLIT_BY_WHITESPACE.toRegex()
-        ).dropLastWhile { it.isEmpty() }.toTypedArray()
+        )
+        .dropLastWhile { it.isEmpty() }
+        .toTypedArray()
+  }
+
+  @CheckResult
+  fun getWordCount(text: CharSequence): Int {
+    val tokens = tokenizeString(text)
+
+    Timber.d("String tokenized: %s", Arrays.toString(tokens))
+    return tokens.size
+  }
+
+  @CheckResult
+  fun getLetterCount(text: CharSequence): Int {
+    val tokens = tokenizeString(text)
+
+    Timber.d("Get a sub of letter counts")
+    return tokens.sumBy { it.length }
+  }
+
+  @CheckResult
+  fun getOccurrences(
+    text: CharSequence,
+    snip: String
+  ): Int {
+    Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
+    val pattern = Pattern.compile(snip, Pattern.LITERAL)
+    val matcher = pattern.matcher(text)
+    var count = 0
+    while (matcher.find()) {
+      ++count
     }
 
-    @CheckResult
-    fun getWordCount(text: CharSequence): Int {
-        val tokens = tokenizeString(text)
+    return count
+  }
 
-        Timber.d("String tokenized: %s", Arrays.toString(tokens))
-        return tokens.size
-    }
+  companion object {
 
-    @CheckResult
-    fun getLetterCount(text: CharSequence): Int {
-        val tokens = tokenizeString(text)
-
-        Timber.d("Get a sub of letter counts")
-        return tokens.sumBy { it.length }
-    }
-
-    @CheckResult
-    fun getOccurrences(text: CharSequence, snip: String): Int {
-        Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
-        val pattern = Pattern.compile(snip, Pattern.LITERAL)
-        val matcher = pattern.matcher(text)
-        var count = 0
-        while (matcher.find()) {
-            ++count
-        }
-
-        return count
-    }
-
-    companion object {
-
-        private const val SPLIT_BY_WHITESPACE = "\\s+"
-    }
+    private const val SPLIT_BY_WHITESPACE = "\\s+"
+  }
 }

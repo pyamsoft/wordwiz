@@ -22,5 +22,5 @@ import com.pyamsoft.wordwiz.word.WordProcessActivity
 
 interface WordWizComponent {
 
-    fun inject(activity: WordProcessActivity)
+  fun inject(activity: WordProcessActivity)
 }

@@ -24,15 +24,15 @@ import io.reactivex.Scheduler
 
 interface WordWizModule {
 
-    @CheckResult
-    fun provideContext(): Context
+  @CheckResult
+  fun provideContext(): Context
 
-    @CheckResult
-    fun provideMainScheduler(): Scheduler
+  @CheckResult
+  fun provideMainScheduler(): Scheduler
 
-    @CheckResult
-    fun provideIoScheduler(): Scheduler
+  @CheckResult
+  fun provideIoScheduler(): Scheduler
 
-    @CheckResult
-    fun provideComputationScheduler(): Scheduler
+  @CheckResult
+  fun provideComputationScheduler(): Scheduler
 }
