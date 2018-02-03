@@ -25,6 +25,7 @@ import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
+import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.word.count.LetterCountActivity
 import com.pyamsoft.wordwiz.word.count.WordCountActivity
