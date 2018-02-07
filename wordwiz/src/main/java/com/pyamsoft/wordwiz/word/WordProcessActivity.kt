@@ -21,7 +21,7 @@ package com.pyamsoft.wordwiz.word
 import android.content.Intent
 import android.os.Bundle
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
-import com.pyamsoft.pydroid.ui.helper.Toasty
+import com.pyamsoft.pydroid.util.Toasty
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.word.WordProcessPresenter.View
