@@ -27,8 +27,8 @@ android {
     applicationId "com.pyamsoft.wordwiz"
     minSdkVersion rootProject.ext.minSdk
     targetSdkVersion rootProject.ext.maxSdk
-    versionCode 57
-    versionName "1.4.11"
+    versionCode 58
+    versionName "1.4.12"
 
     // For vector drawables
     vectorDrawables.useSupportLibrary = true
