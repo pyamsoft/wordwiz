@@ -33,7 +33,7 @@ class MainActivity : TamperActivity() {
   private lateinit var binding: ActivityMainBinding
 
   override val changeLogLines: Array<String> = arrayOf(
-      "BUGFIX: Bugfixes and optimizations"
+      "BUGFIX: Smoother animations"
   )
 
   override val versionName: String = BuildConfig.VERSION_NAME
