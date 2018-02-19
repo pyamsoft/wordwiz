@@ -71,17 +71,14 @@ abstract class WordProcessActivity : ActivityBase(), View {
         applicationContext,
         "An error occurred while attempting to process text", Toasty.LENGTH_SHORT
     )
-        .show()
   }
 
   override fun onProcessTypeWordCount(count: Int) {
     Toasty.makeText(applicationContext, "Word count: $count", Toasty.LENGTH_SHORT)
-        .show()
   }
 
   override fun onProcessTypeLetterCount(count: Int) {
     Toasty.makeText(applicationContext, "Letter count: $count   ", Toasty.LENGTH_SHORT)
-        .show()
   }
 
   override fun onProcessTypeOccurrences(
@@ -92,6 +89,5 @@ abstract class WordProcessActivity : ActivityBase(), View {
         applicationContext, "Occurrence count of snippet '$snippet': $count",
         Toasty.LENGTH_SHORT
     )
-        .show()
   }
 }
