@@ -21,9 +21,9 @@ import android.os.Bundle
 import android.support.v4.view.ViewCompat
 import android.support.v7.preference.PreferenceManager
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
-import com.pyamsoft.pydroid.ui.helper.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.sec.TamperActivity
-import com.pyamsoft.pydroid.util.AppUtil
+import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
+import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
@@ -62,7 +62,7 @@ class MainActivity : TamperActivity() {
     binding.toolbar.apply {
       setToolbar(this)
       setTitle(R.string.app_name)
-      ViewCompat.setElevation(this, AppUtil.convertToDP(context, 4f))
+      ViewCompat.setElevation(this, 4f.toDp(context).toFloat())
 
       setNavigationOnClickListener(DebouncedOnClickListener.create {
         onBackPressed()
@@ -73,7 +73,7 @@ class MainActivity : TamperActivity() {
   private fun showPreferenceFragment() {
     val fragmentManager = supportFragmentManager
     if (fragmentManager.findFragmentByTag(MainFragment.TAG) == null
-        && fragmentManager.findFragmentByTag(AboutLibrariesFragment.TAG) == null
+        && !AboutLibrariesFragment.isPresent(this)
     ) {
       fragmentManager.beginTransaction()
           .add(

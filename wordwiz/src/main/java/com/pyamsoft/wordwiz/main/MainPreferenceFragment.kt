@@ -42,9 +42,6 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override val hideClearAll: Boolean = true
 
-  override val aboutReplaceFragment: Fragment?
-    get() = activity?.supportFragmentManager?.findFragmentByTag(MainFragment.TAG)
-
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
