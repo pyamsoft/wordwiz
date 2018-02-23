@@ -26,7 +26,7 @@ class WordProcessModule(wordWizModule: WordWizModule) {
   private val interactor: WordProcessInteractor
   private val computationScheduler: Scheduler = wordWizModule.provideComputationScheduler()
   private val ioScheduler: Scheduler = wordWizModule.provideIoScheduler()
-  private val mainScheduler: Scheduler = wordWizModule.provideMainScheduler()
+  private val mainScheduler: Scheduler = wordWizModule.provideMainThreadScheduler()
 
   init {
     interactor = WordProcessInteractorImpl(wordWizModule.provideContext())

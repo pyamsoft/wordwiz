@@ -20,7 +20,7 @@ import android.app.Application
 import android.support.annotation.CheckResult
 import android.support.v4.app.Fragment
 import com.pyamsoft.pydroid.PYDroidModule
-import com.pyamsoft.pydroid.PYDroidModuleImpl
+import com.pyamsoft.pydroid.base.PYDroidModuleImpl
 import com.pyamsoft.pydroid.base.about.Licenses
 import com.pyamsoft.pydroid.loader.LoaderModule
 import com.pyamsoft.pydroid.loader.LoaderModuleImpl
@@ -31,10 +31,14 @@ import com.squareup.leakcanary.RefWatcher
 
 class WordWiz : Application() {
 
+  private val component: WordWizComponent by lazy(LazyThreadSafetyMode.NONE) { buildComponent() }
+  private val pydroidModule: PYDroidModule by lazy(LazyThreadSafetyMode.NONE) {
+    PYDroidModuleImpl(this, BuildConfig.DEBUG)
+  }
+  private val loaderModule: LoaderModule by lazy(LazyThreadSafetyMode.NONE) {
+    LoaderModuleImpl(pydroidModule)
+  }
   private lateinit var refWatcher: RefWatcher
-  private var component: WordWizComponent? = null
-  private lateinit var pydroidModule: PYDroidModule
-  private lateinit var loaderModule: LoaderModule
 
   override fun onCreate() {
     super.onCreate()
@@ -42,38 +46,26 @@ class WordWiz : Application() {
       return
     }
 
-    Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-    pydroidModule = PYDroidModuleImpl(this, BuildConfig.DEBUG)
-    loaderModule = LoaderModuleImpl(pydroidModule)
-    PYDroid.init(pydroidModule, loaderModule)
-
-    refWatcher = if (BuildConfig.DEBUG) {
-      LeakCanary.install(this)
+    if (BuildConfig.DEBUG) {
+      refWatcher = LeakCanary.install(this)
     } else {
-      RefWatcher.DISABLED
+      refWatcher = RefWatcher.DISABLED
     }
+
+    PYDroid.init(pydroidModule, loaderModule)
+    Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
+
   }
 
   private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
-      WordWizModuleImpl(pydroidModule)
+      WordWizModuleImpl(pydroidModule, loaderModule)
   )
 
   override fun getSystemService(name: String?): Any {
-    return if (Injector.name == name) {
-      val wordWiz: WordWizComponent
-      val obj = component
-      if (obj == null) {
-        wordWiz = buildComponent()
-        component = wordWiz
-      } else {
-        wordWiz = obj
-      }
-
-      // Return
-      wordWiz
+    if (Injector.name == name) {
+      return component
     } else {
-      // Return
-      super.getSystemService(name)
+      return super.getSystemService(name)
     }
   }
 

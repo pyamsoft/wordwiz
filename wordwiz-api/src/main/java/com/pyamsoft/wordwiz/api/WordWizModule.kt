@@ -16,21 +16,7 @@
 
 package com.pyamsoft.wordwiz.api
 
-import android.content.Context
-import android.support.annotation.CheckResult
-import io.reactivex.Scheduler
+import com.pyamsoft.pydroid.ApplicationModule
+import com.pyamsoft.pydroid.loader.LoaderModule
 
-interface WordWizModule {
-
-  @CheckResult
-  fun provideContext(): Context
-
-  @CheckResult
-  fun provideMainScheduler(): Scheduler
-
-  @CheckResult
-  fun provideIoScheduler(): Scheduler
-
-  @CheckResult
-  fun provideComputationScheduler(): Scheduler
-}
+interface WordWizModule : ApplicationModule, LoaderModule
