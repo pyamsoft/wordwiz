@@ -22,7 +22,6 @@ import com.pyamsoft.pydroid.presenter.SchedulerPresenter
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.ProcessType
 import com.pyamsoft.wordwiz.model.WordProcessResult
-import com.pyamsoft.wordwiz.word.WordProcessPresenter.View
 import io.reactivex.Scheduler
 import timber.log.Timber
 
@@ -31,7 +30,7 @@ class WordProcessPresenter internal constructor(
   computationScheduler: Scheduler,
   ioScheduler: Scheduler,
   mainThreadScheduler: Scheduler
-) : SchedulerPresenter<View>(
+) : SchedulerPresenter<WordProcessPresenter.View>(
     computationScheduler, ioScheduler, mainThreadScheduler
 ) {
 

@@ -18,7 +18,6 @@ package com.pyamsoft.wordwiz.main
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
@@ -49,18 +48,16 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
     super.onViewCreated(view, savedInstanceState)
 
     val context: Context = view.context
-    wordCountPreference = findPreference(
-        getString(R.string.word_count_key)
-    ) as SwitchPreferenceCompat
+    wordCountPreference =
+        findPreference(getString(R.string.word_count_key)) as SwitchPreferenceCompat
     wordCountPreference.setOnPreferenceClickListener {
       val enabled = WordCountActivity.isEnabled(context)
       WordCountActivity.enable(context, !enabled)
       return@setOnPreferenceClickListener true
     }
 
-    letterCountPreference = findPreference(
-        getString(R.string.letter_count_key)
-    ) as SwitchPreferenceCompat
+    letterCountPreference =
+        findPreference(getString(R.string.letter_count_key)) as SwitchPreferenceCompat
     letterCountPreference.setOnPreferenceClickListener {
       val enabled = LetterCountActivity.isEnabled(context)
       LetterCountActivity.enable(context, !enabled)

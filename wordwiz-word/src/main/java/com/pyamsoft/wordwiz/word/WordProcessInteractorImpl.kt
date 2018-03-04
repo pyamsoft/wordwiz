@@ -62,7 +62,7 @@ internal class WordProcessInteractorImpl internal constructor(
         result = getProcessTypeForLabel(label, text)
       } catch (e: PackageManager.NameNotFoundException) {
         Timber.e(e, "Name not found ERROR")
-        throw RuntimeException("Name not found for ComponentName: " + componentName)
+        throw RuntimeException("Name not found for ComponentName: $componentName")
       }
       return@fromCallable result
     }
@@ -76,6 +76,6 @@ internal class WordProcessInteractorImpl internal constructor(
     labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
     labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
     labelTypeOccurrences -> throw RuntimeException("Not ready yet")
-    else -> throw IllegalArgumentException("Invalid label: " + label)
+    else -> throw IllegalArgumentException("Invalid label: $label")
   }
 }
