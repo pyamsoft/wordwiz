@@ -32,16 +32,10 @@ internal class WordProcessInteractorImpl internal constructor(
   context: Context
 ) : WordProcessCommonInteractor() {
 
-  private val packageManager: PackageManager = context.applicationContext.packageManager
-  private val labelTypeWordCount: String = context.applicationContext.getString(
-      R.string.label_word_count
-  )
-  private val labelTypeLetterCount: String = context.applicationContext.getString(
-      R.string.label_letter_count
-  )
-  private val labelTypeOccurrences: String = context.applicationContext.getString(
-      R.string.label_occurrence_count
-  )
+  private val packageManager: PackageManager = context.packageManager
+  private val labelTypeWordCount: String = context.getString(R.string.label_word_count)
+  private val labelTypeLetterCount: String = context.getString(R.string.label_letter_count)
+  private val labelTypeOccurrences: String = context.getString(R.string.label_occurrence_count)
 
   //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
   //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,

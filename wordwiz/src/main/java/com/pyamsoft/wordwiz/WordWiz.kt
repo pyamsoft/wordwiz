@@ -74,7 +74,8 @@ class WordWiz : Application() {
     @JvmStatic
     @CheckResult
     fun getRefWatcher(fragment: Fragment): RefWatcher {
-      val application = fragment.activity!!.application
+      val application = fragment.requireActivity()
+          .application
       if (application is WordWiz) {
         return application.refWatcher
       } else {
