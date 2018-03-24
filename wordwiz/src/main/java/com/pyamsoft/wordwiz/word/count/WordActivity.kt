@@ -45,8 +45,8 @@ abstract class WordActivity<out T : WordProcessActivity> {
     enable: Boolean,
     targetClass: Class<out T>
   ) {
-    Timber.d("set ${targetClass::class.java.simpleName} enabled state: $enable")
-    val name = ComponentName(context, targetClass::class.java)
+    Timber.d("set ${targetClass.simpleName} enabled state: $enable")
+    val name = ComponentName(context, targetClass)
     val state: Int
     if (enable) {
       state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -62,7 +62,7 @@ abstract class WordActivity<out T : WordProcessActivity> {
     context: Context,
     targetClass: Class<out T>
   ): Boolean {
-    val name = ComponentName(context, targetClass::class.java)
+    val name = ComponentName(context, targetClass)
     val state = context.packageManager.getComponentEnabledSetting(name)
     return state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
   }
