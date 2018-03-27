@@ -44,9 +44,7 @@ android {
 
 dependencies {
   // PYDroid
-  api("com.github.pyamsoft.pydroid:pydroid-loader:$pydroid@aar") {
-    transitive = true
-  }
+  api "com.github.pyamsoft.pydroid:pydroid-loader:$pydroid"
 
   api project(":wordwiz-model")
 }
