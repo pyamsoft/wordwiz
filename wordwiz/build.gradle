@@ -89,15 +89,9 @@ dependencies {
   releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanary"
   testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanary"
 
-  // Firebase Crash
-  implementation "com.google.firebase:firebase-crash:$firebase"
-
   // PYDroid
   implementation "com.github.pyamsoft.pydroid:pydroid-ui:$pydroid"
 
   implementation project(":wordwiz-base")
   implementation project(":wordwiz-word")
 }
-
-// Firebase
-apply plugin: "com.google.gms.google-services"

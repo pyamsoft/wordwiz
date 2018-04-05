@@ -53,8 +53,6 @@ class WordWiz : Application() {
     }
 
     PYDroid.init(pydroidModule, loaderModule)
-    Licenses.create("Firebase", "https://firebase.google.com", "licenses/firebase")
-
   }
 
   private fun buildComponent(): WordWizComponent = WordWizComponentImpl(
