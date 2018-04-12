@@ -18,8 +18,8 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
-import com.pyamsoft.pydroid.util.Toasty
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.word.WordProcessPresenter.View
@@ -67,27 +67,29 @@ abstract class WordProcessActivity : ActivityBase(), View {
 
   override fun onProcessError(throwable: Throwable) {
     Timber.e(throwable, "An error occurred while attempting to process text")
-    Toasty.makeText(
+    Toast.makeText(
         applicationContext,
-        "An error occurred while attempting to process text", Toasty.LENGTH_SHORT
-    )
+        "An error occurred while attempting to process text", Toast.LENGTH_SHORT
+    ).show()
   }
 
   override fun onProcessTypeWordCount(count: Int) {
-    Toasty.makeText(applicationContext, "Word count: $count", Toasty.LENGTH_SHORT)
+    Toast.makeText(applicationContext, "Word count: $count", Toast.LENGTH_SHORT)
+        .show()
   }
 
   override fun onProcessTypeLetterCount(count: Int) {
-    Toasty.makeText(applicationContext, "Letter count: $count   ", Toasty.LENGTH_SHORT)
+    Toast.makeText(applicationContext, "Letter count: $count   ", Toast.LENGTH_SHORT)
+    .show()
   }
 
   override fun onProcessTypeOccurrences(
     count: Int,
     snippet: String
   ) {
-    Toasty.makeText(
+    Toast.makeText(
         applicationContext, "Occurrence count of snippet '$snippet': $count",
-        Toasty.LENGTH_SHORT
-    )
+        Toast.LENGTH_SHORT
+    ).show()
   }
 }
