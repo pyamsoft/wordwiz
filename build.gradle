@@ -23,17 +23,8 @@ buildscript {
   }
 
   repositories {
-    mavenLocal()
     jcenter()
     google()
-
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-
-    maven {
-      url 'https://maven.google.com'
-    }
 
     maven {
       url 'https://jitpack.io'
@@ -47,7 +38,6 @@ buildscript {
     supportLib = "27.1.1"
     pydroid = "16.6.1"
     leakCanary = "1.5.4"
-    ktlint = "3.2.0"
   }
 
   dependencies {
@@ -60,32 +50,20 @@ buildscript {
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
 
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-    classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:$ktlint"
   }
 }
 
 subprojects {
-  apply plugin: "org.jlleitschuh.gradle.ktlint"
   apply plugin: "com.github.ben-manes.versions"
-
-  ktlint {
-    version = "0.20.0"
-    android = true
-  }
 }
 
 allprojects {
   repositories {
-    mavenLocal()
     jcenter()
     google()
 
     maven {
       url 'https://jitpack.io'
-    }
-    maven {
-      url 'https://maven.google.com'
     }
   }
 
