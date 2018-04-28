@@ -16,7 +16,23 @@
 
 package com.pyamsoft.wordwiz.api
 
-import com.pyamsoft.pydroid.ApplicationModule
-import com.pyamsoft.pydroid.loader.LoaderModule
+import android.app.Application
+import android.content.Context
+import android.support.annotation.CheckResult
+import com.pyamsoft.pydroid.cache.Cache
+import com.pyamsoft.pydroid.loader.ImageLoader
 
-interface WordWizModule : ApplicationModule, LoaderModule
+interface WordWizModule {
+
+  @CheckResult
+  fun provideApplication(): Application
+
+  @CheckResult
+  fun provideContext(): Context
+
+  @CheckResult
+  fun provideImageLoader(): ImageLoader
+
+  @CheckResult
+  fun provideImageLoaderCache(): Cache
+}

@@ -23,25 +23,19 @@ import android.support.v7.preference.PreferenceManager
 import android.view.View
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
+import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
-import com.pyamsoft.pydroid.ui.sec.TamperActivity
 import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
-class MainActivity : TamperActivity() {
+class MainActivity : RatingActivity() {
 
   private lateinit var binding: ActivityMainBinding
 
-  override val changeLogLines: ChangeLogBuilder = buildChangeLog {
-    bugfix("Smoother animations")
-  }
-
   override val versionName: String = BuildConfig.VERSION_NAME
-
-  override val safePackageName: String = "com.pyamsoft.wordwiz"
 
   override val applicationIcon: Int = R.mipmap.ic_launcher
 
@@ -52,6 +46,10 @@ class MainActivity : TamperActivity() {
 
   override val rootView: View
     get() = binding.root
+
+  override val changeLogLines: ChangeLogBuilder = buildChangeLog {
+    bugfix("Smoother animations")
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     setTheme(R.style.Theme_WordWiz_Light)

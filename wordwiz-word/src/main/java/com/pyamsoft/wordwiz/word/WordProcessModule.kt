@@ -17,22 +17,21 @@
 package com.pyamsoft.wordwiz.word
 
 import android.support.annotation.CheckResult
+import com.pyamsoft.pydroid.bus.EventBus
+import com.pyamsoft.pydroid.bus.RxBus
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.api.WordWizModule
-import io.reactivex.Scheduler
+import com.pyamsoft.wordwiz.model.WordProcessResult
 
 class WordProcessModule(wordWizModule: WordWizModule) {
 
   private val interactor: WordProcessInteractor
-  private val computationScheduler: Scheduler = wordWizModule.provideComputationScheduler()
-  private val ioScheduler: Scheduler = wordWizModule.provideIoScheduler()
-  private val mainScheduler: Scheduler = wordWizModule.provideMainThreadScheduler()
+  private val bus: EventBus<WordProcessResult> = RxBus.create()
 
   init {
     interactor = WordProcessInteractorImpl(wordWizModule.provideContext())
   }
 
   @CheckResult
-  fun getPresenter(): WordProcessPresenter =
-    WordProcessPresenter(interactor, computationScheduler, ioScheduler, mainScheduler)
+  fun getPresenter(): WordProcessPresenter = WordProcessPresenter(interactor, bus)
 }

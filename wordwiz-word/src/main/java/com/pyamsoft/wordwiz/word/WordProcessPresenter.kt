@@ -18,21 +18,29 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import android.os.Bundle
-import com.pyamsoft.pydroid.presenter.SchedulerPresenter
+import com.pyamsoft.pydroid.bus.EventBus
+import com.pyamsoft.pydroid.presenter.Presenter
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.ProcessType
 import com.pyamsoft.wordwiz.model.WordProcessResult
-import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
   private val interactor: WordProcessInteractor,
-  computationScheduler: Scheduler,
-  ioScheduler: Scheduler,
-  mainThreadScheduler: Scheduler
-) : SchedulerPresenter<WordProcessPresenter.View>(
-    computationScheduler, ioScheduler, mainThreadScheduler
-) {
+  private val bus: EventBus<WordProcessResult>
+) : Presenter<WordProcessPresenter.View>() {
+
+  override fun onCreate() {
+    super.onCreate()
+    dispose {
+      bus.listen()
+          .subscribeOn(Schedulers.computation())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe { handleProcessType(it) }
+    }
+  }
 
   fun handleActivityLaunchType(
     componentName: ComponentName,
@@ -41,11 +49,11 @@ class WordProcessPresenter internal constructor(
   ) {
     dispose {
       interactor.getProcessType(componentName, text, extras)
-          .subscribeOn(computationScheduler)
-          .observeOn(mainThreadScheduler)
+          .subscribeOn(Schedulers.computation())
+          .observeOn(AndroidSchedulers.mainThread())
           .doAfterTerminate { view?.onProcessComplete() }
           .doOnSubscribe { view?.onProcessBegin() }
-          .subscribe({ handleProcessType(it) }, {
+          .subscribe({ bus.publish(it) }, {
             Timber.e(it, "onError handleActivityLaunchType")
             view?.onProcessError(it)
           })
@@ -86,4 +94,5 @@ class WordProcessPresenter internal constructor(
       snippet: String
     )
   }
+
 }

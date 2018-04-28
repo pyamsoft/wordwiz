@@ -18,31 +18,22 @@ package com.pyamsoft.wordwiz.base
 
 import android.app.Application
 import android.content.Context
-import com.pyamsoft.pydroid.PYDroidModule
 import com.pyamsoft.pydroid.cache.Cache
 import com.pyamsoft.pydroid.loader.ImageLoader
-import com.pyamsoft.pydroid.loader.LoaderModule
 import com.pyamsoft.wordwiz.api.WordWizModule
-import io.reactivex.Scheduler
 
 class WordWizModuleImpl(
-  private val pyDroidModule: PYDroidModule,
-  private val loaderModule: LoaderModule
+  private val application: Application,
+  private val imageLoader: ImageLoader,
+  private val imageCache: Cache
 ) : WordWizModule {
 
-  override fun provideApplication(): Application = pyDroidModule.provideApplication()
+  override fun provideApplication(): Application = application
 
-  override fun provideContext(): Context = pyDroidModule.provideContext()
+  override fun provideContext(): Context = provideApplication()
 
-  override fun provideComputationScheduler(): Scheduler =
-    pyDroidModule.provideComputationScheduler()
+  override fun provideImageLoader(): ImageLoader = imageLoader
 
-  override fun provideIoScheduler(): Scheduler = pyDroidModule.provideIoScheduler()
-
-  override fun provideMainThreadScheduler(): Scheduler = pyDroidModule.provideMainThreadScheduler()
-
-  override fun provideImageLoader(): ImageLoader = loaderModule.provideImageLoader()
-
-  override fun provideImageLoaderCache(): Cache = loaderModule.provideImageLoaderCache()
+  override fun provideImageLoaderCache(): Cache = imageCache
 
 }
