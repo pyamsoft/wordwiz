@@ -18,7 +18,6 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import android.os.Bundle
-import com.pyamsoft.pydroid.bus.EventBus
 import com.pyamsoft.pydroid.presenter.Presenter
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.ProcessType
@@ -28,19 +27,8 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
-  private val interactor: WordProcessInteractor,
-  private val bus: EventBus<WordProcessResult>
+  private val interactor: WordProcessInteractor
 ) : Presenter<WordProcessPresenter.View>() {
-
-  override fun onCreate() {
-    super.onCreate()
-    dispose {
-      bus.listen()
-          .subscribeOn(Schedulers.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe { handleProcessType(it) }
-    }
-  }
 
   fun handleActivityLaunchType(
     componentName: ComponentName,
@@ -53,7 +41,7 @@ class WordProcessPresenter internal constructor(
           .observeOn(AndroidSchedulers.mainThread())
           .doAfterTerminate { view?.onProcessComplete() }
           .doOnSubscribe { view?.onProcessBegin() }
-          .subscribe({ bus.publish(it) }, {
+          .subscribe({ handleProcessType(it) }, {
             Timber.e(it, "onError handleActivityLaunchType")
             view?.onProcessError(it)
           })
