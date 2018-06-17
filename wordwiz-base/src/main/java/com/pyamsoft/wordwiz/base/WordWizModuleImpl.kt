@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.base
 
 import android.app.Application
 import android.content.Context
-import com.pyamsoft.pydroid.cache.Cache
+import com.pyamsoft.pydroid.core.cache.Cache
 import com.pyamsoft.pydroid.loader.ImageLoader
 import com.pyamsoft.wordwiz.api.WordWizModule
 

@@ -18,17 +18,18 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import android.os.Bundle
-import com.pyamsoft.pydroid.presenter.Presenter
+import com.pyamsoft.pydroid.core.presenter.Presenter
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.ProcessType
 import com.pyamsoft.wordwiz.model.WordProcessResult
+import com.pyamsoft.wordwiz.word.WordProcessPresenter.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class WordProcessPresenter internal constructor(
   private val interactor: WordProcessInteractor
-) : Presenter<WordProcessPresenter.View>() {
+) : Presenter<View>() {
 
   fun handleActivityLaunchType(
     componentName: ComponentName,

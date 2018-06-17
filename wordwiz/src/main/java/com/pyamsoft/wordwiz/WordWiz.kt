@@ -17,8 +17,8 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
-import android.support.annotation.CheckResult
-import android.support.v4.app.Fragment
+import androidx.annotation.CheckResult
+import androidx.fragment.app.Fragment
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.ui.PYDroid.Instance
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl

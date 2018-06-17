@@ -18,7 +18,7 @@ package com.pyamsoft.wordwiz.main
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.preference.SwitchPreferenceCompat
+import androidx.preference.SwitchPreferenceCompat
 import android.view.View
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.util.setUpEnabled

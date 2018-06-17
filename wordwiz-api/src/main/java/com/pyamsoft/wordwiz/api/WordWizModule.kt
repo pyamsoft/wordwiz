@@ -18,8 +18,8 @@ package com.pyamsoft.wordwiz.api
 
 import android.app.Application
 import android.content.Context
-import android.support.annotation.CheckResult
-import com.pyamsoft.pydroid.cache.Cache
+import androidx.annotation.CheckResult
+import com.pyamsoft.pydroid.core.cache.Cache
 import com.pyamsoft.pydroid.loader.ImageLoader
 
 interface WordWizModule {

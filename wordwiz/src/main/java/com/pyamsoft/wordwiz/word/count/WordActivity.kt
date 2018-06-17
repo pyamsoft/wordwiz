@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.word.count
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.annotation.CheckResult
+import androidx.annotation.CheckResult
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 import timber.log.Timber
 

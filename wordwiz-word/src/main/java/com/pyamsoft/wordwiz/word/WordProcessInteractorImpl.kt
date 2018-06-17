@@ -21,7 +21,7 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.annotation.CheckResult
+import androidx.annotation.CheckResult
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult

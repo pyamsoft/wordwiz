@@ -77,7 +77,7 @@ android {
 }
 
 dependencies {
-  kapt "com.android.databinding:compiler:$plugin_version"
+  kapt 'androidx.databinding:databinding-compiler:3.2.0-alpha18'
 
   // Leak Canary
   debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanary"
@@ -85,7 +85,7 @@ dependencies {
   testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanary"
 
   // PYDroid
-  implementation "com.github.pyamsoft.pydroid:pydroid-ui:$pydroid"
+  implementation "com.github.pyamsoft.pydroid:ui:$pydroid"
 
   implementation project(":wordwiz-base")
   implementation project(":wordwiz-word")

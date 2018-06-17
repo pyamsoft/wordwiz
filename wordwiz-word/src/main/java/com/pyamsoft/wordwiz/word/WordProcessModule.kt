@@ -16,7 +16,7 @@
 
 package com.pyamsoft.wordwiz.word
 
-import android.support.annotation.CheckResult
+import androidx.annotation.CheckResult
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.api.WordWizModule
 

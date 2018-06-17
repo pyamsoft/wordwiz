@@ -38,8 +38,7 @@ android {
 }
 
 dependencies {
-  api "com.android.support:preference-v7:$supportLib"
-
+  api "androidx.preference:preference:$androidx"
   api project(":wordwiz-api")
 }
 
