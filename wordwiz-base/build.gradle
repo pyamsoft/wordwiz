@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-  api "androidx.preference:preference:$androidx"
+  api "androidx.preference:preference:$preference"
   api project(":wordwiz-api")
 }
 
