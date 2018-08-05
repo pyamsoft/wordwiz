@@ -17,27 +17,29 @@
 package com.pyamsoft.wordwiz.word
 
 import androidx.annotation.CheckResult
+import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
 
-internal abstract class WordProcessCommonInteractor protected constructor() :
-    WordProcessInteractor {
+internal abstract class WordProcessCommonInteractor protected constructor(
+  private val enforcer: Enforcer
+) : WordProcessInteractor {
 
   @CheckResult
   private fun tokenizeString(text: CharSequence): Array<String> {
+    enforcer.assertNotOnMainThread()
     Timber.d("Tokenize string by spaces")
     return text.toString()
-        .split(
-            SPLIT_BY_WHITESPACE.toRegex()
-        )
+        .split(SPLIT_BY_WHITESPACE.toRegex())
         .dropLastWhile { it.isEmpty() }
         .toTypedArray()
   }
 
   @CheckResult
   fun getWordCount(text: CharSequence): Int {
+    enforcer.assertNotOnMainThread()
     val tokens = tokenizeString(text)
 
     Timber.d("String tokenized: %s", Arrays.toString(tokens))
@@ -46,6 +48,7 @@ internal abstract class WordProcessCommonInteractor protected constructor() :
 
   @CheckResult
   fun getLetterCount(text: CharSequence): Int {
+    enforcer.assertNotOnMainThread()
     val tokens = tokenizeString(text)
 
     Timber.d("Get a sub of letter counts")
@@ -57,6 +60,7 @@ internal abstract class WordProcessCommonInteractor protected constructor() :
     text: CharSequence,
     snip: String
   ): Int {
+    enforcer.assertNotOnMainThread()
     Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
     val pattern = Pattern.compile(snip, Pattern.LITERAL)
     val matcher = pattern.matcher(text)

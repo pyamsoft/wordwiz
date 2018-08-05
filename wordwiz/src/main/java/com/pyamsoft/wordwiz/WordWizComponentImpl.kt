@@ -16,13 +16,17 @@
 
 package com.pyamsoft.wordwiz
 
+import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
-class WordWizComponentImpl(module: WordWizModule) : WordWizComponent {
+class WordWizComponentImpl(
+  enforcer: Enforcer,
+  module: WordWizModule
+) : WordWizComponent {
 
-  private val wordProcessModule = WordProcessModule(module)
+  private val wordProcessModule = WordProcessModule(enforcer, module)
 
   override fun inject(activity: WordProcessActivity) {
     activity.presenter = wordProcessModule.getPresenter()

@@ -22,6 +22,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.annotation.CheckResult
+import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
@@ -29,8 +30,9 @@ import io.reactivex.Single
 import timber.log.Timber
 
 internal class WordProcessInteractorImpl internal constructor(
-  context: Context
-) : WordProcessCommonInteractor() {
+  context: Context,
+  private val enforcer: Enforcer
+) : WordProcessCommonInteractor(enforcer) {
 
   private val packageManager: PackageManager = context.packageManager
   private val labelTypeWordCount: String = context.getString(R.string.label_word_count)
@@ -48,6 +50,7 @@ internal class WordProcessInteractorImpl internal constructor(
     extras: Bundle?
   ): Single<WordProcessResult> {
     return Single.fromCallable {
+      enforcer.assertNotOnMainThread()
       val result: WordProcessResult
       try {
         Timber.d("Attempt to load the label this activity launched with")
@@ -66,10 +69,13 @@ internal class WordProcessInteractorImpl internal constructor(
   private fun getProcessTypeForLabel(
     label: CharSequence,
     text: CharSequence
-  ): WordProcessResult = when (label) {
-    labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
-    labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
-    labelTypeOccurrences -> throw RuntimeException("Not ready yet")
-    else -> throw IllegalArgumentException("Invalid label: $label")
+  ): WordProcessResult {
+    enforcer.assertNotOnMainThread()
+    return when (label) {
+      labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
+      labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+      labelTypeOccurrences -> throw RuntimeException("Not ready yet")
+      else -> throw IllegalArgumentException("Invalid label: $label")
+    }
   }
 }

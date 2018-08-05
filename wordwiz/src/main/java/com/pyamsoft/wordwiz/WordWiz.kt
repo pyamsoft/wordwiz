@@ -53,6 +53,7 @@ class WordWiz : Application(), Instance {
       val loaderModule = it.modules()
           .loaderModule()
       component = WordWizComponentImpl(
+          it.enforcer(),
           WordWizModuleImpl(
               this,
               loaderModule.provideImageLoader(),
