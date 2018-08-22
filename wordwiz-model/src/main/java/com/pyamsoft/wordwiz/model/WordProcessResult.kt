@@ -16,16 +16,7 @@
 
 package com.pyamsoft.wordwiz.model
 
-import android.os.Bundle
-
-data class WordProcessResult @JvmOverloads constructor(
+data class WordProcessResult(
   val type: ProcessType,
-  val count: Int,
-  val extras: Bundle? = null
-) {
-
-  companion object {
-
-    const val KEY_EXTRA_SNIPPET = "key_extra_snippet"
-  }
-}
+  val count: Int
+)

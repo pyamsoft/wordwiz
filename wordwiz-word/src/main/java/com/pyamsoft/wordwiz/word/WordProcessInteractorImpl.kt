@@ -23,31 +23,73 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.threads.Enforcer
+import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.Single
 import timber.log.Timber
+import java.util.Arrays
+import java.util.regex.Pattern
 
 internal class WordProcessInteractorImpl internal constructor(
   context: Context,
   private val enforcer: Enforcer
-) : WordProcessCommonInteractor(enforcer) {
+) : WordProcessInteractor {
 
   private val packageManager: PackageManager = context.packageManager
   private val labelTypeWordCount: String = context.getString(R.string.label_word_count)
   private val labelTypeLetterCount: String = context.getString(R.string.label_letter_count)
   private val labelTypeOccurrences: String = context.getString(R.string.label_occurrence_count)
 
-  //@NonNull @Override public AsyncTask<Void, Void, WordProcessResult> getProcessType(
-  //    @NonNull ComponentName componentName, @NonNull CharSequence text, @NonNull Bundle extras,
-  //    @NonNull ActionSingle<WordProcessResult> onLoaded) {
-  //}
+  @CheckResult
+  private fun tokenizeString(text: CharSequence): Array<String> {
+    enforcer.assertNotOnMainThread()
+    Timber.d("Tokenize string by spaces")
+    return text.toString()
+        .split(SPLIT_BY_WHITESPACE.toRegex())
+        .dropLastWhile { it.isEmpty() }
+        .toTypedArray()
+  }
+
+  @CheckResult
+  private fun getWordCount(text: CharSequence): Int {
+    enforcer.assertNotOnMainThread()
+    val tokens = tokenizeString(text)
+
+    Timber.d("String tokenized: %s", Arrays.toString(tokens))
+    return tokens.size
+  }
+
+  @CheckResult
+  private fun getLetterCount(text: CharSequence): Int {
+    enforcer.assertNotOnMainThread()
+    val tokens = tokenizeString(text)
+
+    Timber.d("Get a sub of letter counts")
+    return tokens.sumBy { it.length }
+  }
+
+  @CheckResult
+  private fun getOccurrences(
+    text: CharSequence,
+    snip: String
+  ): Int {
+    enforcer.assertNotOnMainThread()
+    Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
+    val pattern = Pattern.compile(snip, Pattern.LITERAL)
+    val matcher = pattern.matcher(text)
+    var count = 0
+    while (matcher.find()) {
+      ++count
+    }
+
+    return count
+  }
 
   override fun getProcessType(
     componentName: ComponentName,
-    text: CharSequence,
-    extras: Bundle?
+    text: CharSequence
   ): Single<WordProcessResult> {
     return Single.fromCallable {
       enforcer.assertNotOnMainThread()
@@ -77,5 +119,10 @@ internal class WordProcessInteractorImpl internal constructor(
       labelTypeOccurrences -> throw RuntimeException("Not ready yet")
       else -> throw IllegalArgumentException("Invalid label: $label")
     }
+  }
+
+  companion object {
+
+    private const val SPLIT_BY_WHITESPACE = "\\s+"
   }
 }

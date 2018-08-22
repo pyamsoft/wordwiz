@@ -29,6 +29,6 @@ class WordWizComponentImpl(
   private val wordProcessModule = WordProcessModule(enforcer, module)
 
   override fun inject(activity: WordProcessActivity) {
-    activity.presenter = wordProcessModule.getPresenter()
+    activity.viewModel = wordProcessModule.getViewModel()
   }
 }

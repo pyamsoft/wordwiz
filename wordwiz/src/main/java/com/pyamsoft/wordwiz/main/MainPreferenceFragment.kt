@@ -16,14 +16,14 @@
 
 package com.pyamsoft.wordwiz.main
 
-import android.content.Context
 import android.os.Bundle
-import androidx.preference.SwitchPreferenceCompat
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.preference.SwitchPreferenceCompat
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.R
-import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.word.count.LetterCountActivity
 import com.pyamsoft.wordwiz.word.count.WordCountActivity
 
@@ -41,28 +41,30 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override val hideClearAll: Boolean = true
 
-  override fun onViewCreated(
-    view: View,
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
     savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
+  ): View? {
+    val view = super.onCreateView(inflater, container, savedInstanceState)
 
-    val context: Context = view.context
     wordCountPreference =
         findPreference(getString(R.string.word_count_key)) as SwitchPreferenceCompat
     wordCountPreference.setOnPreferenceClickListener {
-      val enabled = WordCountActivity.isEnabled(context)
-      WordCountActivity.enable(context, !enabled)
+      val enabled = WordCountActivity.isEnabled(it.context)
+      WordCountActivity.enable(it.context, !enabled)
       return@setOnPreferenceClickListener true
     }
 
     letterCountPreference =
         findPreference(getString(R.string.letter_count_key)) as SwitchPreferenceCompat
     letterCountPreference.setOnPreferenceClickListener {
-      val enabled = LetterCountActivity.isEnabled(context)
-      LetterCountActivity.enable(context, !enabled)
+      val enabled = LetterCountActivity.isEnabled(it.context)
+      LetterCountActivity.enable(it.context, !enabled)
       return@setOnPreferenceClickListener true
     }
+
+    return view
   }
 
   override fun onStart() {
@@ -79,12 +81,6 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
       it.setTitle(R.string.app_name)
       it.setUpEnabled(false)
     }
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    WordWiz.getRefWatcher(this)
-        .watch(this)
   }
 
   companion object {

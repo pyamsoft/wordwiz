@@ -33,5 +33,5 @@ class WordProcessModule(
   }
 
   @CheckResult
-  fun getPresenter(): WordProcessPresenter = WordProcessPresenter(interactor)
+  fun getViewModel() = WordViewModel(interactor)
 }

@@ -17,8 +17,6 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
-import androidx.annotation.CheckResult
-import androidx.fragment.app.Fragment
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.ui.PYDroid.Instance
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
@@ -63,7 +61,7 @@ class WordWiz : Application(), Instance {
     }
   }
 
-  override fun getSystemService(name: String?): Any {
+  override fun getSystemService(name: String): Any {
     if (Injector.name == name) {
       return component
     } else {
@@ -71,18 +69,4 @@ class WordWiz : Application(), Instance {
     }
   }
 
-  companion object {
-
-    @JvmStatic
-    @CheckResult
-    fun getRefWatcher(fragment: Fragment): RefWatcher {
-      val application = fragment.requireActivity()
-          .application
-      if (application is WordWiz) {
-        return application.refWatcher
-      } else {
-        throw IllegalStateException("Application is not WordWiz")
-      }
-    }
-  }
 }

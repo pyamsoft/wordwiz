@@ -18,19 +18,12 @@ package com.pyamsoft.wordwiz.main
 
 import com.pyamsoft.pydroid.ui.app.fragment.AppSettingsFragment
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
-import com.pyamsoft.wordwiz.WordWiz
 
 class MainFragment : AppSettingsFragment() {
 
   override fun provideSettingsFragment(): SettingsPreferenceFragment = MainPreferenceFragment()
 
   override fun provideSettingsTag(): String = MainPreferenceFragment.TAG
-
-  override fun onDestroy() {
-    super.onDestroy()
-    WordWiz.getRefWatcher(this)
-        .watch(this)
-  }
 
   companion object {
     const val TAG = "MainFragment"

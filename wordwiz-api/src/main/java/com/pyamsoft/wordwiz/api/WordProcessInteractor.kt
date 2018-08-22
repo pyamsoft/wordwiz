@@ -17,7 +17,6 @@
 package com.pyamsoft.wordwiz.api
 
 import android.content.ComponentName
-import android.os.Bundle
 import androidx.annotation.CheckResult
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.Single
@@ -27,7 +26,6 @@ interface WordProcessInteractor {
   @CheckResult
   fun getProcessType(
     componentName: ComponentName,
-    text: CharSequence,
-    extras: Bundle?
+    text: CharSequence
   ): Single<WordProcessResult>
 }

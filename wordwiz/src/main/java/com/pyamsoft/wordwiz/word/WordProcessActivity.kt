@@ -18,24 +18,29 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.word.WordProcessPresenter.View
+import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
+import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
+import com.pyamsoft.wordwiz.model.WordProcessResult
 import timber.log.Timber
 
-abstract class WordProcessActivity : ActivityBase(), View {
+abstract class WordProcessActivity : ActivityBase() {
 
-  internal lateinit var presenter: WordProcessPresenter
+  internal lateinit var viewModel: WordViewModel
+  private val handler = Handler(Looper.getMainLooper())
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
     Injector.obtain<WordWizComponent>(applicationContext)
         .inject(this)
-    presenter.bind(this, this)
-    handleIntent(intent)
+    observeProcessRequests()
+    requestWordProcess()
   }
 
   override fun onStop() {
@@ -48,48 +53,54 @@ abstract class WordProcessActivity : ActivityBase(), View {
   override fun onDestroy() {
     super.onDestroy()
     overridePendingTransition(0, 0)
+    handler.removeCallbacksAndMessages(null)
   }
 
-  private fun handleIntent(intent: Intent) {
+  private fun observeProcessRequests() {
+    viewModel.onProcessWordCount(this) { wrapper ->
+      wrapper.onError { onProcessError() }
+      wrapper.onSuccess { onProcessSuccess(it) }
+      wrapper.onComplete { onProcessComplete() }
+    }
+  }
+
+  private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    presenter.handleActivityLaunchType(componentName, text, getIntent().extras)
+    viewModel.handleProcess(this, componentName, text)
   }
 
-  override fun onProcessBegin() {
-    Timber.d("Start processing")
-  }
-
-  override fun onProcessComplete() {
+  private fun onProcessComplete() {
     Timber.d("Process complete")
-    finish()
+
+    handler.removeCallbacksAndMessages(null)
+    handler.postDelayed({ finish() }, 500)
   }
 
-  override fun onProcessError(throwable: Throwable) {
-    Timber.e(throwable, "An error occurred while attempting to process text")
+  private fun onProcessError() {
     Toast.makeText(
         applicationContext,
-        "An error occurred while attempting to process text", Toast.LENGTH_SHORT
-    ).show()
+        "An error occurred while attempting to process text, please try again",
+        Toast.LENGTH_SHORT
+    )
+        .show()
   }
 
-  override fun onProcessTypeWordCount(count: Int) {
+  private fun onProcessSuccess(result: WordProcessResult) {
+    when (result.type) {
+      WORD_COUNT -> onProcessTypeWordCount(result.count)
+      LETTER_COUNT -> onProcessTypeLetterCount(result.count)
+      else -> Timber.w("Unhandled process success: ${result.type}")
+    }
+  }
+
+  private fun onProcessTypeWordCount(count: Int) {
     Toast.makeText(applicationContext, "Word count: $count", Toast.LENGTH_SHORT)
         .show()
   }
 
-  override fun onProcessTypeLetterCount(count: Int) {
+  private fun onProcessTypeLetterCount(count: Int) {
     Toast.makeText(applicationContext, "Letter count: $count   ", Toast.LENGTH_SHORT)
-    .show()
-  }
-
-  override fun onProcessTypeOccurrences(
-    count: Int,
-    snippet: String
-  ) {
-    Toast.makeText(
-        applicationContext, "Occurrence count of snippet '$snippet': $count",
-        Toast.LENGTH_SHORT
-    ).show()
+        .show()
   }
 }
