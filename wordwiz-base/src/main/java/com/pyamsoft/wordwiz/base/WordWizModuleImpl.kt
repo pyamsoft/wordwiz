@@ -24,8 +24,7 @@ import com.pyamsoft.wordwiz.api.WordWizModule
 
 class WordWizModuleImpl(
   private val application: Application,
-  private val imageLoader: ImageLoader,
-  private val imageCache: Cache
+  private val imageLoader: ImageLoader
 ) : WordWizModule {
 
   override fun provideApplication(): Application = application
@@ -33,7 +32,5 @@ class WordWizModuleImpl(
   override fun provideContext(): Context = provideApplication()
 
   override fun provideImageLoader(): ImageLoader = imageLoader
-
-  override fun provideImageLoaderCache(): Cache = imageCache
 
 }

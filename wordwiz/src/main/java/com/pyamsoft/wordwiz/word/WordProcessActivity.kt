@@ -21,18 +21,25 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.pyamsoft.pydroid.core.addTo
+import com.pyamsoft.pydroid.core.disposable
+import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
+import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase() {
 
   internal lateinit var viewModel: WordViewModel
   private val handler = Handler(Looper.getMainLooper())
+
+  private val compositeDisposable = CompositeDisposable()
+  private var processDisposable by disposable()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
@@ -54,20 +61,24 @@ abstract class WordProcessActivity : ActivityBase() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
+
+    compositeDisposable.clear()
+    processDisposable.tryDispose()
   }
 
   private fun observeProcessRequests() {
-    viewModel.onProcessWordCount(this) { wrapper ->
+    viewModel.onProcessWordCount { wrapper ->
       wrapper.onError { onProcessError() }
       wrapper.onSuccess { onProcessSuccess(it) }
       wrapper.onComplete { onProcessComplete() }
     }
+        .addTo(compositeDisposable)
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    viewModel.handleProcess(this, componentName, text)
+    processDisposable = viewModel.handleProcess(componentName, text)
   }
 
   private fun onProcessComplete() {

@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz.api
 import android.app.Application
 import android.content.Context
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.cache.Cache
 import com.pyamsoft.pydroid.loader.ImageLoader
 
 interface WordWizModule {
@@ -32,7 +31,4 @@ interface WordWizModule {
 
   @CheckResult
   fun provideImageLoader(): ImageLoader
-
-  @CheckResult
-  fun provideImageLoaderCache(): Cache
 }

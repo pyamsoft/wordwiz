@@ -17,39 +17,36 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.core.viewmodel.DataBus
-import com.pyamsoft.pydroid.core.viewmodel.DataWrapper
-import com.pyamsoft.pydroid.core.viewmodel.LifecycleViewModel
+import androidx.annotation.CheckResult
+import com.pyamsoft.pydroid.core.DataBus
+import com.pyamsoft.pydroid.core.DataWrapper
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class WordViewModel internal constructor(
   private val interactor: WordProcessInteractor
-) : LifecycleViewModel {
+) {
 
   private val processBus = DataBus<WordProcessResult>()
 
-  fun onProcessWordCount(
-    owner: LifecycleOwner,
-    func: (DataWrapper<WordProcessResult>) -> Unit
-  ) {
-    processBus.listen()
+  @CheckResult
+  fun onProcessWordCount(func: (DataWrapper<WordProcessResult>) -> Unit): Disposable {
+    return processBus.listen()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(func)
-        .bind(owner)
   }
 
+  @CheckResult
   fun handleProcess(
-    owner: LifecycleOwner,
     componentName: ComponentName,
     text: CharSequence
-  ) {
-    interactor.getProcessType(componentName, text)
+  ): Disposable {
+    return interactor.getProcessType(componentName, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .doAfterTerminate { processBus.publishComplete() }
@@ -58,7 +55,6 @@ class WordViewModel internal constructor(
           Timber.e(it, "Error handling process request")
           processBus.publishError(it)
         })
-        .disposeOnClear(owner)
   }
 
 }

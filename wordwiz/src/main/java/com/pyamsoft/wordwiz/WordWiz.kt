@@ -52,11 +52,7 @@ class WordWiz : Application(), Instance {
           .loaderModule()
       component = WordWizComponentImpl(
           it.enforcer(),
-          WordWizModuleImpl(
-              this,
-              loaderModule.provideImageLoader(),
-              loaderModule.provideImageLoaderCache()
-          )
+          WordWizModuleImpl(this, loaderModule.provideImageLoader())
       )
     }
   }
