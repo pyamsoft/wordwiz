@@ -16,9 +16,11 @@
 
 package com.pyamsoft.wordwiz
 
+import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.api.WordWizModule
-import com.pyamsoft.wordwiz.word.WordProcessActivity
+import com.pyamsoft.wordwiz.word.WordComponent
+import com.pyamsoft.wordwiz.word.WordComponentImpl
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
 class WordWizComponentImpl(
@@ -28,7 +30,7 @@ class WordWizComponentImpl(
 
   private val wordProcessModule = WordProcessModule(enforcer, module)
 
-  override fun inject(activity: WordProcessActivity) {
-    activity.viewModel = wordProcessModule.getViewModel()
+  override fun plusWordComponent(owner: LifecycleOwner): WordComponent {
+    return WordComponentImpl(owner, wordProcessModule)
   }
 }

@@ -17,36 +17,43 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.DataBus
-import com.pyamsoft.pydroid.core.DataWrapper
+import androidx.lifecycle.LifecycleOwner
+import com.pyamsoft.pydroid.core.viewmodel.BaseViewModel
+import com.pyamsoft.pydroid.core.viewmodel.DataBus
+import com.pyamsoft.pydroid.core.viewmodel.DataWrapper
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class WordViewModel internal constructor(
+  owner: LifecycleOwner,
   private val interactor: WordProcessInteractor
-) {
+) : BaseViewModel(owner) {
 
+  private var handleDisposable by disposable()
   private val processBus = DataBus<WordProcessResult>()
 
-  @CheckResult
-  fun onProcessWordCount(func: (DataWrapper<WordProcessResult>) -> Unit): Disposable {
-    return processBus.listen()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(func)
+  override fun onCleared() {
+    super.onCleared()
+    handleDisposable.tryDispose()
   }
 
-  @CheckResult
+  fun onProcessWordCount(func: (DataWrapper<WordProcessResult>) -> Unit) {
+    dispose {
+      processBus.listen()
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(func)
+    }
+  }
+
   fun handleProcess(
     componentName: ComponentName,
     text: CharSequence
-  ): Disposable {
-    return interactor.getProcessType(componentName, text)
+  ) {
+    handleDisposable = interactor.getProcessType(componentName, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .doAfterTerminate { processBus.publishComplete() }

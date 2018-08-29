@@ -16,9 +16,12 @@
 
 package com.pyamsoft.wordwiz
 
-import com.pyamsoft.wordwiz.word.WordProcessActivity
+import androidx.annotation.CheckResult
+import androidx.lifecycle.LifecycleOwner
+import com.pyamsoft.wordwiz.word.WordComponent
 
 interface WordWizComponent {
 
-  fun inject(activity: WordProcessActivity)
+  @CheckResult
+  fun plusWordComponent(owner: LifecycleOwner): WordComponent
 }

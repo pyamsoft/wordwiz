@@ -21,16 +21,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import com.pyamsoft.pydroid.core.addTo
-import com.pyamsoft.pydroid.core.disposable
-import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
-import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase() {
@@ -38,13 +34,11 @@ abstract class WordProcessActivity : ActivityBase() {
   internal lateinit var viewModel: WordViewModel
   private val handler = Handler(Looper.getMainLooper())
 
-  private val compositeDisposable = CompositeDisposable()
-  private var processDisposable by disposable()
-
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     super.onCreate(savedInstanceState)
     Injector.obtain<WordWizComponent>(applicationContext)
+        .plusWordComponent(this)
         .inject(this)
     observeProcessRequests()
     requestWordProcess()
@@ -61,9 +55,6 @@ abstract class WordProcessActivity : ActivityBase() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-
-    compositeDisposable.clear()
-    processDisposable.tryDispose()
   }
 
   private fun observeProcessRequests() {
@@ -72,13 +63,12 @@ abstract class WordProcessActivity : ActivityBase() {
       wrapper.onSuccess { onProcessSuccess(it) }
       wrapper.onComplete { onProcessComplete() }
     }
-        .addTo(compositeDisposable)
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    processDisposable = viewModel.handleProcess(componentName, text)
+    viewModel.handleProcess(componentName, text)
   }
 
   private fun onProcessComplete() {
