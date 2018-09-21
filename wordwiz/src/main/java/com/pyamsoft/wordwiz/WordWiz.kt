@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz
 import android.app.Application
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.ui.PYDroid.Instance
-import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
@@ -48,12 +47,7 @@ class WordWiz : Application(), Instance {
 
   override fun setPydroid(instance: PYDroid) {
     pyDroid = instance.also {
-      val loaderModule = it.modules()
-          .loaderModule()
-      component = WordWizComponentImpl(
-          it.enforcer(),
-          WordWizModuleImpl(this, loaderModule.provideImageLoader())
-      )
+      component = WordWizComponentImpl(this, it.modules())
     }
   }
 

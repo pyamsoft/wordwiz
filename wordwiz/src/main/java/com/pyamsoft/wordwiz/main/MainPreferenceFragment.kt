@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.preference.SwitchPreferenceCompat
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
+import com.pyamsoft.pydroid.ui.app.fragment.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.word.count.LetterCountActivity
@@ -77,7 +78,7 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override fun onResume() {
     super.onResume()
-    toolbarActivity.withToolbar {
+    requireToolbarActivity().withToolbar {
       it.setTitle(R.string.app_name)
       it.setUpEnabled(false)
     }

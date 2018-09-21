@@ -16,19 +16,24 @@
 
 package com.pyamsoft.wordwiz
 
+import android.app.Application
 import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.core.threads.Enforcer
+import com.pyamsoft.pydroid.ui.ModuleProvider
 import com.pyamsoft.wordwiz.api.WordWizModule
+import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.pyamsoft.wordwiz.word.WordComponent
 import com.pyamsoft.wordwiz.word.WordComponentImpl
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
 class WordWizComponentImpl(
-  enforcer: Enforcer,
-  module: WordWizModule
+  application: Application,
+  moduleProvider: ModuleProvider
 ) : WordWizComponent {
 
-  private val wordProcessModule = WordProcessModule(enforcer, module)
+  private val wordWizModule: WordWizModule = WordWizModuleImpl(
+      application, moduleProvider.loaderModule().provideImageLoader()
+  )
+  private val wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
 
   override fun plusWordComponent(owner: LifecycleOwner): WordComponent {
     return WordComponentImpl(owner, wordProcessModule)

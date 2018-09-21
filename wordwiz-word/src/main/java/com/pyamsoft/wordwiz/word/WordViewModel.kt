@@ -18,6 +18,8 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import androidx.lifecycle.LifecycleOwner
+import com.pyamsoft.pydroid.core.singleDisposable
+import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.core.viewmodel.BaseViewModel
 import com.pyamsoft.pydroid.core.viewmodel.DataBus
 import com.pyamsoft.pydroid.core.viewmodel.DataWrapper
@@ -32,7 +34,7 @@ class WordViewModel internal constructor(
   private val interactor: WordProcessInteractor
 ) : BaseViewModel(owner) {
 
-  private var handleDisposable by disposable()
+  private var handleDisposable by singleDisposable()
   private val processBus = DataBus<WordProcessResult>()
 
   override fun onCleared() {
