@@ -26,6 +26,7 @@ import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
+import com.pyamsoft.pydroid.ui.util.commit
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.R
@@ -81,7 +82,7 @@ class MainActivity : RatingActivity() {
     ) {
       fragmentManager.beginTransaction()
           .add(R.id.main_view_container, MainFragment(), MainFragment.TAG)
-          .commit()
+          .commit(this)
     }
   }
 }
