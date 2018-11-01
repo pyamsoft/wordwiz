@@ -42,6 +42,8 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override val hideClearAll: Boolean = true
 
+  override val isDarkTheme: Boolean = false
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
