@@ -18,24 +18,17 @@
 
   <PreferenceCategory android:title="Text Selection Actions">
 
-    <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <androidx.preference.SwitchPreferenceCompat
+        android:icon="@drawable/ic_reader_24dp"
         android:key="@string/word_count_key"
         android:summary="@string/word_count_summary"
         android:title="@string/label_word_count"/>
 
-    <!--suppress AndroidElementNotAllowed -->
-    <SwitchPreferenceCompat
+    <androidx.preference.SwitchPreferenceCompat
+        android:icon="@drawable/ic_reader_24dp"
         android:key="@string/letter_count_key"
         android:summary="@string/letter_count_summary"
         android:title="@string/label_letter_count"/>
-
-    <!--suppress AndroidElementNotAllowed -->
-    <!--<SwitchPreferenceCompat-->
-    <!--android:key="@string/occurrence_count_key"-->
-    <!--android:summary="@string/occurrence_count_summary"-->
-    <!--android:title="@string/label_occurrence_count"-->
-    <!--/>-->
 
   </PreferenceCategory>
 
