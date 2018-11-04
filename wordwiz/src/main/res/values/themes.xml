@@ -22,10 +22,6 @@
     <item name="colorPrimary">@color/purple500</item>
     <item name="colorPrimaryDark">@color/purple700</item>
     <item name="colorAccent">@color/lightblueA200</item>
-
-    <item name="colorSecondary">?attr/colorPrimary</item>
-    <item name="scrimBackground">@color/shadow_scrim45</item>
-    <item name="snackbarButtonStyle">?attr/borderlessButtonStyle</item>
   </style>
 
   <!-- Normal App Theme -->

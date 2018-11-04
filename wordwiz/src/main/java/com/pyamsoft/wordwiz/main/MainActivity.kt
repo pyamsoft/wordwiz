@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat
 import androidx.preference.PreferenceManager
 import android.view.View
 import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
+import com.pyamsoft.pydroid.ui.bugreport.BugreportDialog
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
@@ -49,7 +50,8 @@ class MainActivity : RatingActivity() {
     get() = binding.root
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
-    bugfix("Bugfixes and stability updates")
+    change("New icon style")
+    change("Better open source license viewing experience")
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,8 @@ class MainActivity : RatingActivity() {
         onBackPressed()
       })
     }
+
+    BugreportDialog.attachToToolbar(this, applicationName, currentApplicationVersion)
   }
 
   private fun showPreferenceFragment() {
