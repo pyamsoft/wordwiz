@@ -44,6 +44,8 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override val isDarkTheme: Boolean = false
 
+  override val bugreportUrl: String = "https://github.com/pyamsoft/wordwiz/issues"
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
