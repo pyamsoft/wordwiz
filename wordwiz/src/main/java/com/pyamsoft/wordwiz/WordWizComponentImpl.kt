@@ -21,6 +21,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.ui.ModuleProvider
 import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
+import com.pyamsoft.wordwiz.main.MainActivity
+import com.pyamsoft.wordwiz.main.MainPreferenceFragment
 import com.pyamsoft.wordwiz.word.WordComponent
 import com.pyamsoft.wordwiz.word.WordComponentImpl
 import com.pyamsoft.wordwiz.word.WordProcessModule
@@ -30,12 +32,21 @@ class WordWizComponentImpl(
   moduleProvider: ModuleProvider
 ) : WordWizComponent {
 
+  private val theming = moduleProvider.theming()
   private val wordWizModule: WordWizModule = WordWizModuleImpl(
       application, moduleProvider.loaderModule().provideImageLoader()
   )
   private val wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
 
+  override fun inject(activity: MainActivity) {
+    activity.theming = theming
+  }
+
+  override fun inject(fragment: MainPreferenceFragment) {
+    fragment.theming = theming
+  }
+
   override fun plusWordComponent(owner: LifecycleOwner): WordComponent {
-    return WordComponentImpl(owner, wordProcessModule)
+    return WordComponentImpl(owner, theming, wordProcessModule)
   }
 }

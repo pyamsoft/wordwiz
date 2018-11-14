@@ -25,14 +25,19 @@ import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.util.commit
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.BuildConfig
+import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
+import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
 class MainActivity : RatingActivity() {
+
+  internal lateinit var theming: Theming
 
   private lateinit var binding: ActivityMainBinding
 
@@ -54,7 +59,15 @@ class MainActivity : RatingActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.Theme_WordWiz_Light)
+    Injector.obtain<WordWizComponent>(applicationContext)
+        .inject(this)
+
+    if (theming.isDarkTheme()) {
+      setTheme(R.style.Theme_WordWiz_Dark)
+    } else {
+      setTheme(R.style.Theme_WordWiz_Light)
+    }
+
     super.onCreate(savedInstanceState)
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -65,7 +78,15 @@ class MainActivity : RatingActivity() {
   }
 
   private fun setupToolbarAsActionBar() {
+    val theme: Int
+    if (theming.isDarkTheme()) {
+      theme = R.style.ThemeOverlay_AppCompat
+    } else {
+      theme = R.style.ThemeOverlay_AppCompat_Light
+    }
+
     binding.toolbar.apply {
+      popupTheme = theme
       setToolbar(this)
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4f.toDp(context).toFloat())

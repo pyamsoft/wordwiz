@@ -23,12 +23,17 @@ import android.view.ViewGroup
 import androidx.preference.SwitchPreferenceCompat
 import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.app.fragment.requireToolbarActivity
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
+import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
+import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.word.count.LetterCountActivity
 import com.pyamsoft.wordwiz.word.count.WordCountActivity
 
 class MainPreferenceFragment : SettingsPreferenceFragment() {
+
+  internal lateinit var theming: Theming
 
   private lateinit var wordCountPreference: SwitchPreferenceCompat
   private lateinit var letterCountPreference: SwitchPreferenceCompat
@@ -42,8 +47,6 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   override val hideClearAll: Boolean = true
 
-  override val isDarkTheme: Boolean = false
-
   override val bugreportUrl: String = "https://github.com/pyamsoft/wordwiz/issues"
 
   override fun onCreateView(
@@ -51,8 +54,23 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
+    Injector.obtain<WordWizComponent>(requireContext().applicationContext)
+        .inject(this)
 
+    return super.onCreateView(inflater, container, savedInstanceState)
+  }
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    setupWordCount()
+    setupLetterCount()
+    setupDarkMode()
+  }
+
+  private fun setupLetterCount() {
     wordCountPreference =
         findPreference(getString(R.string.word_count_key)) as SwitchPreferenceCompat
     wordCountPreference.setOnPreferenceClickListener {
@@ -60,7 +78,9 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
       WordCountActivity.enable(it.context, !enabled)
       return@setOnPreferenceClickListener true
     }
+  }
 
+  private fun setupWordCount() {
     letterCountPreference =
         findPreference(getString(R.string.letter_count_key)) as SwitchPreferenceCompat
     letterCountPreference.setOnPreferenceClickListener {
@@ -68,13 +88,24 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
       LetterCountActivity.enable(it.context, !enabled)
       return@setOnPreferenceClickListener true
     }
+  }
 
-    return view
+  private fun setupDarkMode() {
+    val darkTheme = findPreference(getString(R.string.dark_mode_key))
+    darkTheme.setOnPreferenceChangeListener { _, newValue ->
+      if (newValue is Boolean) {
+        theming.setDarkTheme(newValue)
+        requireActivity().recreate()
+        return@setOnPreferenceChangeListener true
+      } else {
+        return@setOnPreferenceChangeListener false
+      }
+    }
   }
 
   override fun onStart() {
     super.onStart()
-    context?.let {
+    requireActivity().let {
       wordCountPreference.isChecked = WordCountActivity.isEnabled(it)
       letterCountPreference.isChecked = LetterCountActivity.isEnabled(it)
     }

@@ -22,7 +22,9 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.wordwiz.Injector
+import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
@@ -31,15 +33,25 @@ import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase() {
 
+  internal lateinit var theming: Theming
   internal lateinit var viewModel: WordViewModel
+
   private val handler = Handler(Looper.getMainLooper())
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
-    super.onCreate(savedInstanceState)
+
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusWordComponent(this)
         .inject(this)
+
+    if (theming.isDarkTheme()) {
+      setTheme(R.style.Theme_WordWiz_Dark_Transparent)
+    } else {
+      setTheme(R.style.Theme_WordWiz_Light_Transparent)
+    }
+    super.onCreate(savedInstanceState)
+
     observeProcessRequests()
     requestWordProcess()
   }
