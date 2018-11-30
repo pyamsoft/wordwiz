@@ -47,7 +47,7 @@
     </activity>
 
     <activity
-        android:name=".word.count.WordCountActivity"
+        android:name=".word.WordCountActivity"
         android:enabled="false"
         android:excludeFromRecents="true"
         android:exported="true"
@@ -63,7 +63,7 @@
     </activity>
 
     <activity
-        android:name=".word.count.LetterCountActivity"
+        android:name=".word.LetterCountActivity"
         android:enabled="false"
         android:excludeFromRecents="true"
         android:exported="true"

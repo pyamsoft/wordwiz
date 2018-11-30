@@ -18,13 +18,15 @@ package com.pyamsoft.wordwiz
 
 import android.app.Application
 import androidx.lifecycle.LifecycleOwner
+import androidx.preference.PreferenceScreen
 import com.pyamsoft.pydroid.ui.ModuleProvider
 import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.pyamsoft.wordwiz.main.MainActivity
-import com.pyamsoft.wordwiz.main.MainPreferenceFragment
-import com.pyamsoft.wordwiz.word.WordComponent
-import com.pyamsoft.wordwiz.word.WordComponentImpl
+import com.pyamsoft.wordwiz.main.MainPrefComponent
+import com.pyamsoft.wordwiz.main.MainPrefComponentImpl
+import com.pyamsoft.wordwiz.main.MainViewImpl
+import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
 
 class WordWizComponentImpl(
@@ -40,13 +42,18 @@ class WordWizComponentImpl(
 
   override fun inject(activity: MainActivity) {
     activity.theming = theming
+    activity.mainView = MainViewImpl(activity)
   }
 
-  override fun inject(fragment: MainPreferenceFragment) {
-    fragment.theming = theming
+  override fun inject(activity: WordProcessActivity) {
+    activity.theming = theming
+    activity.viewModel = wordProcessModule.getViewModel()
   }
 
-  override fun plusWordComponent(owner: LifecycleOwner): WordComponent {
-    return WordComponentImpl(owner, theming, wordProcessModule)
+  override fun plusMainPrefComponent(
+    owner: LifecycleOwner,
+    preferenceScreen: PreferenceScreen
+  ): MainPrefComponent {
+    return MainPrefComponentImpl(theming, owner, preferenceScreen)
   }
 }

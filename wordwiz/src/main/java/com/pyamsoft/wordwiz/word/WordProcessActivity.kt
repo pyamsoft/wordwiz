@@ -21,6 +21,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.pyamsoft.pydroid.core.singleDisposable
+import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.wordwiz.Injector
@@ -38,11 +40,12 @@ abstract class WordProcessActivity : ActivityBase() {
 
   private val handler = Handler(Looper.getMainLooper())
 
+  private var processDisposable by singleDisposable()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
 
     Injector.obtain<WordWizComponent>(applicationContext)
-        .plusWordComponent(this)
         .inject(this)
 
     if (theming.isDarkTheme()) {
@@ -51,8 +54,6 @@ abstract class WordProcessActivity : ActivityBase() {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
     super.onCreate(savedInstanceState)
-
-    observeProcessRequests()
     requestWordProcess()
   }
 
@@ -67,20 +68,18 @@ abstract class WordProcessActivity : ActivityBase() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-  }
 
-  private fun observeProcessRequests() {
-    viewModel.onProcessWordCount { wrapper ->
-      wrapper.onError { onProcessError() }
-      wrapper.onSuccess { onProcessSuccess(it) }
-      wrapper.onComplete { onProcessComplete() }
-    }
+    processDisposable.tryDispose()
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    viewModel.handleProcess(componentName, text)
+    processDisposable = viewModel.handleProcess(componentName, text,
+        onProcessBegin = {},
+        onProcessSuccess = { onProcessSuccess(it) },
+        onProcessError = { onProcessError() },
+        onProcessComplete = { onProcessComplete() })
   }
 
   private fun onProcessComplete() {

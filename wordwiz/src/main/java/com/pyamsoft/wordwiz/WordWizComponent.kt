@@ -18,16 +18,20 @@ package com.pyamsoft.wordwiz
 
 import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
+import androidx.preference.PreferenceScreen
 import com.pyamsoft.wordwiz.main.MainActivity
-import com.pyamsoft.wordwiz.main.MainPreferenceFragment
-import com.pyamsoft.wordwiz.word.WordComponent
+import com.pyamsoft.wordwiz.main.MainPrefComponent
+import com.pyamsoft.wordwiz.word.WordProcessActivity
 
 interface WordWizComponent {
 
   fun inject(activity: MainActivity)
 
-  fun inject(fragment: MainPreferenceFragment)
+  fun inject(activity: WordProcessActivity)
 
   @CheckResult
-  fun plusWordComponent(owner: LifecycleOwner): WordComponent
+  fun plusMainPrefComponent(
+    owner: LifecycleOwner,
+    preferenceScreen: PreferenceScreen
+  ): MainPrefComponent
 }

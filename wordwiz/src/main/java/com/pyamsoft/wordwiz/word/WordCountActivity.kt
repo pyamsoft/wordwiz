@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.word.count
-
-import com.pyamsoft.wordwiz.word.WordProcessActivity
+package com.pyamsoft.wordwiz.word
 
 class WordCountActivity : WordProcessActivity() {
 

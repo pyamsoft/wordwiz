@@ -17,52 +17,33 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.core.singleDisposable
-import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.pydroid.core.viewmodel.BaseViewModel
-import com.pyamsoft.pydroid.core.viewmodel.DataBus
-import com.pyamsoft.pydroid.core.viewmodel.DataWrapper
+import androidx.annotation.CheckResult
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class WordViewModel internal constructor(
-  owner: LifecycleOwner,
-  private val interactor: WordProcessInteractor
-) : BaseViewModel(owner) {
+class WordViewModel internal constructor(private val interactor: WordProcessInteractor) {
 
-  private var handleDisposable by singleDisposable()
-  private val processBus = DataBus<WordProcessResult>()
-
-  override fun onCleared() {
-    super.onCleared()
-    handleDisposable.tryDispose()
-  }
-
-  fun onProcessWordCount(func: (DataWrapper<WordProcessResult>) -> Unit) {
-    dispose {
-      processBus.listen()
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(func)
-    }
-  }
-
+  @CheckResult
   fun handleProcess(
     componentName: ComponentName,
-    text: CharSequence
-  ) {
-    handleDisposable = interactor.getProcessType(componentName, text)
+    text: CharSequence,
+    onProcessBegin: () -> Unit,
+    onProcessSuccess: (result: WordProcessResult) -> Unit,
+    onProcessError: (error: Throwable) -> Unit,
+    onProcessComplete: () -> Unit
+  ): Disposable {
+    return interactor.getProcessType(componentName, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
-        .doAfterTerminate { processBus.publishComplete() }
-        .doOnSubscribe { processBus.publishLoading(false) }
-        .subscribe({ processBus.publishSuccess(it) }, {
+        .doAfterTerminate { onProcessComplete() }
+        .doOnSubscribe { onProcessBegin() }
+        .subscribe({ onProcessSuccess(it) }, {
           Timber.e(it, "Error handling process request")
-          processBus.publishError(it)
+          onProcessError(it)
         })
   }
 

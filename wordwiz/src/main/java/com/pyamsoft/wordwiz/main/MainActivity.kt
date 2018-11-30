@@ -18,40 +18,28 @@ package com.pyamsoft.wordwiz.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.databinding.DataBindingUtil
-import androidx.preference.PreferenceManager
-import com.pyamsoft.pydroid.ui.about.AboutLibrariesFragment
+import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.theme.Theming
-import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
 import com.pyamsoft.pydroid.ui.util.commit
-import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
 
 class MainActivity : RatingActivity() {
 
   internal lateinit var theming: Theming
-
-  private lateinit var binding: ActivityMainBinding
+  internal lateinit var mainView: MainView
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
   override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val currentApplicationVersion: Int = BuildConfig.VERSION_CODE
-
-  override val applicationName: String
-    get() = getString(R.string.app_name)
-
   override val rootView: View
-    get() = binding.root
+    get() = mainView.root()
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
     change("New icon style")
@@ -67,44 +55,26 @@ class MainActivity : RatingActivity() {
     } else {
       setTheme(R.style.Theme_WordWiz_Light)
     }
-
     super.onCreate(savedInstanceState)
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
+    mainView.create()
 
-    setupToolbarAsActionBar()
+    setupToolbar()
     showPreferenceFragment()
-  }
-
-  private fun setupToolbarAsActionBar() {
-    val theme: Int
-    if (theming.isDarkTheme()) {
-      theme = R.style.ThemeOverlay_AppCompat
-    } else {
-      theme = R.style.ThemeOverlay_AppCompat_Light
-    }
-
-    binding.toolbar.apply {
-      popupTheme = theme
-      setToolbar(this)
-      setTitle(R.string.app_name)
-      ViewCompat.setElevation(this, 4f.toDp(context).toFloat())
-
-      setNavigationOnClickListener(DebouncedOnClickListener.create {
-        onBackPressed()
-      })
-    }
   }
 
   private fun showPreferenceFragment() {
     val fragmentManager = supportFragmentManager
     if (fragmentManager.findFragmentByTag(MainFragment.TAG) == null
-        && !AboutLibrariesFragment.isPresent(this)
+        && !AboutFragment.isPresent(this)
     ) {
       fragmentManager.beginTransaction()
           .add(R.id.main_view_container, MainFragment(), MainFragment.TAG)
           .commit(this)
     }
+  }
+
+  private fun setupToolbar() {
+    mainView.onToolbarNavClicked { onBackPressed() }
   }
 }

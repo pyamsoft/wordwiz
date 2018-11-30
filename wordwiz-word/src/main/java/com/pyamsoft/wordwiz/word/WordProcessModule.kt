@@ -17,7 +17,6 @@
 package com.pyamsoft.wordwiz.word
 
 import androidx.annotation.CheckResult
-import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.api.WordWizModule
@@ -34,5 +33,5 @@ class WordProcessModule(
   }
 
   @CheckResult
-  fun getViewModel(owner: LifecycleOwner) = WordViewModel(owner, interactor)
+  fun getViewModel() = WordViewModel(interactor)
 }

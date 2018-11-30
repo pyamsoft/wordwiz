@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.pyamsoft.wordwiz.word.count
+package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.annotation.CheckResult
-import com.pyamsoft.wordwiz.word.WordProcessActivity
 import timber.log.Timber
 
 abstract class WordActivity<out T : WordProcessActivity> {
