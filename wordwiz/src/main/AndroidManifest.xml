@@ -53,7 +53,8 @@
         android:exported="true"
         android:label="@string/label_word_count"
         android:launchMode="singleTop"
-        android:noHistory="false">
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent">
 
       <intent-filter>
         <action android:name="android.intent.action.PROCESS_TEXT"/>
@@ -69,7 +70,8 @@
         android:exported="true"
         android:label="@string/label_letter_count"
         android:launchMode="singleTop"
-        android:noHistory="false">
+        android:noHistory="false"
+        android:theme="@style/Theme.WordWiz.Light.Transparent">
 
       <intent-filter>
         <action android:name="android.intent.action.PROCESS_TEXT"/>
