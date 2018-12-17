@@ -25,6 +25,7 @@ import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
 import com.pyamsoft.pydroid.ui.theme.Theming
+import com.pyamsoft.pydroid.ui.widget.resize.FluidContentResizer
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
@@ -54,6 +55,9 @@ abstract class WordProcessActivity : ActivityBase() {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
     super.onCreate(savedInstanceState)
+
+    FluidContentResizer.listen(this)
+
     requestWordProcess()
   }
 
