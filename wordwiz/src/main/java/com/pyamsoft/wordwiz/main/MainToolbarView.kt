@@ -17,56 +17,56 @@
 
 package com.pyamsoft.wordwiz.main
 
-import android.view.View
+import android.os.Bundle
+import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import com.pyamsoft.pydroid.core.bus.Publisher
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
+import com.pyamsoft.pydroid.ui.arch.UiView
 import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
-import com.pyamsoft.wordwiz.databinding.ActivityMainBinding
+import com.pyamsoft.wordwiz.main.MainViewEvent.ToolbarClicked
 
-internal class MainViewImpl internal constructor(
-  private val activity: ActivityBase
-) : MainView, LifecycleObserver {
+internal class MainToolbarView internal constructor(
+  private val parent: ViewGroup,
+  private val activity: ActivityBase,
+  bus: Publisher<MainViewEvent>
+) : UiView<MainViewEvent>(bus) {
 
-  private lateinit var binding: ActivityMainBinding
+  private lateinit var toolbar: Toolbar
 
-  init {
-    activity.lifecycle.addObserver(this)
+  override fun id(): Int {
+    return toolbar.id
   }
 
-  override fun create() {
-    binding = DataBindingUtil.setContentView(activity, R.layout.activity_main)
+  override fun inflate(savedInstanceState: Bundle?) {
+    parent.inflateAndAdd(R.layout.toolbar) {
+      toolbar = findViewById(R.id.toolbar)
+    }
+
     setupToolbar()
   }
 
-  @Suppress("unused")
-  @OnLifecycleEvent(ON_DESTROY)
-  internal fun destroy() {
-    activity.lifecycle.removeObserver(this)
-    binding.unbind()
-  }
-
-  override fun root(): View {
-    return binding.root
-  }
-
   private fun setupToolbar() {
-    binding.toolbar.apply {
+    toolbar.apply {
       activity.setToolbar(this)
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
+
+      setNavigationOnClickListener(DebouncedOnClickListener.create {
+        publish(ToolbarClicked)
+      })
     }
+
   }
 
-  override fun onToolbarNavClicked(onClick: () -> Unit) {
-    binding.toolbar.setNavigationOnClickListener(DebouncedOnClickListener.create {
-      onClick()
-    })
+  override fun saveState(outState: Bundle) {
+  }
+
+  override fun teardown() {
+    toolbar.setNavigationOnClickListener(null)
   }
 
 }

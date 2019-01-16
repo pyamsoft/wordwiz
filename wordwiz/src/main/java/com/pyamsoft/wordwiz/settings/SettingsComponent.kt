@@ -15,9 +15,9 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.settings
 
-interface MainPrefComponent {
+interface SettingsComponent {
 
-  fun inject(fragment: MainPreferenceFragment)
+  fun inject(fragment: SettingsPreferenceFragment)
 }

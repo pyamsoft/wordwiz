@@ -15,19 +15,10 @@
  *
  */
 
-package com.pyamsoft.wordwiz.word
+package com.pyamsoft.wordwiz.main
 
-import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.threads.Enforcer
-import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.api.WordWizModule
+interface MainComponent {
 
-class WordProcessModule(
-  enforcer: Enforcer,
-  wordWizModule: WordWizModule
-) {
+  fun inject(activity: MainActivity)
 
-  @get:CheckResult
-  val interactor: WordProcessInteractor =
-    WordProcessInteractorImpl(wordWizModule.provideContext(), enforcer)
 }

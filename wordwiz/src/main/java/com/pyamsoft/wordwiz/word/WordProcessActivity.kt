@@ -25,6 +25,7 @@ import android.widget.Toast
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
+import com.pyamsoft.pydroid.ui.arch.destroy
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
@@ -32,16 +33,22 @@ import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.model.WordProcessResult
+import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Begin
+import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Complete
+import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessError
+import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessResult
 import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase() {
 
   internal lateinit var theming: Theming
-  internal lateinit var viewModel: WordViewModel
+  internal lateinit var worker: WordProcessWorker
 
   private val handler = Handler(Looper.getMainLooper())
 
   private var processDisposable by singleDisposable()
+
+  override val fragmentContainerId: Int = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
@@ -55,6 +62,16 @@ abstract class WordProcessActivity : ActivityBase() {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
     super.onCreate(savedInstanceState)
+
+    worker.onProcessEvent {
+      return@onProcessEvent when (it) {
+        Begin -> onProcessBegin()
+        is ProcessResult -> onProcessResult(it.result)
+        is ProcessError -> onProcessError(it.error)
+        Complete -> onProcessComplete()
+      }
+    }
+        .destroy(this)
 
     requestWordProcess()
   }
@@ -70,18 +87,18 @@ abstract class WordProcessActivity : ActivityBase() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-
     processDisposable.tryDispose()
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    processDisposable = viewModel.handleProcess(componentName, text,
-        onProcessBegin = {},
-        onProcessSuccess = { onProcessSuccess(it) },
-        onProcessError = { onProcessError() },
-        onProcessComplete = { onProcessComplete() })
+    processDisposable = worker.handleProcess(componentName, text)
+  }
+
+  private fun onProcessBegin() {
+    Timber.d("Process begin")
+    handler.removeCallbacksAndMessages(null)
   }
 
   private fun onProcessComplete() {
@@ -91,16 +108,12 @@ abstract class WordProcessActivity : ActivityBase() {
     handler.postDelayed({ finish() }, 500)
   }
 
-  private fun onProcessError() {
-    Toast.makeText(
-        applicationContext,
-        "An error occurred while attempting to process text, please try again",
-        Toast.LENGTH_SHORT
-    )
+  private fun onProcessError(error: Throwable) {
+    Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT)
         .show()
   }
 
-  private fun onProcessSuccess(result: WordProcessResult) {
+  private fun onProcessResult(result: WordProcessResult) {
     when (result.type) {
       WORD_COUNT -> onProcessTypeWordCount(result.count)
       LETTER_COUNT -> onProcessTypeLetterCount(result.count)

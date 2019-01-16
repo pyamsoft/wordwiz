@@ -17,22 +17,28 @@
 
 package com.pyamsoft.wordwiz
 
+import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.wordwiz.main.MainActivity
-import com.pyamsoft.wordwiz.main.MainPrefComponent
+import com.pyamsoft.wordwiz.main.MainComponent
+import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 
 interface WordWizComponent {
 
-  fun inject(activity: MainActivity)
-
   fun inject(activity: WordProcessActivity)
 
   @CheckResult
-  fun plusMainPrefComponent(
+  fun plusMainComponent(
+    parent: ViewGroup,
+    owner: LifecycleOwner
+  ): MainComponent
+
+  @CheckResult
+  fun plusSettingsComponent(
     owner: LifecycleOwner,
     preferenceScreen: PreferenceScreen
-  ): MainPrefComponent
+  ): SettingsComponent
 }

@@ -19,28 +19,38 @@ package com.pyamsoft.wordwiz.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
-import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.commit
+import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowUiComponent
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
+import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.settings.MainFragment
 
 class MainActivity : RatingActivity() {
 
-  internal lateinit var theming: Theming
-  internal lateinit var mainView: MainView
+  internal lateinit var toolbarComponent: MainToolbarUiComponent
+  internal lateinit var frameComponent: MainFrameUiComponent
+  internal lateinit var dropshadowComponent: DropshadowUiComponent
+
+  private lateinit var layoutRoot: ConstraintLayout
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
   override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val rootView: View
-    get() = mainView.root()
+  override val snackbarRoot: View
+    get() = layoutRoot
+
+  override val fragmentContainerId: Int
+    get() = frameComponent.id()
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
     change("New icon style")
@@ -48,20 +58,59 @@ class MainActivity : RatingActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    Injector.obtain<WordWizComponent>(applicationContext)
-        .inject(this)
-
-    if (theming.isDarkTheme()) {
+    if (WordWiz.theming(this).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark)
     } else {
       setTheme(R.style.Theme_WordWiz_Light)
     }
     super.onCreate(savedInstanceState)
+    setContentView(R.layout.layout_constraint)
+    layoutRoot = findViewById(R.id.layout_constraint)
 
-    mainView.create()
+    Injector.obtain<WordWizComponent>(applicationContext)
+        .plusMainComponent(layoutRoot, this)
+        .inject(this)
 
-    setupToolbar()
+    createComponents(savedInstanceState)
+    layoutComponents(layoutRoot)
     showPreferenceFragment()
+  }
+
+  private fun createComponents(savedInstanceState: Bundle?) {
+    toolbarComponent.create(savedInstanceState)
+    frameComponent.create(savedInstanceState)
+    dropshadowComponent.create(savedInstanceState)
+  }
+
+  private fun layoutComponents(layoutRoot: ConstraintLayout) {
+    ConstraintSet().apply {
+      clone(layoutRoot)
+
+      toolbarComponent.also {
+        connect(it.id(), ConstraintSet.TOP, layoutRoot.id, ConstraintSet.TOP)
+        connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
+        connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
+        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+      }
+
+      frameComponent.also {
+        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+        connect(it.id(), ConstraintSet.BOTTOM, layoutRoot.id, ConstraintSet.BOTTOM)
+        connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
+        connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
+        constrainHeight(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+      }
+
+      dropshadowComponent.also {
+        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+        connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
+        connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
+        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+      }
+
+      applyTo(layoutRoot)
+    }
   }
 
   private fun showPreferenceFragment() {
@@ -70,12 +119,18 @@ class MainActivity : RatingActivity() {
         && !AboutFragment.isPresent(this)
     ) {
       fragmentManager.beginTransaction()
-          .add(R.id.main_view_container, MainFragment(), MainFragment.TAG)
+          .add(
+              fragmentContainerId,
+              MainFragment(), MainFragment.TAG
+          )
           .commit(this)
     }
   }
 
-  private fun setupToolbar() {
-    mainView.onToolbarNavClicked { onBackPressed() }
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    toolbarComponent.saveState(outState)
+    frameComponent.saveState(outState)
+    dropshadowComponent.saveState(outState)
   }
 }

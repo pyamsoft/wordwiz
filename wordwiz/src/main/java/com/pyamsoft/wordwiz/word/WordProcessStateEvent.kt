@@ -15,11 +15,19 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.word
 
-import com.pyamsoft.pydroid.ui.app.BaseScreen
+import com.pyamsoft.pydroid.ui.arch.StateEvent
+import com.pyamsoft.wordwiz.model.WordProcessResult
 
-interface MainView : BaseScreen {
+internal sealed class WordProcessStateEvent : StateEvent {
 
-  fun onToolbarNavClicked(onClick: () -> Unit)
+  object Begin : WordProcessStateEvent()
+
+  data class ProcessResult(val result: WordProcessResult) : WordProcessStateEvent()
+
+  data class ProcessError(val error: Throwable) : WordProcessStateEvent()
+
+  object Complete : WordProcessStateEvent()
+
 }

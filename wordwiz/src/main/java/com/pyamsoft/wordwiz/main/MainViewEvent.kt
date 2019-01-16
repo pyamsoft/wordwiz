@@ -17,11 +17,10 @@
 
 package com.pyamsoft.wordwiz.main
 
-import com.pyamsoft.pydroid.ui.app.BaseView
+import com.pyamsoft.pydroid.ui.arch.ViewEvent
 
-interface MainPrefView : BaseView {
+internal sealed class MainViewEvent : ViewEvent {
 
-  fun onWordCountClicked(onClick: () -> Unit)
+  object ToolbarClicked : MainViewEvent()
 
-  fun onLetterCountClicked(onClick: () -> Unit)
 }

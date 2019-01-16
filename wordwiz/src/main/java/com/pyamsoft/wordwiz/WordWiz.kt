@@ -18,8 +18,11 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
+import android.content.Context
+import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.ui.PYDroid.Instance
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
@@ -28,6 +31,7 @@ class WordWiz : Application(), Instance {
   private var pyDroid: PYDroid? = null
   private lateinit var refWatcher: RefWatcher
   private lateinit var component: WordWizComponent
+  private lateinit var theming: Theming
 
   override fun onCreate() {
     super.onCreate()
@@ -56,6 +60,8 @@ class WordWiz : Application(), Instance {
   override fun setPydroid(instance: PYDroid) {
     pyDroid = instance.also {
       component = WordWizComponentImpl(this, it.modules())
+      theming = it.modules()
+          .theming()
     }
   }
 
@@ -65,6 +71,13 @@ class WordWiz : Application(), Instance {
     } else {
       return super.getSystemService(name)
     }
+  }
+
+  companion object {
+
+    @JvmStatic
+    @CheckResult
+    fun theming(context: Context): Theming = (context as WordWiz).theming
   }
 
 }

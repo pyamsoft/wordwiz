@@ -15,18 +15,14 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.pydroid.ui.app.fragment.AppSettingsFragment
-import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
+import com.pyamsoft.pydroid.ui.arch.ViewEvent
 
-class MainFragment : AppSettingsFragment() {
+internal sealed class SettingsViewEvent : ViewEvent {
 
-  override fun provideSettingsFragment(): SettingsPreferenceFragment = MainPreferenceFragment()
+  object WordCountToggled: SettingsViewEvent()
 
-  override fun provideSettingsTag(): String = MainPreferenceFragment.TAG
+  object LetterCountToggled: SettingsViewEvent()
 
-  companion object {
-    const val TAG = "MainFragment"
-  }
 }

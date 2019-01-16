@@ -15,28 +15,29 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pyamsoft.pydroid.ui.app.fragment.SettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.app.fragment.requireToolbarActivity
+import com.pyamsoft.pydroid.ui.arch.destroy
+import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.settings.SettingsViewEvent.LetterCountToggled
+import com.pyamsoft.wordwiz.settings.SettingsViewEvent.WordCountToggled
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 
-class MainPreferenceFragment : SettingsPreferenceFragment() {
+class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
   internal lateinit var theming: Theming
-  internal lateinit var rootView: MainPrefView
-
-  override val rootViewContainer: Int = R.id.main_view_container
+  internal lateinit var settingsComponent: SettingsUiComponent
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -48,10 +49,8 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
     savedInstanceState: Bundle?
   ): View? {
     Injector.obtain<WordWizComponent>(requireContext().applicationContext)
-        .plusMainPrefComponent(viewLifecycleOwner, preferenceScreen)
+        .plusSettingsComponent(viewLifecycleOwner, preferenceScreen)
         .inject(this)
-
-    rootView.create()
     return super.onCreateView(inflater, container, savedInstanceState)
   }
 
@@ -60,15 +59,26 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    rootView.onWordCountClicked {
-      val enabled = WordCountActivity.isEnabled(view.context)
-      WordCountActivity.enable(view.context, !enabled)
-    }
+    settingsComponent.onUiEvent()
+        .subscribe {
+          return@subscribe when (it) {
+            WordCountToggled -> onWordCountClicked()
+            LetterCountToggled -> onLetterCountClicked()
+          }
+        }
+        .destroy(viewLifecycleOwner)
 
-    rootView.onLetterCountClicked {
-      val enabled = LetterCountActivity.isEnabled(view.context)
-      LetterCountActivity.enable(view.context, !enabled)
-    }
+    settingsComponent.create(savedInstanceState)
+  }
+
+  private fun onWordCountClicked() {
+    val enabled = WordCountActivity.isEnabled(requireContext())
+    WordCountActivity.enable(requireContext(), !enabled)
+  }
+
+  private fun onLetterCountClicked() {
+    val enabled = LetterCountActivity.isEnabled(requireContext())
+    LetterCountActivity.enable(requireContext(), !enabled)
   }
 
   override fun onResume() {
@@ -81,6 +91,6 @@ class MainPreferenceFragment : SettingsPreferenceFragment() {
 
   companion object {
 
-    const val TAG = "MainPreferenceFragment"
+    const val TAG = "SettingsPreferenceFragment"
   }
 }

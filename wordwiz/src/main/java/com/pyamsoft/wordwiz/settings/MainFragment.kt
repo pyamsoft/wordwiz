@@ -15,19 +15,21 @@
  *
  */
 
-package com.pyamsoft.wordwiz.word
+package com.pyamsoft.wordwiz.settings
 
-import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.threads.Enforcer
-import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.api.WordWizModule
+import com.pyamsoft.pydroid.ui.settings.AppSettingsFragment
+import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
+import com.pyamsoft.wordwiz.settings.SettingsPreferenceFragment.Companion
 
-class WordProcessModule(
-  enforcer: Enforcer,
-  wordWizModule: WordWizModule
-) {
+class MainFragment : AppSettingsFragment() {
 
-  @get:CheckResult
-  val interactor: WordProcessInteractor =
-    WordProcessInteractorImpl(wordWizModule.provideContext(), enforcer)
+  override fun provideSettingsFragment(): AppSettingsPreferenceFragment =
+    SettingsPreferenceFragment()
+
+  override fun provideSettingsTag(): String =
+    SettingsPreferenceFragment.TAG
+
+  companion object {
+    const val TAG = "MainFragment"
+  }
 }

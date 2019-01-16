@@ -18,22 +18,34 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
+import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
+import com.pyamsoft.pydroid.core.bus.RxBus
 import com.pyamsoft.pydroid.ui.ModuleProvider
 import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
-import com.pyamsoft.wordwiz.main.MainActivity
-import com.pyamsoft.wordwiz.main.MainPrefComponent
-import com.pyamsoft.wordwiz.main.MainPrefComponentImpl
-import com.pyamsoft.wordwiz.main.MainViewImpl
+import com.pyamsoft.wordwiz.main.MainComponent
+import com.pyamsoft.wordwiz.main.MainComponentImpl
+import com.pyamsoft.wordwiz.main.MainViewEvent
+import com.pyamsoft.wordwiz.settings.SettingsComponent
+import com.pyamsoft.wordwiz.settings.SettingsComponentImpl
+import com.pyamsoft.wordwiz.settings.SettingsViewEvent
 import com.pyamsoft.wordwiz.word.WordProcessActivity
 import com.pyamsoft.wordwiz.word.WordProcessModule
+import com.pyamsoft.wordwiz.word.WordProcessStateEvent
+import com.pyamsoft.wordwiz.word.WordProcessWorker
 
 class WordWizComponentImpl(
   application: Application,
   moduleProvider: ModuleProvider
 ) : WordWizComponent {
+
+  private val wordProcessStateBus = RxBus.create<WordProcessStateEvent>()
+
+  private val settingsViewBus = RxBus.create<SettingsViewEvent>()
+
+  private val mainViewBus = RxBus.create<MainViewEvent>()
 
   private val theming = moduleProvider.theming()
   private val wordWizModule: WordWizModule = WordWizModuleImpl(
@@ -41,20 +53,20 @@ class WordWizComponentImpl(
   )
   private val wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
 
-  override fun inject(activity: MainActivity) {
-    activity.theming = theming
-    activity.mainView = MainViewImpl(activity)
-  }
-
   override fun inject(activity: WordProcessActivity) {
     activity.theming = theming
-    activity.viewModel = wordProcessModule.getViewModel()
+    activity.worker = WordProcessWorker(wordProcessModule.interactor, wordProcessStateBus)
   }
 
-  override fun plusMainPrefComponent(
+  override fun plusMainComponent(
+    parent: ViewGroup,
+    owner: LifecycleOwner
+  ): MainComponent = MainComponentImpl(parent, owner, mainViewBus)
+
+  override fun plusSettingsComponent(
     owner: LifecycleOwner,
     preferenceScreen: PreferenceScreen
-  ): MainPrefComponent {
-    return MainPrefComponentImpl(theming, owner, preferenceScreen)
-  }
+  ): SettingsComponent =
+    SettingsComponentImpl(theming, owner, preferenceScreen, settingsViewBus)
+
 }
