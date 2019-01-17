@@ -77,7 +77,7 @@ class WordWiz : Application(), Instance {
 
     @JvmStatic
     @CheckResult
-    fun theming(context: Context): Theming = (context as WordWiz).theming
+    fun theming(context: Context): Theming = (context.applicationContext as WordWiz).theming
   }
 
 }
