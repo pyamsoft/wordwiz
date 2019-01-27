@@ -30,11 +30,9 @@ internal class SettingsComponentImpl internal constructor(
 ) : SettingsComponent {
 
   override fun inject(fragment: SettingsPreferenceFragment) {
-    fragment.theming = theming
-
     val settingsView = SettingsView(owner, preferenceScreen, uiBus)
-    fragment.settingsComponent =
-        SettingsUiComponent(settingsView, uiBus, owner)
+    fragment.settingsComponent = SettingsUiComponent(settingsView, owner)
+    fragment.theming = theming
   }
 
 }

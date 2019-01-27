@@ -22,6 +22,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.pyamsoft.pydroid.ui.about.AboutFragment
+import com.pyamsoft.pydroid.ui.arch.destroy
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
@@ -32,6 +33,7 @@ import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.main.MainViewEvent.ToolbarClicked
 import com.pyamsoft.wordwiz.settings.MainFragment
 
 class MainActivity : RatingActivity() {
@@ -77,6 +79,13 @@ class MainActivity : RatingActivity() {
   }
 
   private fun createComponents(savedInstanceState: Bundle?) {
+    toolbarComponent.onUiEvent {
+      return@onUiEvent when (it) {
+        ToolbarClicked -> onBackPressed()
+      }
+    }
+        .destroy(this)
+
     toolbarComponent.create(savedInstanceState)
     frameComponent.create(savedInstanceState)
     dropshadowComponent.create(savedInstanceState)

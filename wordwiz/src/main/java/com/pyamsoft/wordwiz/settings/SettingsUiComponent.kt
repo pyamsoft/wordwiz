@@ -17,37 +17,23 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.core.bus.Listener
-import com.pyamsoft.pydroid.ui.arch.UiComponent
-import io.reactivex.Observable
+import com.pyamsoft.pydroid.ui.arch.BaseUiComponent
+import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 internal class SettingsUiComponent internal constructor(
-  private val settingsView: SettingsView,
-  private val uiBus: Listener<SettingsViewEvent>,
+  settingsView: SettingsView,
   owner: LifecycleOwner
-) : UiComponent<SettingsViewEvent>(owner) {
+) : BaseUiComponent<SettingsViewEvent, SettingsView>(settingsView, owner) {
 
-  override fun id(): Int {
-    return settingsView.id()
-  }
-
-  override fun create(savedInstanceState: Bundle?) {
-    settingsView.inflate(savedInstanceState)
-    owner.runOnDestroy { settingsView.teardown() }
-  }
-
-  override fun onUiEvent(): Observable<SettingsViewEvent> {
-    return uiBus.listen()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-  }
-
-  override fun saveState(outState: Bundle) {
-    settingsView.saveState(outState)
+  override fun onUiEvent(): ObservableTransformer<in SettingsViewEvent, out SettingsViewEvent>? {
+    return ObservableTransformer {
+      return@ObservableTransformer it
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+    }
   }
 
 }

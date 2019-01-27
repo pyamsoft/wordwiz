@@ -20,9 +20,7 @@ package com.pyamsoft.wordwiz.main
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.core.bus.EventBus
-import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowUiComponent
-import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
 
 internal class MainComponentImpl internal constructor(
   private val parent: ViewGroup,
@@ -32,13 +30,10 @@ internal class MainComponentImpl internal constructor(
 
   override fun inject(activity: MainActivity) {
     val frameView = MainFrameView(parent)
+    val toolbarView = MainToolbarView(activity, parent, uiBus)
     activity.frameComponent = MainFrameUiComponent(frameView, owner)
-
-    val toolbarView = MainToolbarView(parent, activity, uiBus)
-    activity.toolbarComponent = MainToolbarUiComponent(toolbarView, uiBus, owner)
-
-    val dropshadowView = DropshadowView(parent)
-    activity.dropshadowComponent = DropshadowUiComponent(dropshadowView, owner)
+    activity.toolbarComponent = MainToolbarUiComponent(toolbarView, owner)
+    activity.dropshadowComponent = DropshadowUiComponent.create(parent, owner)
   }
 
 }

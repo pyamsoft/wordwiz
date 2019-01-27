@@ -59,13 +59,12 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    settingsComponent.onUiEvent()
-        .subscribe {
-          return@subscribe when (it) {
-            WordCountToggled -> onWordCountClicked()
-            LetterCountToggled -> onLetterCountClicked()
-          }
-        }
+    settingsComponent.onUiEvent {
+      return@onUiEvent when (it) {
+        WordCountToggled -> onWordCountClicked()
+        LetterCountToggled -> onLetterCountClicked()
+      }
+    }
         .destroy(viewLifecycleOwner)
 
     settingsComponent.create(savedInstanceState)

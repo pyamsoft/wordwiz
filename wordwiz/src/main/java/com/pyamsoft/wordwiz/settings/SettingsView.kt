@@ -28,9 +28,8 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
-import com.pyamsoft.pydroid.core.bus.Publisher
-import com.pyamsoft.pydroid.ui.arch.InvalidUiComponentIdException
-import com.pyamsoft.pydroid.ui.arch.UiView
+import com.pyamsoft.pydroid.core.bus.EventBus
+import com.pyamsoft.pydroid.ui.arch.PrefUiView
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.LetterCountToggled
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.WordCountToggled
@@ -39,16 +38,13 @@ import com.pyamsoft.wordwiz.word.WordCountActivity
 
 internal class SettingsView internal constructor(
   private val owner: LifecycleOwner,
-  private val preferenceScreen: PreferenceScreen,
-  bus: Publisher<SettingsViewEvent>
-) : UiView<SettingsViewEvent>(bus), LifecycleObserver {
+  preferenceScreen: PreferenceScreen,
+  bus: EventBus<SettingsViewEvent>
+) : PrefUiView<SettingsViewEvent>(preferenceScreen, bus), LifecycleObserver {
 
+  private val context = parent.context
   private lateinit var wordCount: SwitchPreferenceCompat
   private lateinit var letterCount: SwitchPreferenceCompat
-
-  override fun id(): Int {
-    throw InvalidUiComponentIdException
-  }
 
   override fun inflate(savedInstanceState: Bundle?) {
     owner.lifecycle.addObserver(this)
@@ -60,9 +56,6 @@ internal class SettingsView internal constructor(
     setupLetterCount()
   }
 
-  override fun saveState(outState: Bundle) {
-  }
-
   override fun teardown() {
     wordCount.onPreferenceClickListener = null
     letterCount.onPreferenceClickListener = null
@@ -70,7 +63,7 @@ internal class SettingsView internal constructor(
 
   @CheckResult
   private fun findPreference(@StringRes key: Int): Preference {
-    return preferenceScreen.findPreference(preferenceScreen.context.getString(key))
+    return parent.findPreference(context.getString(key))
   }
 
   private fun setupWordCount() {
@@ -90,7 +83,6 @@ internal class SettingsView internal constructor(
   @Suppress("unused")
   @OnLifecycleEvent(ON_START)
   internal fun syncState() {
-    val context = preferenceScreen.context
     wordCount.isChecked = WordCountActivity.isEnabled(context)
     letterCount.isChecked = LetterCountActivity.isEnabled(context)
   }
