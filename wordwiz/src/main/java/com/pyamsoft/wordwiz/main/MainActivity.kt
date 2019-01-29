@@ -35,6 +35,7 @@ import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.main.MainViewEvent.ToolbarClicked
 import com.pyamsoft.wordwiz.settings.MainFragment
+import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : RatingActivity() {
 
@@ -42,7 +43,9 @@ class MainActivity : RatingActivity() {
   internal lateinit var frameComponent: MainFrameUiComponent
   internal lateinit var dropshadowComponent: DropshadowUiComponent
 
-  private lateinit var layoutRoot: ConstraintLayout
+  private val layoutRoot by lazy(NONE) {
+    findViewById<ConstraintLayout>(R.id.layout_constraint)
+  }
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
@@ -67,7 +70,6 @@ class MainActivity : RatingActivity() {
     }
     super.onCreate(savedInstanceState)
     setContentView(R.layout.layout_constraint)
-    layoutRoot = findViewById(R.id.layout_constraint)
 
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusMainComponent(layoutRoot, this)
@@ -81,7 +83,7 @@ class MainActivity : RatingActivity() {
   private fun createComponents(savedInstanceState: Bundle?) {
     toolbarComponent.onUiEvent {
       return@onUiEvent when (it) {
-        ToolbarClicked -> onBackPressed()
+        is ToolbarClicked -> onBackPressed()
       }
     }
         .destroy(this)
