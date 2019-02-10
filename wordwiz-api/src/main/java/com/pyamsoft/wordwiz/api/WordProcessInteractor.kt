@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz.api
 
 import android.content.ComponentName
 import androidx.annotation.CheckResult
-import com.pyamsoft.wordwiz.model.WordProcessResult
 import io.reactivex.Single
 
 interface WordProcessInteractor {

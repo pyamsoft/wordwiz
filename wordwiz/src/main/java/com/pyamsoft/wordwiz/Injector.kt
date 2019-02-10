@@ -23,18 +23,22 @@ import androidx.annotation.CheckResult
 
 object Injector {
 
-  const val name: String = "com.pyamsoft.wordwiz.INJECTOR"
+  internal const val name: String = "com.pyamsoft.wordwiz.INJECTOR"
 
   @SuppressLint("WrongConstant")
+  @JvmOverloads
   @JvmStatic
   @CheckResult
-  fun <T : Any> obtain(context: Context): T {
-    val service: Any? = context.getSystemService(name)
-    if (service == null) {
-      throw IllegalStateException("No service found for: $name")
+  fun <T : Any> obtain(
+    context: Context,
+    service: String = name
+  ): T {
+    val result: Any? = context.getSystemService(service)
+    if (result == null) {
+      throw IllegalStateException("No service found for: $service")
     } else {
       @Suppress("UNCHECKED_CAST")
-      return service as T
+      return result as T
     }
   }
 }

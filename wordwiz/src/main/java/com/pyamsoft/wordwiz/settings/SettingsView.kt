@@ -28,26 +28,37 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
-import com.pyamsoft.pydroid.core.bus.EventBus
 import com.pyamsoft.pydroid.ui.arch.PrefUiView
 import com.pyamsoft.wordwiz.R
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.LetterCountToggled
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.WordCountToggled
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 
 internal class SettingsView internal constructor(
   private val owner: LifecycleOwner,
   preferenceScreen: PreferenceScreen,
-  bus: EventBus<SettingsViewEvent>
-) : PrefUiView<SettingsViewEvent>(preferenceScreen, bus), LifecycleObserver {
+  callback: SettingsView.Callback
+) : PrefUiView<SettingsView.Callback>(preferenceScreen, callback), LifecycleObserver {
 
   private val context = parent.context
   private lateinit var wordCount: SwitchPreferenceCompat
   private lateinit var letterCount: SwitchPreferenceCompat
 
   override fun inflate(savedInstanceState: Bundle?) {
-    owner.lifecycle.addObserver(this)
+    owner.lifecycle.addObserver(object : LifecycleObserver {
+
+      @Suppress("unused")
+      @OnLifecycleEvent(ON_START)
+      fun onStart() {
+        syncState()
+      }
+
+      @Suppress("unused")
+      @OnLifecycleEvent(ON_DESTROY)
+      fun destroy() {
+        owner.lifecycle.removeObserver(this)
+      }
+
+    })
 
     wordCount = findPreference(R.string.word_count_key) as SwitchPreferenceCompat
     letterCount = findPreference(R.string.letter_count_key) as SwitchPreferenceCompat
@@ -68,29 +79,34 @@ internal class SettingsView internal constructor(
 
   private fun setupWordCount() {
     wordCount.setOnPreferenceClickListener {
-      publish(WordCountToggled)
+      val enabled = WordCountActivity.isEnabled(context)
+      callback.onWordCountToggled(!enabled)
+      syncState()
+
       return@setOnPreferenceClickListener true
     }
   }
 
   private fun setupLetterCount() {
     letterCount.setOnPreferenceClickListener {
-      publish(LetterCountToggled)
+      val enabled = LetterCountActivity.isEnabled(context)
+      callback.onLetterCountToggled(!enabled)
+      syncState()
+
       return@setOnPreferenceClickListener true
     }
   }
 
-  @Suppress("unused")
-  @OnLifecycleEvent(ON_START)
-  internal fun syncState() {
+  private fun syncState() {
     wordCount.isChecked = WordCountActivity.isEnabled(context)
     letterCount.isChecked = LetterCountActivity.isEnabled(context)
   }
 
-  @Suppress("unused")
-  @OnLifecycleEvent(ON_DESTROY)
-  internal fun destroy() {
-    owner.lifecycle.removeObserver(this)
+  interface Callback {
+
+    fun onWordCountToggled(enabled: Boolean)
+
+    fun onLetterCountToggled(enabled: Boolean)
   }
 
 }

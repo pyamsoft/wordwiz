@@ -20,13 +20,11 @@ package com.pyamsoft.wordwiz.main
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.pyamsoft.pydroid.ui.arch.BaseUiView
-import com.pyamsoft.pydroid.ui.arch.ViewEvent.EMPTY
-import com.pyamsoft.pydroid.ui.arch.ViewEvent.EmptyBus
 import com.pyamsoft.wordwiz.R
 
 internal class MainFrameView internal constructor(
   parent: ViewGroup
-) : BaseUiView<EMPTY>(parent, EmptyBus) {
+) : BaseUiView<Unit>(parent, Unit) {
 
   private val frameLayout by lazyView<FrameLayout>(R.id.layout_frame)
 

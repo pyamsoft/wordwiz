@@ -18,22 +18,22 @@
 package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.core.bus.EventBus
-import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowUiComponent
+import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
 
 internal class MainComponentImpl internal constructor(
-  private val parent: ViewGroup,
-  private val owner: LifecycleOwner,
-  private val uiBus: EventBus<MainViewEvent>
+  private val parent: ViewGroup
 ) : MainComponent {
 
   override fun inject(activity: MainActivity) {
     val frameView = MainFrameView(parent)
-    val toolbarView = MainToolbarView(activity, parent, uiBus)
-    activity.frameComponent = MainFrameUiComponent(frameView, owner)
-    activity.toolbarComponent = MainToolbarUiComponent(toolbarView, owner)
-    activity.dropshadowComponent = DropshadowUiComponent.create(parent, owner)
+    val toolbarView = MainToolbarView(parent, activity, activity)
+    val dropshadow = DropshadowView(parent)
+
+    activity.apply {
+      this.frameView = frameView
+      this.toolbar = toolbarView
+      this.dropshadow = dropshadow
+    }
   }
 
 }

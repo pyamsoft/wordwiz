@@ -27,46 +27,43 @@ import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.main.MainComponentImpl
-import com.pyamsoft.wordwiz.main.MainViewEvent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponentImpl
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent
 import com.pyamsoft.wordwiz.word.WordProcessActivity
+import com.pyamsoft.wordwiz.word.WordProcessEvent
 import com.pyamsoft.wordwiz.word.WordProcessModule
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent
-import com.pyamsoft.wordwiz.word.WordProcessWorker
+import com.pyamsoft.wordwiz.word.WordProcessPresenterImpl
 
 class WordWizComponentImpl(
   application: Application,
   moduleProvider: ModuleProvider
 ) : WordWizComponent {
 
-  private val wordProcessStateBus = RxBus.create<WordProcessStateEvent>()
+  private val wordProcessModule: WordProcessModule
 
-  private val settingsViewBus = RxBus.create<SettingsViewEvent>()
+  private val processBus = RxBus.create<WordProcessEvent>()
 
-  private val mainViewBus = RxBus.create<MainViewEvent>()
-
-  private val theming = moduleProvider.theming()
-  private val wordWizModule: WordWizModule = WordWizModuleImpl(
-      application, moduleProvider.loaderModule().provideImageLoader()
-  )
-  private val wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
+  init {
+    val wordWizModule: WordWizModule = WordWizModuleImpl(
+        application, moduleProvider.loaderModule().provideImageLoader()
+    )
+    wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
+  }
 
   override fun inject(activity: WordProcessActivity) {
-    activity.theming = theming
-    activity.worker = WordProcessWorker(wordProcessModule.interactor, wordProcessStateBus)
+    activity.apply {
+      this.presenter = WordProcessPresenterImpl(wordProcessModule.interactor, activity, processBus)
+    }
   }
 
   override fun plusMainComponent(
     parent: ViewGroup,
     owner: LifecycleOwner
-  ): MainComponent = MainComponentImpl(parent, owner, mainViewBus)
+  ): MainComponent = MainComponentImpl(parent)
 
   override fun plusSettingsComponent(
     owner: LifecycleOwner,
     preferenceScreen: PreferenceScreen
-  ): SettingsComponent =
-    SettingsComponentImpl(theming, owner, preferenceScreen, settingsViewBus)
+  ): SettingsComponent = SettingsComponentImpl(owner, preferenceScreen)
 
 }

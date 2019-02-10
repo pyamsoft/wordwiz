@@ -31,6 +31,11 @@ android {
 
     resConfigs "en"
   }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 // Kapt flags
@@ -49,6 +54,4 @@ kapt {
 dependencies {
   // PYDroid
   api "com.pyamsoft.pydroid:loader:$pydroid"
-
-  api project(":wordwiz-model")
 }

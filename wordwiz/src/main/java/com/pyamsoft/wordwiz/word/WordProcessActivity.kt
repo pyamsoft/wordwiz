@@ -21,58 +21,37 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
-import com.pyamsoft.pydroid.core.singleDisposable
-import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.pydroid.ui.app.activity.ActivityBase
-import com.pyamsoft.pydroid.ui.arch.destroy
-import com.pyamsoft.pydroid.ui.theme.Theming
+import com.pyamsoft.pydroid.ui.app.ActivityBase
+import com.pyamsoft.pydroid.ui.theme.ThemeInjector
+import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
-import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
-import com.pyamsoft.wordwiz.model.WordProcessResult
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Begin
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Complete
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessError
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessResult
+import com.pyamsoft.wordwiz.api.WordProcessResult
+import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
+import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
 import timber.log.Timber
 
-abstract class WordProcessActivity : ActivityBase() {
+abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callback {
 
-  internal lateinit var theming: Theming
-  internal lateinit var worker: WordProcessWorker
+  internal lateinit var presenter: WordProcessPresenter
 
   private val handler = Handler(Looper.getMainLooper())
-
-  private var processDisposable by singleDisposable()
 
   override val fragmentContainerId: Int = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
-
-    Injector.obtain<WordWizComponent>(applicationContext)
-        .inject(this)
-
-    if (theming.isDarkTheme()) {
+    if (ThemeInjector.obtain(applicationContext).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark_Transparent)
     } else {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
+
+    Injector.obtain<WordWizComponent>(applicationContext)
+        .inject(this)
+
     super.onCreate(savedInstanceState)
-
-    worker.onProcessEvent {
-      return@onProcessEvent when (it) {
-        Begin -> onProcessBegin()
-        is ProcessResult -> onProcessResult(it.result)
-        is ProcessError -> onProcessError(it.error)
-        Complete -> onProcessComplete()
-      }
-    }
-        .destroy(this)
-
     requestWordProcess()
   }
 
@@ -87,33 +66,33 @@ abstract class WordProcessActivity : ActivityBase() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-    processDisposable.tryDispose()
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    processDisposable = worker.handleProcess(componentName, text)
+    presenter.process(componentName, text)
   }
 
-  private fun onProcessBegin() {
+  override fun onProcessBegin() {
     Timber.d("Process begin")
     handler.removeCallbacksAndMessages(null)
   }
 
-  private fun onProcessComplete() {
+  override fun onProcessComplete() {
     Timber.d("Process complete")
 
     handler.removeCallbacksAndMessages(null)
     handler.postDelayed({ finish() }, 500)
   }
 
-  private fun onProcessError(error: Throwable) {
-    Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT)
+  override fun onProcessError(throwable: Throwable) {
+    Toaster.bindTo(this)
+        .short(applicationContext, throwable.message ?: "Error processing selected text")
         .show()
   }
 
-  private fun onProcessResult(result: WordProcessResult) {
+  override fun onProcessSuccess(result: WordProcessResult) {
     when (result.type) {
       WORD_COUNT -> onProcessTypeWordCount(result.count)
       LETTER_COUNT -> onProcessTypeLetterCount(result.count)
@@ -122,12 +101,14 @@ abstract class WordProcessActivity : ActivityBase() {
   }
 
   private fun onProcessTypeWordCount(count: Int) {
-    Toast.makeText(applicationContext, "Word count: $count", Toast.LENGTH_SHORT)
+    Toaster.bindTo(this)
+        .short(applicationContext, "Word count: $count")
         .show()
   }
 
   private fun onProcessTypeLetterCount(count: Int) {
-    Toast.makeText(applicationContext, "Letter count: $count   ", Toast.LENGTH_SHORT)
+    Toaster.bindTo(this)
+        .short(applicationContext, "Letter count: $count   ")
         .show()
   }
 }

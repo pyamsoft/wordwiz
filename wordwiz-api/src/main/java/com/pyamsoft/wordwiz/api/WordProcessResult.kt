@@ -15,14 +15,9 @@
  *
  */
 
-package com.pyamsoft.wordwiz.settings
+package com.pyamsoft.wordwiz.api
 
-import com.pyamsoft.pydroid.ui.arch.ViewEvent
-
-internal sealed class SettingsViewEvent : ViewEvent {
-
-  object WordCountToggled: SettingsViewEvent()
-
-  object LetterCountToggled: SettingsViewEvent()
-
-}
+data class WordProcessResult(
+  val type: ProcessType,
+  val count: Int
+)

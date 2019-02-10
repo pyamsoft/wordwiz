@@ -18,10 +18,9 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
-import android.content.Context
-import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.ui.PYDroid.Instance
+import com.pyamsoft.pydroid.ui.theme.ThemeInjector
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
@@ -66,18 +65,11 @@ class WordWiz : Application(), Instance {
   }
 
   override fun getSystemService(name: String): Any {
-    if (Injector.name == name) {
-      return component
-    } else {
-      return super.getSystemService(name)
+    return when (name) {
+      Injector.name -> component
+      ThemeInjector.name -> theming
+      else -> super.getSystemService(name)
     }
-  }
-
-  companion object {
-
-    @JvmStatic
-    @CheckResult
-    fun theming(context: Context): Theming = (context.applicationContext as WordWiz).theming
   }
 
 }

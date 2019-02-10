@@ -21,23 +21,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pyamsoft.pydroid.ui.app.fragment.requireToolbarActivity
-import com.pyamsoft.pydroid.ui.arch.destroy
+import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
-import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.LetterCountToggled
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.WordCountToggled
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 
-class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
+class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView.Callback {
 
-  internal lateinit var theming: Theming
-  internal lateinit var settingsComponent: SettingsUiComponent
+  internal lateinit var settingsView: SettingsView
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -59,25 +54,25 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    settingsComponent.onUiEvent {
-      return@onUiEvent when (it) {
-        WordCountToggled -> onWordCountClicked()
-        LetterCountToggled -> onLetterCountClicked()
-      }
-    }
-        .destroy(viewLifecycleOwner)
-
-    settingsComponent.create(savedInstanceState)
+    settingsView.inflate(savedInstanceState)
   }
 
-  private fun onWordCountClicked() {
-    val enabled = WordCountActivity.isEnabled(requireContext())
-    WordCountActivity.enable(requireContext(), !enabled)
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    settingsView.saveState(outState)
   }
 
-  private fun onLetterCountClicked() {
-    val enabled = LetterCountActivity.isEnabled(requireContext())
-    LetterCountActivity.enable(requireContext(), !enabled)
+  override fun onDestroyView() {
+    super.onDestroyView()
+    settingsView.teardown()
+  }
+
+  override fun onWordCountToggled(enabled: Boolean) {
+    WordCountActivity.enable(requireContext(), enabled)
+  }
+
+  override fun onLetterCountToggled(enabled: Boolean) {
+    LetterCountActivity.enable(requireContext(), enabled)
   }
 
   override fun onResume() {

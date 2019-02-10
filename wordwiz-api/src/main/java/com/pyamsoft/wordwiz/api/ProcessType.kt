@@ -15,19 +15,10 @@
  *
  */
 
-package com.pyamsoft.wordwiz.word
+package com.pyamsoft.wordwiz.api
 
-import com.pyamsoft.pydroid.ui.arch.StateEvent
-import com.pyamsoft.wordwiz.model.WordProcessResult
-
-internal sealed class WordProcessStateEvent : StateEvent {
-
-  object Begin : WordProcessStateEvent()
-
-  data class ProcessResult(val result: WordProcessResult) : WordProcessStateEvent()
-
-  data class ProcessError(val error: Throwable) : WordProcessStateEvent()
-
-  object Complete : WordProcessStateEvent()
-
+enum class ProcessType {
+  WORD_COUNT,
+  LETTER_COUNT,
+  OCCURRENCES
 }

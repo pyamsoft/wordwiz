@@ -22,26 +22,25 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.pyamsoft.pydroid.ui.about.AboutFragment
-import com.pyamsoft.pydroid.ui.arch.destroy
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
+import com.pyamsoft.pydroid.ui.theme.ThemeInjector
 import com.pyamsoft.pydroid.ui.util.commit
-import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowUiComponent
+import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.main.MainViewEvent.ToolbarClicked
 import com.pyamsoft.wordwiz.settings.MainFragment
 import kotlin.LazyThreadSafetyMode.NONE
 
-class MainActivity : RatingActivity() {
+class MainActivity : RatingActivity(), MainToolbarView.Callback {
 
-  internal lateinit var toolbarComponent: MainToolbarUiComponent
-  internal lateinit var frameComponent: MainFrameUiComponent
-  internal lateinit var dropshadowComponent: DropshadowUiComponent
+  internal lateinit var toolbar: MainToolbarView
+  internal lateinit var frameView: MainFrameView
+  internal lateinit var dropshadow: DropshadowView
 
   private val layoutRoot by lazy(NONE) {
     findViewById<ConstraintLayout>(R.id.layout_constraint)
@@ -55,7 +54,7 @@ class MainActivity : RatingActivity() {
     get() = layoutRoot
 
   override val fragmentContainerId: Int
-    get() = frameComponent.id()
+    get() = frameView.id()
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
     change("New icon style")
@@ -63,7 +62,7 @@ class MainActivity : RatingActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    if (WordWiz.theming(this).isDarkTheme()) {
+    if (ThemeInjector.obtain(applicationContext).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark)
     } else {
       setTheme(R.style.Theme_WordWiz_Light)
@@ -75,37 +74,23 @@ class MainActivity : RatingActivity() {
         .plusMainComponent(layoutRoot, this)
         .inject(this)
 
-    createComponents(savedInstanceState)
     layoutComponents(layoutRoot)
     showPreferenceFragment()
-  }
-
-  private fun createComponents(savedInstanceState: Bundle?) {
-    toolbarComponent.onUiEvent {
-      return@onUiEvent when (it) {
-        is ToolbarClicked -> onBackPressed()
-      }
-    }
-        .destroy(this)
-
-    toolbarComponent.create(savedInstanceState)
-    frameComponent.create(savedInstanceState)
-    dropshadowComponent.create(savedInstanceState)
   }
 
   private fun layoutComponents(layoutRoot: ConstraintLayout) {
     ConstraintSet().apply {
       clone(layoutRoot)
 
-      toolbarComponent.also {
+      toolbar.also {
         connect(it.id(), ConstraintSet.TOP, layoutRoot.id, ConstraintSet.TOP)
         connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
         connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
         constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
       }
 
-      frameComponent.also {
-        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+      frameView.also {
+        connect(it.id(), ConstraintSet.TOP, toolbar.id(), ConstraintSet.BOTTOM)
         connect(it.id(), ConstraintSet.BOTTOM, layoutRoot.id, ConstraintSet.BOTTOM)
         connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
         connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
@@ -113,8 +98,8 @@ class MainActivity : RatingActivity() {
         constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
       }
 
-      dropshadowComponent.also {
-        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+      dropshadow.also {
+        connect(it.id(), ConstraintSet.TOP, toolbar.id(), ConstraintSet.BOTTOM)
         connect(it.id(), ConstraintSet.START, layoutRoot.id, ConstraintSet.START)
         connect(it.id(), ConstraintSet.END, layoutRoot.id, ConstraintSet.END)
         constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
@@ -126,22 +111,30 @@ class MainActivity : RatingActivity() {
 
   private fun showPreferenceFragment() {
     val fragmentManager = supportFragmentManager
-    if (fragmentManager.findFragmentByTag(MainFragment.TAG) == null
-        && !AboutFragment.isPresent(this)
+    val tag = MainFragment.TAG
+    if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
     ) {
       fragmentManager.beginTransaction()
-          .add(
-              fragmentContainerId,
-              MainFragment(), MainFragment.TAG
-          )
+          .add(fragmentContainerId, MainFragment(), tag)
           .commit(this)
     }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    toolbarComponent.saveState(outState)
-    frameComponent.saveState(outState)
-    dropshadowComponent.saveState(outState)
+    toolbar.saveState(outState)
+    frameView.saveState(outState)
+    dropshadow.saveState(outState)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    toolbar.teardown()
+    frameView.teardown()
+    dropshadow.teardown()
+  }
+
+  override fun onToolbarClicked() {
+    onBackPressed()
   }
 }

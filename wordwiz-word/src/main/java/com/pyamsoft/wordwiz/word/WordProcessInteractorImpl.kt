@@ -21,13 +21,12 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.os.Bundle
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.threads.Enforcer
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.model.ProcessType.LETTER_COUNT
-import com.pyamsoft.wordwiz.model.ProcessType.WORD_COUNT
-import com.pyamsoft.wordwiz.model.WordProcessResult
+import com.pyamsoft.wordwiz.api.WordProcessResult
+import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
+import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
 import io.reactivex.Single
 import timber.log.Timber
 import java.util.Arrays

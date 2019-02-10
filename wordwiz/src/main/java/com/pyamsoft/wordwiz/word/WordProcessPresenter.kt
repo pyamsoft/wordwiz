@@ -15,12 +15,29 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.word
 
-import com.pyamsoft.pydroid.ui.arch.ViewEvent
+import android.content.ComponentName
+import com.pyamsoft.pydroid.ui.arch.Presenter
+import com.pyamsoft.wordwiz.api.WordProcessResult
 
-internal sealed class MainViewEvent : ViewEvent {
+internal interface WordProcessPresenter : Presenter<WordProcessPresenter.Callback> {
 
-  object ToolbarClicked : MainViewEvent()
+  fun process(
+    component: ComponentName,
+    text: CharSequence
+  )
+
+  interface Callback {
+
+    fun onProcessBegin()
+
+    fun onProcessSuccess(result: WordProcessResult)
+
+    fun onProcessError(throwable: Throwable)
+
+    fun onProcessComplete()
+
+  }
 
 }

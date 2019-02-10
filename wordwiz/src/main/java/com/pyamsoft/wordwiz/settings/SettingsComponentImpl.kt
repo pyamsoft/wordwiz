@@ -19,20 +19,18 @@ package com.pyamsoft.wordwiz.settings
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
-import com.pyamsoft.pydroid.core.bus.EventBus
-import com.pyamsoft.pydroid.ui.theme.Theming
 
 internal class SettingsComponentImpl internal constructor(
-  private val theming: Theming,
   private val owner: LifecycleOwner,
-  private val preferenceScreen: PreferenceScreen,
-  private val uiBus: EventBus<SettingsViewEvent>
+  private val preferenceScreen: PreferenceScreen
 ) : SettingsComponent {
 
   override fun inject(fragment: SettingsPreferenceFragment) {
-    val settingsView = SettingsView(owner, preferenceScreen, uiBus)
-    fragment.settingsComponent = SettingsUiComponent(settingsView, owner)
-    fragment.theming = theming
+    val settingsView = SettingsView(owner, preferenceScreen, fragment)
+
+    fragment.apply {
+      this.settingsView = settingsView
+    }
   }
 
 }

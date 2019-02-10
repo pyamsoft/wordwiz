@@ -18,38 +18,54 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.annotation.CheckResult
+import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.core.bus.EventBus
-import com.pyamsoft.pydroid.ui.arch.Worker
+import com.pyamsoft.pydroid.core.singleDisposable
+import com.pyamsoft.pydroid.core.tryDispose
+import com.pyamsoft.pydroid.ui.arch.BasePresenter
+import com.pyamsoft.pydroid.ui.arch.destroy
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Begin
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.Complete
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessError
-import com.pyamsoft.wordwiz.word.WordProcessStateEvent.ProcessResult
+import com.pyamsoft.wordwiz.word.WordProcessEvent.Begin
+import com.pyamsoft.wordwiz.word.WordProcessEvent.Complete
+import com.pyamsoft.wordwiz.word.WordProcessEvent.ProcessError
+import com.pyamsoft.wordwiz.word.WordProcessEvent.ProcessResult
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-internal class WordProcessWorker internal constructor(
+internal class WordProcessPresenterImpl internal constructor(
   private val interactor: WordProcessInteractor,
-  bus: EventBus<WordProcessStateEvent>
-) : Worker<WordProcessStateEvent>(bus) {
+  owner: LifecycleOwner,
+  bus: EventBus<WordProcessEvent>
+) : BasePresenter<WordProcessEvent, WordProcessPresenter.Callback>(owner, bus),
+    WordProcessPresenter {
 
-  @CheckResult
-  fun onProcessEvent(func: (event: WordProcessStateEvent) -> Unit): Disposable {
-    return listen()
+  private var processDisposable by singleDisposable()
+
+  override fun onBind() {
+    listen()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(func)
+        .subscribe {
+          return@subscribe when (it) {
+            is Begin -> callback.onProcessBegin()
+            is ProcessResult -> callback.onProcessSuccess(it.result)
+            is ProcessError -> callback.onProcessError(it.error)
+            is Complete -> callback.onProcessComplete()
+          }
+        }
+        .destroy(owner)
   }
 
-  @CheckResult
-  fun handleProcess(
-    componentName: ComponentName,
+  override fun onUnbind() {
+    processDisposable.tryDispose()
+  }
+
+  override fun process(
+    component: ComponentName,
     text: CharSequence
-  ): Disposable {
-    return interactor.getProcessType(componentName, text)
+  ) {
+    processDisposable = interactor.getProcessType(component, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .doAfterTerminate { publish(Complete) }

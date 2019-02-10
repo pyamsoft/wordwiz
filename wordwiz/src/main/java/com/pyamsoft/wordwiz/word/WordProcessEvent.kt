@@ -15,10 +15,18 @@
  *
  */
 
-package com.pyamsoft.wordwiz.model
+package com.pyamsoft.wordwiz.word
 
-enum class ProcessType {
-  WORD_COUNT,
-  LETTER_COUNT,
-  OCCURRENCES
+import com.pyamsoft.wordwiz.api.WordProcessResult
+
+internal sealed class WordProcessEvent {
+
+  object Begin : WordProcessEvent()
+
+  data class ProcessResult(val result: WordProcessResult) : WordProcessEvent()
+
+  data class ProcessError(val error: Throwable) : WordProcessEvent()
+
+  object Complete : WordProcessEvent()
+
 }
