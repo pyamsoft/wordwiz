@@ -35,9 +35,8 @@ import timber.log.Timber
 
 internal class WordProcessPresenterImpl internal constructor(
   private val interactor: WordProcessInteractor,
-  owner: LifecycleOwner,
   bus: EventBus<WordProcessEvent>
-) : BasePresenter<WordProcessEvent, WordProcessPresenter.Callback>(owner, bus),
+) : BasePresenter<WordProcessEvent, WordProcessPresenter.Callback>(bus),
     WordProcessPresenter {
 
   private var processDisposable by singleDisposable()

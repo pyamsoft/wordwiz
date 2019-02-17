@@ -52,6 +52,7 @@ abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callba
         .inject(this)
 
     super.onCreate(savedInstanceState)
+    presenter.bind(this, this)
     requestWordProcess()
   }
 

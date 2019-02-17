@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
-import com.pyamsoft.wordwiz.main.MainActivity
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.word.WordProcessActivity
@@ -31,10 +30,7 @@ interface WordWizComponent {
   fun inject(activity: WordProcessActivity)
 
   @CheckResult
-  fun plusMainComponent(
-    parent: ViewGroup,
-    owner: LifecycleOwner
-  ): MainComponent
+  fun plusMainComponent(parent: ViewGroup): MainComponent
 
   @CheckResult
   fun plusSettingsComponent(

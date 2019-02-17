@@ -52,14 +52,11 @@ class WordWizComponentImpl(
 
   override fun inject(activity: WordProcessActivity) {
     activity.apply {
-      this.presenter = WordProcessPresenterImpl(wordProcessModule.interactor, activity, processBus)
+      this.presenter = WordProcessPresenterImpl(wordProcessModule.interactor, processBus)
     }
   }
 
-  override fun plusMainComponent(
-    parent: ViewGroup,
-    owner: LifecycleOwner
-  ): MainComponent = MainComponentImpl(parent)
+  override fun plusMainComponent(parent: ViewGroup): MainComponent = MainComponentImpl(parent)
 
   override fun plusSettingsComponent(
     owner: LifecycleOwner,
