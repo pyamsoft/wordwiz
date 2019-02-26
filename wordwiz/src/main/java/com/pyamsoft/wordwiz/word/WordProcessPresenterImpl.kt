@@ -22,8 +22,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.core.bus.EventBus
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.pydroid.ui.arch.BasePresenter
-import com.pyamsoft.pydroid.ui.arch.destroy
+import com.pyamsoft.pydroid.arch.BasePresenter
+import com.pyamsoft.pydroid.arch.destroy
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.word.WordProcessEvent.Begin
 import com.pyamsoft.wordwiz.word.WordProcessEvent.Complete

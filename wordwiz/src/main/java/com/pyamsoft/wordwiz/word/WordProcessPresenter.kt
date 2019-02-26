@@ -18,7 +18,7 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.ui.arch.Presenter
+import com.pyamsoft.pydroid.arch.Presenter
 import com.pyamsoft.wordwiz.api.WordProcessResult
 
 internal interface WordProcessPresenter : Presenter<WordProcessPresenter.Callback> {

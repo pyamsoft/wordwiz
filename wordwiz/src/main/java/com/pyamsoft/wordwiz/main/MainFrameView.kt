@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.pyamsoft.pydroid.ui.arch.BaseUiView
+import com.pyamsoft.pydroid.arch.BaseUiView
 import com.pyamsoft.wordwiz.R
 
 internal class MainFrameView internal constructor(

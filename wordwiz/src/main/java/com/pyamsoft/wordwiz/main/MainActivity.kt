@@ -31,7 +31,6 @@ import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
-import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.settings.MainFragment
 import kotlin.LazyThreadSafetyMode.NONE
@@ -71,7 +70,7 @@ class MainActivity : RatingActivity(), MainToolbarView.Callback {
     setContentView(R.layout.layout_constraint)
 
     Injector.obtain<WordWizComponent>(applicationContext)
-        .plusMainComponent(layoutRoot, this)
+        .plusMainComponent(layoutRoot)
         .inject(this)
 
     layoutComponents(layoutRoot)
