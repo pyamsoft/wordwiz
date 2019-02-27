@@ -18,12 +18,11 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.lifecycle.LifecycleOwner
+import com.pyamsoft.pydroid.arch.BasePresenter
+import com.pyamsoft.pydroid.arch.destroy
 import com.pyamsoft.pydroid.core.bus.EventBus
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.pydroid.arch.BasePresenter
-import com.pyamsoft.pydroid.arch.destroy
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.word.WordProcessEvent.Begin
 import com.pyamsoft.wordwiz.word.WordProcessEvent.Complete
@@ -42,17 +41,14 @@ internal class WordProcessPresenterImpl internal constructor(
   private var processDisposable by singleDisposable()
 
   override fun onBind() {
-    listen()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe {
-          return@subscribe when (it) {
-            is Begin -> callback.onProcessBegin()
-            is ProcessResult -> callback.onProcessSuccess(it.result)
-            is ProcessError -> callback.onProcessError(it.error)
-            is Complete -> callback.onProcessComplete()
-          }
-        }
+    listen().subscribe {
+      return@subscribe when (it) {
+        is Begin -> callback.onProcessBegin()
+        is ProcessResult -> callback.onProcessSuccess(it.result)
+        is ProcessError -> callback.onProcessError(it.error)
+        is Complete -> callback.onProcessComplete()
+      }
+    }
         .destroy(owner)
   }
 
