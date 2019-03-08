@@ -53,7 +53,10 @@ internal class MainToolbarView internal constructor(
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
     }
+  }
 
+  override fun teardown() {
+    toolbarActivityProvider.setToolbar(null)
   }
 
 }
