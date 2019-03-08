@@ -19,6 +19,8 @@ package com.pyamsoft.wordwiz.settings
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
+import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
+import com.pyamsoft.wordwiz.widget.ToolbarView
 
 internal class SettingsComponentImpl internal constructor(
   private val owner: LifecycleOwner,
@@ -30,6 +32,7 @@ internal class SettingsComponentImpl internal constructor(
 
     fragment.apply {
       this.settingsView = settingsView
+      this.toolbarView = ToolbarView(fragment.requireToolbarActivity())
     }
   }
 

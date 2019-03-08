@@ -26,7 +26,7 @@ internal class MainComponentImpl internal constructor(
 
   override fun inject(activity: MainActivity) {
     val frameView = MainFrameView(parent)
-    val toolbarView = MainToolbarView(parent, activity, activity)
+    val toolbarView = MainToolbarView(parent, activity)
     val dropshadow = DropshadowView(parent)
 
     activity.apply {

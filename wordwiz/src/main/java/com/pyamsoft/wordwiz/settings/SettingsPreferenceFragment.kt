@@ -18,52 +18,47 @@
 package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
-import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.widget.ToolbarView
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 
 class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView.Callback {
 
+  internal lateinit var toolbarView: ToolbarView
   internal lateinit var settingsView: SettingsView
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
   override val hideClearAll: Boolean = true
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    Injector.obtain<WordWizComponent>(requireContext().applicationContext)
-        .plusSettingsComponent(viewLifecycleOwner, preferenceScreen)
-        .inject(this)
-    return super.onCreateView(inflater, container, savedInstanceState)
-  }
-
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
+
+    Injector.obtain<WordWizComponent>(requireContext().applicationContext)
+        .plusSettingsComponent(viewLifecycleOwner, preferenceScreen)
+        .inject(this)
+
     settingsView.inflate(savedInstanceState)
+    toolbarView.inflate(savedInstanceState)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
+    toolbarView.saveState(outState)
     settingsView.saveState(outState)
   }
 
   override fun onDestroyView() {
     super.onDestroyView()
+    toolbarView.teardown()
     settingsView.teardown()
   }
 
@@ -73,14 +68,6 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView
 
   override fun onLetterCountToggled(enabled: Boolean) {
     LetterCountActivity.enable(requireContext(), enabled)
-  }
-
-  override fun onResume() {
-    super.onResume()
-    requireToolbarActivity().withToolbar {
-      it.setTitle(R.string.app_name)
-      it.setUpEnabled(false)
-    }
   }
 
   companion object {

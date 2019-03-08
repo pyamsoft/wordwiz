@@ -35,7 +35,7 @@ import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.settings.MainFragment
 import kotlin.LazyThreadSafetyMode.NONE
 
-class MainActivity : RatingActivity(), MainToolbarView.Callback {
+class MainActivity : RatingActivity() {
 
   internal lateinit var toolbar: MainToolbarView
   internal lateinit var frameView: MainFrameView
@@ -131,9 +131,5 @@ class MainActivity : RatingActivity(), MainToolbarView.Callback {
     toolbar.teardown()
     frameView.teardown()
     dropshadow.teardown()
-  }
-
-  override fun onToolbarClicked() {
-    onBackPressed()
   }
 }

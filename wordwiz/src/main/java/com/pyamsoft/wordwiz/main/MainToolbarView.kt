@@ -22,17 +22,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.arch.BaseUiView
-import com.pyamsoft.pydroid.ui.util.DebouncedOnClickListener
+import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
 
 internal class MainToolbarView internal constructor(
   parent: ViewGroup,
-  private val toolbarActivityProvider: ToolbarActivityProvider,
-  callback: MainToolbarView.Callback
-) : BaseUiView<MainToolbarView.Callback>(parent, callback) {
+  private val toolbarActivityProvider: ToolbarActivityProvider
+) : BaseUiView<Unit>(parent, Unit) {
 
   private val toolbar by lazyView<Toolbar>(R.id.toolbar)
 
@@ -54,22 +52,12 @@ internal class MainToolbarView internal constructor(
       toolbarActivityProvider.setToolbar(this)
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
-
-      setNavigationOnClickListener(DebouncedOnClickListener.create {
-        callback.onToolbarClicked()
-      })
     }
 
   }
 
   override fun teardown() {
     toolbar.setNavigationOnClickListener(null)
-  }
-
-  interface Callback {
-
-    fun onToolbarClicked()
-
   }
 
 }
