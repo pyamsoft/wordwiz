@@ -41,14 +41,17 @@ internal class WordProcessPresenterImpl internal constructor(
   private var processDisposable by singleDisposable()
 
   override fun onBind() {
-    listen().subscribe {
-      return@subscribe when (it) {
-        is Begin -> callback.onProcessBegin()
-        is ProcessResult -> callback.onProcessSuccess(it.result)
-        is ProcessError -> callback.onProcessError(it.error)
-        is Complete -> callback.onProcessComplete()
-      }
-    }
+    listen()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+          return@subscribe when (it) {
+            is Begin -> callback.onProcessBegin()
+            is ProcessResult -> callback.onProcessSuccess(it.result)
+            is ProcessError -> callback.onProcessError(it.error)
+            is Complete -> callback.onProcessComplete()
+          }
+        }
         .destroy(owner)
   }
 
