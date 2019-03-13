@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz
 
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
-import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
@@ -33,8 +32,5 @@ interface WordWizComponent {
   fun plusMainComponent(parent: ViewGroup): MainComponent
 
   @CheckResult
-  fun plusSettingsComponent(
-    owner: LifecycleOwner,
-    preferenceScreen: PreferenceScreen
-  ): SettingsComponent
+  fun plusSettingsComponent(preferenceScreen: PreferenceScreen): SettingsComponent
 }

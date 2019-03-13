@@ -32,30 +32,23 @@ internal class MainToolbarView internal constructor(
   private val toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<Unit>(parent, Unit) {
 
-  private val toolbar by lazyView<Toolbar>(R.id.toolbar)
+  override val layoutRoot by lazyView<Toolbar>(R.id.toolbar)
 
   override val layout: Int = R.layout.toolbar
-
-  override fun id(): Int {
-    return toolbar.id
-  }
 
   override fun onInflated(
     view: View,
     savedInstanceState: Bundle?
   ) {
-    setupToolbar()
-  }
-
-  private fun setupToolbar() {
-    toolbar.apply {
+    layoutRoot.apply {
       toolbarActivityProvider.setToolbar(this)
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
     }
   }
 
-  override fun teardown() {
+  override fun onTeardown() {
+    super.onTeardown()
     toolbarActivityProvider.setToolbar(null)
   }
 

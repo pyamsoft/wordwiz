@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz
 
 import android.app.Application
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.pydroid.core.bus.RxBus
 import com.pyamsoft.pydroid.ui.ModuleProvider
@@ -58,9 +57,7 @@ class WordWizComponentImpl(
 
   override fun plusMainComponent(parent: ViewGroup): MainComponent = MainComponentImpl(parent)
 
-  override fun plusSettingsComponent(
-    owner: LifecycleOwner,
-    preferenceScreen: PreferenceScreen
-  ): SettingsComponent = SettingsComponentImpl(owner, preferenceScreen)
+  override fun plusSettingsComponent(preferenceScreen: PreferenceScreen): SettingsComponent =
+    SettingsComponentImpl(preferenceScreen)
 
 }

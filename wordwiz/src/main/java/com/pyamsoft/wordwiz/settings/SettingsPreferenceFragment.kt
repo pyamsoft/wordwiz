@@ -43,7 +43,7 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView
     super.onViewCreated(view, savedInstanceState)
 
     Injector.obtain<WordWizComponent>(requireContext().applicationContext)
-        .plusSettingsComponent(viewLifecycleOwner, preferenceScreen)
+        .plusSettingsComponent(preferenceScreen)
         .inject(this)
 
     settingsView.inflate(savedInstanceState)
@@ -54,6 +54,11 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView
     super.onSaveInstanceState(outState)
     toolbarView.saveState(outState)
     settingsView.saveState(outState)
+  }
+
+  override fun onStart() {
+    super.onStart()
+    settingsView.syncState()
   }
 
   override fun onDestroyView() {

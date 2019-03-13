@@ -15,23 +15,22 @@
  *
  */
 
-package com.pyamsoft.wordwiz.settings
+package com.pyamsoft.wordwiz.main
 
-import androidx.preference.PreferenceScreen
-import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
-import com.pyamsoft.wordwiz.widget.ToolbarView
+import androidx.annotation.CheckResult
+import androidx.annotation.IdRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.pyamsoft.pydroid.arch.UiComponent
 
-internal class SettingsComponentImpl internal constructor(
-  private val preferenceScreen: PreferenceScreen
-) : SettingsComponent {
+internal interface MainUiComponent : UiComponent<Unit> {
 
-  override fun inject(fragment: SettingsPreferenceFragment) {
-    val settingsView = SettingsView(preferenceScreen, fragment)
+  @IdRes
+  @CheckResult
+  fun id(): Int
 
-    fragment.apply {
-      this.settingsView = settingsView
-      this.toolbarView = ToolbarView(fragment.requireToolbarActivity())
-    }
-  }
+  fun layout(
+    constraintLayout: ConstraintLayout,
+    aboveId: Int
+  )
 
 }

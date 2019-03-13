@@ -27,9 +27,9 @@ import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.api.WordProcessResult
 import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
+import com.pyamsoft.wordwiz.api.WordProcessResult
 import timber.log.Timber
 
 abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callback {
@@ -52,7 +52,7 @@ abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callba
         .inject(this)
 
     super.onCreate(savedInstanceState)
-    presenter.bind(this, this)
+    presenter.bind(this)
     requestWordProcess()
   }
 
@@ -67,6 +67,7 @@ abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callba
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
+    presenter.unbind()
   }
 
   private fun requestWordProcess() {

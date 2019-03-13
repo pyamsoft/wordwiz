@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import com.pyamsoft.pydroid.arch.BasePresenter
-import com.pyamsoft.pydroid.arch.destroy
 import com.pyamsoft.pydroid.core.bus.EventBus
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
@@ -52,7 +51,7 @@ internal class WordProcessPresenterImpl internal constructor(
             is Complete -> callback.onProcessComplete()
           }
         }
-        .destroy(owner)
+        .destroy()
   }
 
   override fun onUnbind() {

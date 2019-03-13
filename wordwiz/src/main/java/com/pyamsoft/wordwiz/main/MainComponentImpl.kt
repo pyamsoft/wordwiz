@@ -30,9 +30,8 @@ internal class MainComponentImpl internal constructor(
     val dropshadow = DropshadowView(parent)
 
     activity.apply {
-      this.frameView = frameView
-      this.toolbar = toolbarView
-      this.dropshadow = dropshadow
+      this.component = MainUiComponentImpl(frameView)
+      this.toolbarComponent = MainToolbarUiComponentImpl(toolbarView, dropshadow)
     }
   }
 
