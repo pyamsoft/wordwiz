@@ -20,6 +20,9 @@ package com.pyamsoft.wordwiz.main
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.pyamsoft.pydroid.arch.layout
 import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
@@ -38,16 +41,13 @@ class MainActivity : RatingActivity() {
   internal lateinit var toolbarComponent: MainToolbarUiComponent
   internal lateinit var component: MainUiComponent
 
-  private val layoutRoot by lazy(NONE) {
-    findViewById<ConstraintLayout>(R.id.layout_constraint)
-  }
-
   override val versionName: String = BuildConfig.VERSION_NAME
 
   override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val snackbarRoot: View
-    get() = layoutRoot
+  override val snackbarRoot: View by lazy(NONE) {
+    findViewById<CoordinatorLayout>(R.id.snackbar_root)
+  }
 
   override val fragmentContainerId: Int
     get() = component.id()
@@ -64,17 +64,34 @@ class MainActivity : RatingActivity() {
       setTheme(R.style.Theme_WordWiz_Light)
     }
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.layout_constraint)
+    setContentView(R.layout.snackbar_screen)
 
+    val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusMainComponent(layoutRoot)
         .inject(this)
 
-    component.bind(this, savedInstanceState, Unit)
-    toolbarComponent.bind(this, savedInstanceState, Unit)
+    component.bind(layoutRoot, this, savedInstanceState, Unit)
+    toolbarComponent.bind(layoutRoot, this, savedInstanceState, Unit)
+    layoutRoot.layout {
 
-    toolbarComponent.layout(layoutRoot)
-    component.layout(layoutRoot, toolbarComponent.id())
+      toolbarComponent.also {
+        connect(it.id(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+        connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+        connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+      }
+
+      component.also {
+        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+        connect(it.id(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+        connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+        connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+        constrainHeight(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+      }
+    }
+
 
     showPreferenceFragment()
   }

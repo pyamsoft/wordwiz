@@ -17,17 +17,6 @@
 
 package com.pyamsoft.wordwiz.main
 
-import androidx.annotation.CheckResult
-import androidx.annotation.IdRes
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.pyamsoft.pydroid.arch.UiComponent
 
-internal interface MainToolbarUiComponent : UiComponent<Unit> {
-
-  @IdRes
-  @CheckResult
-  fun id(): Int
-
-  fun layout(constraintLayout: ConstraintLayout)
-
-}
+internal interface MainToolbarUiComponent : UiComponent<Unit>
