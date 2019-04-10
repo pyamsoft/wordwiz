@@ -17,13 +17,8 @@
 
 package com.pyamsoft.wordwiz.word
 
-internal class LetterCountActivity : WordProcessActivity() {
+internal interface WordComponent {
 
-  companion object : WordActivity<LetterCountActivity>() {
+  fun inject(activity: WordProcessActivity)
 
-    override fun provideClassType(): Class<out LetterCountActivity> {
-      return LetterCountActivity::class.java
-    }
-
-  }
 }

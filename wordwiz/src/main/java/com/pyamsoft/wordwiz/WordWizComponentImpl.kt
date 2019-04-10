@@ -27,11 +27,11 @@ import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.main.MainComponentImpl
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponentImpl
-import com.pyamsoft.wordwiz.word.WordProcessActivity
+import com.pyamsoft.wordwiz.word.WordComponent
+import com.pyamsoft.wordwiz.word.WordComponentImpl
 import com.pyamsoft.wordwiz.word.WordProcessModule
-import com.pyamsoft.wordwiz.word.WordProcessBinder
 
-class WordWizComponentImpl(
+internal class WordWizComponentImpl(
   application: Application,
   moduleProvider: ModuleProvider
 ) : WordWizComponent {
@@ -45,11 +45,7 @@ class WordWizComponentImpl(
     wordProcessModule = WordProcessModule(moduleProvider.enforcer(), wordWizModule)
   }
 
-  override fun inject(activity: WordProcessActivity) {
-    activity.apply {
-      this.binder = WordProcessBinder(wordProcessModule.interactor)
-    }
-  }
+  override fun plusWordComponent(): WordComponent = WordComponentImpl(wordProcessModule.interactor)
 
   override fun plusMainComponent(parent: ViewGroup): MainComponent = MainComponentImpl(parent)
 

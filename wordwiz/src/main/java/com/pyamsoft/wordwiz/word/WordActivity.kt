@@ -23,7 +23,7 @@ import android.content.pm.PackageManager
 import androidx.annotation.CheckResult
 import timber.log.Timber
 
-abstract class WordActivity<out T : WordProcessActivity> {
+internal abstract class WordActivity<out T : WordProcessActivity> {
 
   @CheckResult
   abstract fun provideClassType(): Class<out T>

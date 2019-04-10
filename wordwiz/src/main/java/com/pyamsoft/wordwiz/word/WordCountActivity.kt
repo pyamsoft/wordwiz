@@ -17,7 +17,7 @@
 
 package com.pyamsoft.wordwiz.word
 
-class WordCountActivity : WordProcessActivity() {
+internal class WordCountActivity : WordProcessActivity() {
 
   companion object : WordActivity<WordCountActivity>() {
 

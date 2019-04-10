@@ -17,7 +17,6 @@
 
 package com.pyamsoft.wordwiz.word
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,88 +28,119 @@ import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
-import com.pyamsoft.wordwiz.api.WordProcessResult
+import com.pyamsoft.wordwiz.word.WordProcessPresenter.ProcessState
 import timber.log.Timber
+import kotlin.LazyThreadSafetyMode.NONE
 
-abstract class WordProcessActivity : ActivityBase(), WordProcessBinder.Callback {
+internal abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callback {
 
-  internal lateinit var binder: WordProcessBinder
+  private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
-  private val handler = Handler(Looper.getMainLooper())
+  internal lateinit var presenter: WordProcessPresenter
 
-  override val fragmentContainerId: Int = 0
+  final override val fragmentContainerId: Int = 0
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+  final override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
     if (ThemeInjector.obtain(applicationContext).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark_Transparent)
     } else {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
+    super.onCreate(savedInstanceState)
 
     Injector.obtain<WordWizComponent>(applicationContext)
+        .plusWordComponent()
         .inject(this)
-
-    super.onCreate(savedInstanceState)
-    binder.bind(this)
-    requestWordProcess()
+    presenter.bind(this)
   }
 
-  override fun onStop() {
+  final override fun onStop() {
     super.onStop()
     if (!isFinishing && !isChangingConfigurations) {
       finish()
     }
   }
 
-  override fun onDestroy() {
+  final override fun finish() {
+    super.finish()
+    overridePendingTransition(0, 0)
+  }
+
+  final override fun onDestroy() {
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-    binder.unbind()
+    presenter.unbind()
   }
 
-  private fun requestWordProcess() {
-    Timber.d("Handle a process text intent")
-    val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    binder.process(componentName, text)
+  final override fun onRender(
+    state: ProcessState,
+    oldState: ProcessState?
+  ) {
+    renderLoading(state, oldState)
+    renderResult(state, oldState)
+    renderError(state, oldState)
   }
 
-  override fun onProcessBegin() {
-    Timber.d("Process begin")
-    handler.removeCallbacksAndMessages(null)
-  }
-
-  override fun onProcessComplete() {
-    Timber.d("Process complete")
-
-    handler.removeCallbacksAndMessages(null)
-    handler.postDelayed({ finish() }, 500)
-  }
-
-  override fun onProcessError(throwable: Throwable) {
-    Toaster.bindTo(this)
-        .short(applicationContext, throwable.message ?: "Error processing selected text")
-        .show()
-  }
-
-  override fun onProcessSuccess(result: WordProcessResult) {
-    when (result.type) {
-      WORD_COUNT -> onProcessTypeWordCount(result.count)
-      LETTER_COUNT -> onProcessTypeLetterCount(result.count)
-      else -> Timber.w("Unhandled process success: ${result.type}")
+  private fun renderLoading(
+    state: ProcessState,
+    oldState: ProcessState?
+  ) {
+    state.isProcessing.let { processing ->
+      if (oldState == null || oldState.isProcessing != processing) {
+        if (processing) {
+          handler.removeCallbacksAndMessages(null)
+        } else {
+          handler.removeCallbacksAndMessages(null)
+          handler.postDelayed({ finish() }, 750)
+        }
+      }
     }
   }
 
-  private fun onProcessTypeWordCount(count: Int) {
-    Toaster.bindTo(this)
-        .short(applicationContext, "Word count: $count")
-        .show()
+  private fun renderResult(
+    state: ProcessState,
+    oldState: ProcessState?
+  ) {
+    state.result.let { result ->
+      if (oldState == null || oldState.result != result) {
+        if (result == null) {
+          dismissToast()
+        } else {
+          when (result.type) {
+            WORD_COUNT -> toast("Word count: ${result.count}")
+            LETTER_COUNT -> toast("Letter count: ${result.count}")
+            else -> Timber.w("Unhandled process success: ${result.type}")
+          }
+        }
+      }
+    }
   }
 
-  private fun onProcessTypeLetterCount(count: Int) {
+  private fun renderError(
+    state: ProcessState,
+    oldState: ProcessState?
+  ) {
+    state.throwable.let { throwable ->
+      if (oldState == null || oldState.throwable != throwable) {
+        if (throwable == null) {
+          dismissToast()
+        } else {
+          toast(throwable.message ?: "Error processing selected text")
+        }
+      }
+    }
+  }
+
+  private fun dismissToast() {
     Toaster.bindTo(this)
-        .short(applicationContext, "Letter count: $count   ")
+        .dismiss()
+  }
+
+  private fun toast(message: String) {
+    Toaster.bindTo(this)
+        .short(applicationContext, message)
         .show()
   }
 }

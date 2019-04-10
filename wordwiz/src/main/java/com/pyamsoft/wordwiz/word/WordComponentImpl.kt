@@ -17,16 +17,20 @@
 
 package com.pyamsoft.wordwiz.word
 
-import com.pyamsoft.wordwiz.api.WordProcessResult
+import android.content.Intent
+import com.pyamsoft.wordwiz.api.WordProcessInteractor
 
-internal sealed class WordProcessEvent {
+internal class WordComponentImpl internal constructor(
+  private val interactor: WordProcessInteractor
+) : WordComponent {
 
-  object Begin : WordProcessEvent()
+  override fun inject(activity: WordProcessActivity) {
+    val text = activity.intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+    val componentName = activity.componentName
 
-  data class ProcessResult(val result: WordProcessResult) : WordProcessEvent()
-
-  data class ProcessError(val error: Throwable) : WordProcessEvent()
-
-  object Complete : WordProcessEvent()
+    activity.apply {
+      this.presenter = WordProcessPresenter(interactor, componentName, text)
+    }
+  }
 
 }

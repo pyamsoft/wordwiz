@@ -18,53 +18,78 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.arch.UiBinder
+import com.pyamsoft.pydroid.arch.Presenter
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
 import com.pyamsoft.wordwiz.api.WordProcessResult
+import com.pyamsoft.wordwiz.word.WordProcessPresenter.ProcessState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-internal class WordProcessBinder internal constructor(
-  private val interactor: WordProcessInteractor
-) : UiBinder<WordProcessBinder.Callback>() {
+internal class WordProcessPresenter internal constructor(
+  private val interactor: WordProcessInteractor,
+  private val component: ComponentName,
+  private val text: CharSequence
+) : Presenter<ProcessState, WordProcessPresenter.Callback>() {
 
   private var processDisposable by singleDisposable()
 
+  override fun initialState(): ProcessState {
+    return ProcessState(isProcessing = false, throwable = null, result = null)
+  }
+
   override fun onBind() {
+    process()
   }
 
   override fun onUnbind() {
     processDisposable.tryDispose()
   }
 
-  fun process(
-    component: ComponentName,
-    text: CharSequence
-  ) {
+  private fun process() {
     processDisposable = interactor.getProcessType(component, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
-        .doAfterTerminate { callback.onProcessComplete() }
-        .doOnSubscribe { callback.onProcessBegin() }
-        .subscribe({ callback.onProcessSuccess(it) }, {
+        .doAfterTerminate { handleProcessComplete() }
+        .doOnSubscribe { handleProcessBegin() }
+        .subscribe({ handleProcessSuccess(it) }, {
           Timber.e(it, "Error handling process request")
-          callback.onProcessError(it)
+          handleProcessError(it)
         })
   }
 
-  interface Callback : UiBinder.Callback {
-
-    fun onProcessBegin()
-
-    fun onProcessSuccess(result: WordProcessResult)
-
-    fun onProcessError(throwable: Throwable)
-
-    fun onProcessComplete()
-
+  private fun handleProcessBegin() {
+    setState {
+      copy(isProcessing = true)
+    }
   }
+
+  private fun handleProcessSuccess(result: WordProcessResult) {
+    setState {
+      copy(result = result, throwable = null)
+    }
+  }
+
+  private fun handleProcessError(throwable: Throwable) {
+    setState {
+      copy(result = null, throwable = throwable)
+    }
+  }
+
+  private fun handleProcessComplete() {
+    setState {
+      copy(isProcessing = false)
+    }
+  }
+
+  data class ProcessState(
+    val isProcessing: Boolean,
+    val throwable: Throwable?,
+    val result: WordProcessResult?
+  )
+
+  interface Callback : Presenter.Callback<ProcessState>
 
 }

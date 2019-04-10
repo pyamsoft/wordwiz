@@ -22,14 +22,15 @@ import androidx.annotation.CheckResult
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
-import com.pyamsoft.wordwiz.word.WordProcessActivity
+import com.pyamsoft.wordwiz.word.WordComponent
 
-interface WordWizComponent {
-
-  fun inject(activity: WordProcessActivity)
+internal interface WordWizComponent {
 
   @CheckResult
   fun plusMainComponent(parent: ViewGroup): MainComponent
+
+  @CheckResult
+  fun plusWordComponent(): WordComponent
 
   @CheckResult
   fun plusSettingsComponent(preferenceScreen: PreferenceScreen): SettingsComponent
