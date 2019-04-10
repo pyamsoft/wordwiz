@@ -18,59 +18,53 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.arch.BasePresenter
-import com.pyamsoft.pydroid.core.bus.EventBus
+import com.pyamsoft.pydroid.arch.UiBinder
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.word.WordProcessEvent.Begin
-import com.pyamsoft.wordwiz.word.WordProcessEvent.Complete
-import com.pyamsoft.wordwiz.word.WordProcessEvent.ProcessError
-import com.pyamsoft.wordwiz.word.WordProcessEvent.ProcessResult
+import com.pyamsoft.wordwiz.api.WordProcessResult
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-internal class WordProcessPresenterImpl internal constructor(
-  private val interactor: WordProcessInteractor,
-  bus: EventBus<WordProcessEvent>
-) : BasePresenter<WordProcessEvent, WordProcessPresenter.Callback>(bus),
-    WordProcessPresenter {
+internal class WordProcessBinder internal constructor(
+  private val interactor: WordProcessInteractor
+) : UiBinder<WordProcessBinder.Callback>() {
 
   private var processDisposable by singleDisposable()
 
   override fun onBind() {
-    listen()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe {
-          return@subscribe when (it) {
-            is Begin -> callback.onProcessBegin()
-            is ProcessResult -> callback.onProcessSuccess(it.result)
-            is ProcessError -> callback.onProcessError(it.error)
-            is Complete -> callback.onProcessComplete()
-          }
-        }
-        .destroy()
   }
 
   override fun onUnbind() {
     processDisposable.tryDispose()
   }
 
-  override fun process(
+  fun process(
     component: ComponentName,
     text: CharSequence
   ) {
     processDisposable = interactor.getProcessType(component, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
-        .doAfterTerminate { publish(Complete) }
-        .doOnSubscribe { publish(Begin) }
-        .subscribe({ publish(ProcessResult(it)) }, {
+        .doAfterTerminate { callback.onProcessComplete() }
+        .doOnSubscribe { callback.onProcessBegin() }
+        .subscribe({ callback.onProcessSuccess(it) }, {
           Timber.e(it, "Error handling process request")
-          publish(ProcessError(it))
+          callback.onProcessError(it)
         })
+  }
+
+  interface Callback : UiBinder.Callback {
+
+    fun onProcessBegin()
+
+    fun onProcessSuccess(result: WordProcessResult)
+
+    fun onProcessError(throwable: Throwable)
+
+    fun onProcessComplete()
+
   }
 
 }

@@ -20,7 +20,6 @@ package com.pyamsoft.wordwiz
 import android.app.Application
 import android.view.ViewGroup
 import androidx.preference.PreferenceScreen
-import com.pyamsoft.pydroid.core.bus.RxBus
 import com.pyamsoft.pydroid.ui.ModuleProvider
 import com.pyamsoft.wordwiz.api.WordWizModule
 import com.pyamsoft.wordwiz.base.WordWizModuleImpl
@@ -29,9 +28,8 @@ import com.pyamsoft.wordwiz.main.MainComponentImpl
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponentImpl
 import com.pyamsoft.wordwiz.word.WordProcessActivity
-import com.pyamsoft.wordwiz.word.WordProcessEvent
 import com.pyamsoft.wordwiz.word.WordProcessModule
-import com.pyamsoft.wordwiz.word.WordProcessPresenterImpl
+import com.pyamsoft.wordwiz.word.WordProcessBinder
 
 class WordWizComponentImpl(
   application: Application,
@@ -39,8 +37,6 @@ class WordWizComponentImpl(
 ) : WordWizComponent {
 
   private val wordProcessModule: WordProcessModule
-
-  private val processBus = RxBus.create<WordProcessEvent>()
 
   init {
     val wordWizModule: WordWizModule = WordWizModuleImpl(
@@ -51,7 +47,7 @@ class WordWizComponentImpl(
 
   override fun inject(activity: WordProcessActivity) {
     activity.apply {
-      this.presenter = WordProcessPresenterImpl(wordProcessModule.interactor, processBus)
+      this.binder = WordProcessBinder(wordProcessModule.interactor)
     }
   }
 

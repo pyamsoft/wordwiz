@@ -32,9 +32,9 @@ import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.api.WordProcessResult
 import timber.log.Timber
 
-abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callback {
+abstract class WordProcessActivity : ActivityBase(), WordProcessBinder.Callback {
 
-  internal lateinit var presenter: WordProcessPresenter
+  internal lateinit var binder: WordProcessBinder
 
   private val handler = Handler(Looper.getMainLooper())
 
@@ -52,7 +52,7 @@ abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callba
         .inject(this)
 
     super.onCreate(savedInstanceState)
-    presenter.bind(this)
+    binder.bind(this)
     requestWordProcess()
   }
 
@@ -67,13 +67,13 @@ abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callba
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-    presenter.unbind()
+    binder.unbind()
   }
 
   private fun requestWordProcess() {
     Timber.d("Handle a process text intent")
     val text = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    presenter.process(componentName, text)
+    binder.process(componentName, text)
   }
 
   override fun onProcessBegin() {
