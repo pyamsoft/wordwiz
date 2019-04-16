@@ -17,42 +17,48 @@
 
 package com.pyamsoft.wordwiz.word
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
-import com.pyamsoft.pydroid.ui.theme.ThemeInjector
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.Toaster
-import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
-import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
-import com.pyamsoft.wordwiz.word.WordProcessPresenter.ProcessState
-import timber.log.Timber
+import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-internal abstract class WordProcessActivity : ActivityBase(), WordProcessPresenter.Callback {
+internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiComponent.Callback {
+
+  @field:Inject internal lateinit var component: WordProcessUiComponent
 
   private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
-
-  internal lateinit var presenter: WordProcessPresenter
 
   final override val fragmentContainerId: Int = 0
 
   final override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
-    if (ThemeInjector.obtain(applicationContext).isDarkTheme()) {
+    if (Injector.obtain<Theming>(applicationContext).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark_Transparent)
     } else {
       setTheme(R.style.Theme_WordWiz_Light_Transparent)
     }
     super.onCreate(savedInstanceState)
 
+    val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+    if (text == null) {
+      finish()
+      return
+    }
+
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusWordComponent()
+        .create(componentName, text)
         .inject(this)
-    presenter.bind(this)
+
+    component.bind(this, savedInstanceState, this)
   }
 
   final override fun onStop() {
@@ -71,74 +77,23 @@ internal abstract class WordProcessActivity : ActivityBase(), WordProcessPresent
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
-    presenter.unbind()
   }
 
-  final override fun onRender(
-    state: ProcessState,
-    oldState: ProcessState?
-  ) {
-    renderLoading(state, oldState)
-    renderResult(state, oldState)
-    renderError(state, oldState)
+  override fun beginProcessing() {
+    handler.removeCallbacksAndMessages(null)
   }
 
-  private fun renderLoading(
-    state: ProcessState,
-    oldState: ProcessState?
-  ) {
-    state.isProcessing.let { processing ->
-      if (oldState == null || oldState.isProcessing != processing) {
-        if (processing) {
-          handler.removeCallbacksAndMessages(null)
-        } else {
-          handler.removeCallbacksAndMessages(null)
-          handler.postDelayed({ finish() }, 750)
-        }
-      }
-    }
+  override fun finishProcessing() {
+    handler.removeCallbacksAndMessages(null)
+    handler.postDelayed({ finish() }, 750)
   }
 
-  private fun renderResult(
-    state: ProcessState,
-    oldState: ProcessState?
-  ) {
-    state.result.let { result ->
-      if (oldState == null || oldState.result != result) {
-        if (result == null) {
-          dismissToast()
-        } else {
-          when (result.type) {
-            WORD_COUNT -> toast("Word count: ${result.count}")
-            LETTER_COUNT -> toast("Letter count: ${result.count}")
-            else -> Timber.w("Unhandled process success: ${result.type}")
-          }
-        }
-      }
-    }
-  }
-
-  private fun renderError(
-    state: ProcessState,
-    oldState: ProcessState?
-  ) {
-    state.throwable.let { throwable ->
-      if (oldState == null || oldState.throwable != throwable) {
-        if (throwable == null) {
-          dismissToast()
-        } else {
-          toast(throwable.message ?: "Error processing selected text")
-        }
-      }
-    }
-  }
-
-  private fun dismissToast() {
+  override fun hideMessage() {
     Toaster.bindTo(this)
         .dismiss()
   }
 
-  private fun toast(message: String) {
+  override fun showMessage(message: String) {
     Toaster.bindTo(this)
         .short(applicationContext, message)
         .show()

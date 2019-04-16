@@ -19,18 +19,18 @@ package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.View
+import com.pyamsoft.pydroid.ui.Injector
+import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
-import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.widget.ToolbarView
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
+import javax.inject.Inject
 
-class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView.Callback {
+class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsUiComponent.Callback {
 
-  internal lateinit var toolbarView: ToolbarView
-  internal lateinit var settingsView: SettingsView
+  @field:Inject internal lateinit var component: SettingsUiComponent
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -43,35 +43,28 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsView
     super.onViewCreated(view, savedInstanceState)
 
     Injector.obtain<WordWizComponent>(requireContext().applicationContext)
-        .plusSettingsComponent(preferenceScreen)
+        .plusSettingsComponent()
+        .create(requireToolbarActivity(), preferenceScreen)
         .inject(this)
 
-    settingsView.inflate(savedInstanceState)
-    toolbarView.inflate(savedInstanceState)
+    component.bind(viewLifecycleOwner, savedInstanceState, this)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    toolbarView.saveState(outState)
-    settingsView.saveState(outState)
+    component.saveState(outState)
   }
 
   override fun onStart() {
     super.onStart()
-    settingsView.syncState()
+    component.sync()
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    toolbarView.teardown()
-    settingsView.teardown()
-  }
-
-  override fun onWordCountToggled(enabled: Boolean) {
+  override fun onWordCountChanged(enabled: Boolean) {
     WordCountActivity.enable(requireContext(), enabled)
   }
 
-  override fun onLetterCountToggled(enabled: Boolean) {
+  override fun onLetterCountChanged(enabled: Boolean) {
     LetterCountActivity.enable(requireContext(), enabled)
   }
 

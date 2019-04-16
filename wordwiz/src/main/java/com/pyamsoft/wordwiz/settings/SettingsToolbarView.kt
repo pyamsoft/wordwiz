@@ -15,7 +15,7 @@
  *
  */
 
-package com.pyamsoft.wordwiz.widget
+package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import com.pyamsoft.pydroid.arch.UiView
@@ -23,8 +23,9 @@ import com.pyamsoft.pydroid.ui.app.ToolbarActivity
 import com.pyamsoft.pydroid.ui.arch.InvalidIdException
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.R
+import javax.inject.Inject
 
-internal class ToolbarView internal constructor(
+internal class SettingsToolbarView @Inject internal constructor(
   private val toolbarActivity: ToolbarActivity
 ) : UiView {
 

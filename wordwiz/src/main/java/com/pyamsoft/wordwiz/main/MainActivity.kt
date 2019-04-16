@@ -23,23 +23,24 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.pyamsoft.pydroid.arch.layout
+import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
-import com.pyamsoft.pydroid.ui.theme.ThemeInjector
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.commit
 import com.pyamsoft.wordwiz.BuildConfig
-import com.pyamsoft.wordwiz.Injector
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
-import com.pyamsoft.wordwiz.settings.MainFragment
+import com.pyamsoft.wordwiz.settings.SettingsFragment
+import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : RatingActivity() {
 
-  internal lateinit var toolbarComponent: MainToolbarUiComponent
-  internal lateinit var component: MainUiComponent
+  @field:Inject internal lateinit var toolbarComponent: MainToolbarUiComponent
+  @field:Inject internal lateinit var component: MainUiComponent
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
@@ -58,7 +59,7 @@ class MainActivity : RatingActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    if (ThemeInjector.obtain(applicationContext).isDarkTheme()) {
+    if (Injector.obtain<Theming>(applicationContext).isDarkTheme()) {
       setTheme(R.style.Theme_WordWiz_Dark)
     } else {
       setTheme(R.style.Theme_WordWiz_Light)
@@ -68,7 +69,8 @@ class MainActivity : RatingActivity() {
 
     val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
     Injector.obtain<WordWizComponent>(applicationContext)
-        .plusMainComponent(layoutRoot)
+        .plusMainComponent()
+        .create(this, layoutRoot)
         .inject(this)
 
     component.bind(layoutRoot, this, savedInstanceState, Unit)
@@ -98,11 +100,11 @@ class MainActivity : RatingActivity() {
 
   private fun showPreferenceFragment() {
     val fragmentManager = supportFragmentManager
-    val tag = MainFragment.TAG
+    val tag = SettingsFragment.TAG
     if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
     ) {
       fragmentManager.beginTransaction()
-          .add(fragmentContainerId, MainFragment(), tag)
+          .add(fragmentContainerId, SettingsFragment(), tag)
           .commit(this)
     }
   }

@@ -17,8 +17,52 @@
 
 package com.pyamsoft.wordwiz.main
 
-interface MainComponent {
+import android.view.ViewGroup
+import androidx.annotation.CheckResult
+import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
+import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
+import com.pyamsoft.wordwiz.main.MainComponent.MainModule
+import dagger.Binds
+import dagger.BindsInstance
+import dagger.Module
+import dagger.Provides
+import dagger.Subcomponent
+
+@Subcomponent(modules = [MainModule::class])
+internal interface MainComponent {
 
   fun inject(activity: MainActivity)
+
+  @Subcomponent.Factory
+  interface Factory {
+
+    @CheckResult
+    fun create(
+      @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
+      @BindsInstance layoutRoot: ViewGroup
+    ): MainComponent
+  }
+
+  @Module
+  abstract class MainModule {
+
+    @Binds
+    @CheckResult
+    internal abstract fun bindUiComponent(impl: MainUiComponentImpl): MainUiComponent
+
+    @Binds
+    @CheckResult
+    internal abstract fun bindToolbarComponent(impl: MainToolbarUiComponentImpl): MainToolbarUiComponent
+
+    @Module
+    companion object {
+
+      @JvmStatic
+      @Provides
+      internal fun provideDropshadow(parent: ViewGroup): DropshadowView {
+        return DropshadowView(parent)
+      }
+    }
+  }
 
 }

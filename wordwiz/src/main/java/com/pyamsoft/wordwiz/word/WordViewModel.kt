@@ -18,27 +18,26 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.arch.Presenter
+import com.pyamsoft.pydroid.arch.UiState
+import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.api.WordProcessResult
-import com.pyamsoft.wordwiz.word.WordProcessPresenter.ProcessState
+import com.pyamsoft.wordwiz.word.WordViewModel.ProcessState
+import com.pyamsoft.wordwiz.word.WordViewModel.ProcessState.Processing
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import javax.inject.Inject
 
-internal class WordProcessPresenter internal constructor(
+internal class WordViewModel @Inject internal constructor(
   private val interactor: WordProcessInteractor,
   private val component: ComponentName,
   private val text: CharSequence
-) : Presenter<ProcessState, WordProcessPresenter.Callback>() {
+) : UiViewModel<ProcessState>(
+    initialState = ProcessState(isProcessing = null, throwable = null, result = null)
+) {
 
   private var processDisposable by singleDisposable()
-
-  override fun initialState(): ProcessState {
-    return ProcessState(isProcessing = false, throwable = null, result = null)
-  }
 
   override fun onBind() {
     process()
@@ -62,7 +61,7 @@ internal class WordProcessPresenter internal constructor(
 
   private fun handleProcessBegin() {
     setState {
-      copy(isProcessing = true)
+      copy(isProcessing = Processing(true))
     }
   }
 
@@ -80,16 +79,18 @@ internal class WordProcessPresenter internal constructor(
 
   private fun handleProcessComplete() {
     setState {
-      copy(isProcessing = false)
+      copy(isProcessing = Processing(false))
     }
   }
 
   data class ProcessState(
-    val isProcessing: Boolean,
+    val isProcessing: Processing?,
     val throwable: Throwable?,
     val result: WordProcessResult?
-  )
+  ) : UiState {
 
-  interface Callback : Presenter.Callback<ProcessState>
+    data class Processing(val isProcessing: Boolean)
+
+  }
 
 }

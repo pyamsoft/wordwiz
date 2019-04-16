@@ -25,10 +25,11 @@ import com.pyamsoft.pydroid.ui.arch.PrefUiView
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
+import javax.inject.Inject
 
-internal class SettingsView internal constructor(
+internal class SettingsView @Inject internal constructor(
   preferenceScreen: PreferenceScreen,
-  callback: SettingsView.Callback
+  callback: Callback
 ) : PrefUiView<SettingsView.Callback>(preferenceScreen, callback), LifecycleObserver {
 
   private val wordCount by lazyPref<SwitchPreferenceCompat>(R.string.word_count_key)
@@ -51,8 +52,6 @@ internal class SettingsView internal constructor(
     wordCount.setOnPreferenceClickListener {
       val enabled = WordCountActivity.isEnabled(wordCount.context)
       callback.onWordCountToggled(!enabled)
-      syncState()
-
       return@setOnPreferenceClickListener true
     }
   }
@@ -61,8 +60,6 @@ internal class SettingsView internal constructor(
     letterCount.setOnPreferenceClickListener {
       val enabled = LetterCountActivity.isEnabled(letterCount.context)
       callback.onLetterCountToggled(!enabled)
-      syncState()
-
       return@setOnPreferenceClickListener true
     }
   }

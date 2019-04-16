@@ -26,8 +26,9 @@ import com.pyamsoft.pydroid.arch.BaseUiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
+import javax.inject.Inject
 
-internal class MainToolbarView internal constructor(
+internal class MainToolbarView @Inject internal constructor(
   parent: ViewGroup,
   private val toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<Unit>(parent, Unit) {

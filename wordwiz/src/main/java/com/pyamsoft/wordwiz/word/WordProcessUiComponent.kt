@@ -15,24 +15,21 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.word
 
-import android.view.ViewGroup
-import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
+import com.pyamsoft.pydroid.arch.UiComponent
 
-internal class MainComponentImpl internal constructor(
-  private val parent: ViewGroup
-) : MainComponent {
+internal interface WordProcessUiComponent : UiComponent<WordProcessUiComponent.Callback> {
 
-  override fun inject(activity: MainActivity) {
-    val frameView = MainFrameView(parent)
-    val toolbarView = MainToolbarView(parent, activity)
-    val dropshadow = DropshadowView(parent)
+  interface Callback {
 
-    activity.apply {
-      this.component = MainUiComponentImpl(frameView)
-      this.toolbarComponent = MainToolbarUiComponentImpl(toolbarView, dropshadow)
-    }
+    fun beginProcessing()
+
+    fun finishProcessing()
+
+    fun hideMessage()
+
+    fun showMessage(message: String)
   }
 
 }

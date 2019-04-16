@@ -15,17 +15,10 @@
  *
  */
 
-package com.pyamsoft.wordwiz.api
+package com.pyamsoft.wordwiz.word
 
-import android.content.ComponentName
-import androidx.annotation.CheckResult
-import io.reactivex.Single
-
-interface WordProcessInteractor {
-
-  @CheckResult
-  fun getProcessType(
-    componentName: ComponentName,
-    text: CharSequence
-  ): Single<WordProcessResult>
+enum class ProcessType {
+  WORD_COUNT,
+  LETTER_COUNT,
+  OCCURRENCES
 }

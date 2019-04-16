@@ -15,23 +15,21 @@
  *
  */
 
-package com.pyamsoft.wordwiz.base
+package com.pyamsoft.wordwiz.settings
 
-import android.app.Application
-import android.content.Context
-import com.pyamsoft.pydroid.core.cache.Cache
-import com.pyamsoft.pydroid.loader.ImageLoader
-import com.pyamsoft.wordwiz.api.WordWizModule
+import com.pyamsoft.pydroid.ui.settings.AppSettingsFragment
+import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
+import com.pyamsoft.wordwiz.settings.SettingsPreferenceFragment.Companion
 
-class WordWizModuleImpl(
-  private val application: Application,
-  private val imageLoader: ImageLoader
-) : WordWizModule {
+class SettingsFragment : AppSettingsFragment() {
 
-  override fun provideApplication(): Application = application
+  override fun provideSettingsFragment(): AppSettingsPreferenceFragment =
+    SettingsPreferenceFragment()
 
-  override fun provideContext(): Context = provideApplication()
+  override fun provideSettingsTag(): String =
+    SettingsPreferenceFragment.TAG
 
-  override fun provideImageLoader(): ImageLoader = imageLoader
-
+  companion object {
+    const val TAG = "SettingsFragment"
+  }
 }

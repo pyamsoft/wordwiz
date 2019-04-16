@@ -23,16 +23,15 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.threads.Enforcer
-import com.pyamsoft.wordwiz.api.WordProcessInteractor
-import com.pyamsoft.wordwiz.api.WordProcessResult
-import com.pyamsoft.wordwiz.api.ProcessType.LETTER_COUNT
-import com.pyamsoft.wordwiz.api.ProcessType.WORD_COUNT
+import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
+import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
 import io.reactivex.Single
 import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-internal class WordProcessInteractorImpl internal constructor(
+internal class WordProcessInteractorImpl @Inject internal constructor(
   context: Context,
   private val enforcer: Enforcer
 ) : WordProcessInteractor {
@@ -114,8 +113,12 @@ internal class WordProcessInteractorImpl internal constructor(
   ): WordProcessResult {
     enforcer.assertNotOnMainThread()
     return when (label) {
-      labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
-      labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+      labelTypeWordCount -> WordProcessResult(
+          WORD_COUNT, getWordCount(text)
+      )
+      labelTypeLetterCount -> WordProcessResult(
+          LETTER_COUNT, getLetterCount(text)
+      )
       labelTypeOccurrences -> throw RuntimeException("Not ready yet")
       else -> throw IllegalArgumentException("Invalid label: $label")
     }

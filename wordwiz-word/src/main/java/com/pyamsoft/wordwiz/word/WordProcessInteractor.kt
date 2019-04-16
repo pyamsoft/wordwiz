@@ -15,21 +15,17 @@
  *
  */
 
-package com.pyamsoft.wordwiz.api
+package com.pyamsoft.wordwiz.word
 
-import android.app.Application
-import android.content.Context
+import android.content.ComponentName
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.loader.ImageLoader
+import io.reactivex.Single
 
-interface WordWizModule {
-
-  @CheckResult
-  fun provideApplication(): Application
+interface WordProcessInteractor {
 
   @CheckResult
-  fun provideContext(): Context
-
-  @CheckResult
-  fun provideImageLoader(): ImageLoader
+  fun getProcessType(
+    componentName: ComponentName,
+    text: CharSequence
+  ): Single<WordProcessResult>
 }

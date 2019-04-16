@@ -15,23 +15,9 @@
  *
  */
 
-package com.pyamsoft.wordwiz.settings
+package com.pyamsoft.wordwiz.word
 
-import androidx.preference.PreferenceScreen
-import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
-import com.pyamsoft.wordwiz.widget.ToolbarView
-
-internal class SettingsComponentImpl internal constructor(
-  private val preferenceScreen: PreferenceScreen
-) : SettingsComponent {
-
-  override fun inject(fragment: SettingsPreferenceFragment) {
-    val settingsView = SettingsView(preferenceScreen, fragment)
-
-    fragment.apply {
-      this.settingsView = settingsView
-      this.toolbarView = ToolbarView(fragment.requireToolbarActivity())
-    }
-  }
-
-}
+data class WordProcessResult(
+  val type: ProcessType,
+  val count: Int
+)

@@ -102,6 +102,9 @@ dependencies {
   // PYDroid
   implementation "com.pyamsoft.pydroid:ui:$pydroid"
 
+  implementation "com.google.dagger:dagger:$dagger"
+  kapt "com.google.dagger:dagger-compiler:$dagger"
+
   implementation project(":wordwiz-base")
   implementation project(":wordwiz-word")
 }

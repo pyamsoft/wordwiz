@@ -19,18 +19,13 @@ package com.pyamsoft.wordwiz
 
 import android.app.Application
 import com.pyamsoft.pydroid.ui.PYDroid
-import com.pyamsoft.pydroid.ui.PYDroid.Instance
-import com.pyamsoft.pydroid.ui.theme.ThemeInjector
-import com.pyamsoft.pydroid.ui.theme.Theming
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 
-class WordWiz : Application(), Instance {
+class WordWiz : Application() {
 
-  private var pyDroid: PYDroid? = null
   private lateinit var refWatcher: RefWatcher
   private lateinit var component: WordWizComponent
-  private lateinit var theming: Theming
 
   override fun onCreate() {
     super.onCreate()
@@ -46,30 +41,27 @@ class WordWiz : Application(), Instance {
 
     PYDroid.init(
         this,
-        this,
         getString(R.string.app_name),
         "https://github.com/pyamsoft/wordwiz/issues",
         BuildConfig.VERSION_CODE,
         BuildConfig.DEBUG
-    )
-  }
-
-  override fun getPydroid(): PYDroid? = pyDroid
-
-  override fun setPydroid(instance: PYDroid) {
-    pyDroid = instance.also {
-      component = WordWizComponentImpl(this, it.modules())
-      theming = it.modules()
-          .theming()
+    ) { provider ->
+      component = DaggerWordWizComponent.factory()
+          .create(this, provider.enforcer())
     }
   }
 
   override fun getSystemService(name: String): Any {
-    return when (name) {
-      Injector.name -> component
-      ThemeInjector.name -> theming
-      else -> super.getSystemService(name)
+    val service = PYDroid.getSystemService(name)
+    if (service != null) {
+      return service
     }
+
+    if (WordWizComponent::class.java.name == name) {
+      return component
+    }
+
+    return super.getSystemService(name)
   }
 
 }

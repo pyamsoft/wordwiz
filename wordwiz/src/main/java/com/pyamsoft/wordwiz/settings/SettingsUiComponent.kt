@@ -15,22 +15,18 @@
  *
  */
 
-package com.pyamsoft.wordwiz.word
+package com.pyamsoft.wordwiz.settings
 
-import android.content.Intent
-import com.pyamsoft.wordwiz.api.WordProcessInteractor
+import com.pyamsoft.pydroid.arch.UiComponent
 
-internal class WordComponentImpl internal constructor(
-  private val interactor: WordProcessInteractor
-) : WordComponent {
+internal interface SettingsUiComponent : UiComponent<SettingsUiComponent.Callback> {
 
-  override fun inject(activity: WordProcessActivity) {
-    val text = activity.intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    val componentName = activity.componentName
+  fun sync()
 
-    activity.apply {
-      this.presenter = WordProcessPresenter(interactor, componentName, text)
-    }
+  interface Callback {
+
+    fun onWordCountChanged(enabled: Boolean)
+
+    fun onLetterCountChanged(enabled: Boolean)
   }
-
 }

@@ -17,8 +17,37 @@
 
 package com.pyamsoft.wordwiz.word
 
+import android.content.ComponentName
+import androidx.annotation.CheckResult
+import com.pyamsoft.wordwiz.word.WordComponent.WordModule
+import dagger.Binds
+import dagger.BindsInstance
+import dagger.Module
+import dagger.Subcomponent
+
+@Subcomponent(modules = [WordModule::class])
 internal interface WordComponent {
 
   fun inject(activity: WordProcessActivity)
+
+  @Subcomponent.Factory
+  interface Factory {
+
+    @CheckResult
+    fun create(
+      @BindsInstance componentName: ComponentName,
+      @BindsInstance text: CharSequence
+    ): WordComponent
+
+  }
+
+  @Module
+  abstract class WordModule {
+
+    @Binds
+    @CheckResult
+    internal abstract fun bindUiComponent(impl: WordProcessUiComponentImpl): WordProcessUiComponent
+
+  }
 
 }
