@@ -52,7 +52,7 @@ kapt {
 }
 
 dependencies {
-  api project(":wordwiz-api")
+  implementation "com.pyamsoft.pydroid:core:$pydroid"
 
   implementation "com.google.dagger:dagger:$dagger"
   kapt "com.google.dagger:dagger-compiler:$dagger"

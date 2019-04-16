@@ -15,4 +15,4 @@
  *
  */
 
-include ':wordwiz', ':wordwiz-base', ':wordwiz-word', ':wordwiz-api'
+include ':wordwiz', ':wordwiz-word'
