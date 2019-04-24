@@ -33,7 +33,7 @@ internal class MainToolbarView @Inject internal constructor(
   private val toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<Unit>(parent, Unit) {
 
-  override val layoutRoot by lazyView<Toolbar>(R.id.toolbar)
+  override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
 
   override val layout: Int = R.layout.toolbar
 
