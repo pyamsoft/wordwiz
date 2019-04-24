@@ -20,12 +20,10 @@ package com.pyamsoft.wordwiz
 import android.app.Application
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
 
 class WordWiz : Application() {
 
-  private lateinit var refWatcher: RefWatcher
-  private lateinit var component: WordWizComponent
+  private var component: WordWizComponent? = null
 
   override fun onCreate() {
     super.onCreate()
@@ -34,9 +32,7 @@ class WordWiz : Application() {
     }
 
     if (BuildConfig.DEBUG) {
-      refWatcher = LeakCanary.install(this)
-    } else {
-      refWatcher = RefWatcher.DISABLED
+      LeakCanary.install(this)
     }
 
     PYDroid.init(
@@ -58,7 +54,7 @@ class WordWiz : Application() {
     }
 
     if (WordWizComponent::class.java.name == name) {
-      return component
+      return requireNotNull(component)
     }
 
     return super.getSystemService(name)

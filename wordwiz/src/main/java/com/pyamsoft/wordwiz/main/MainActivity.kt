@@ -39,8 +39,8 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : RatingActivity() {
 
-  @field:Inject internal lateinit var toolbarComponent: MainToolbarUiComponent
-  @field:Inject internal lateinit var component: MainUiComponent
+  @JvmField @Inject internal var toolbarComponent: MainToolbarUiComponent? = null
+  @JvmField @Inject internal var component: MainUiComponent? = null
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
@@ -51,7 +51,7 @@ class MainActivity : RatingActivity() {
   }
 
   override val fragmentContainerId: Int
-    get() = component.id()
+    get() = requireNotNull(component).id()
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
     change("New icon style")
@@ -73,6 +73,8 @@ class MainActivity : RatingActivity() {
         .create(this, layoutRoot)
         .inject(this)
 
+    val component = requireNotNull(component)
+    val toolbarComponent = requireNotNull(toolbarComponent)
     component.bind(layoutRoot, this, savedInstanceState, Unit)
     toolbarComponent.bind(layoutRoot, this, savedInstanceState, Unit)
     layoutRoot.layout {
@@ -111,7 +113,13 @@ class MainActivity : RatingActivity() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    toolbarComponent.saveState(outState)
-    component.saveState(outState)
+    toolbarComponent?.saveState(outState)
+    component?.saveState(outState)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    component = null
+    toolbarComponent = null
   }
 }

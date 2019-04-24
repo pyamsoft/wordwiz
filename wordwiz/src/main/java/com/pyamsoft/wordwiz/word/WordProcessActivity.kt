@@ -32,7 +32,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiComponent.Callback {
 
-  @field:Inject internal lateinit var component: WordProcessUiComponent
+  @JvmField @Inject internal var component: WordProcessUiComponent? = null
 
   private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
@@ -58,7 +58,12 @@ internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiCompo
         .create(componentName, text)
         .inject(this)
 
-    component.bind(this, savedInstanceState, this)
+    requireNotNull(component).bind(this, savedInstanceState, this)
+  }
+
+  final override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    component?.saveState(outState)
   }
 
   final override fun onStop() {
@@ -77,6 +82,8 @@ internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiCompo
     super.onDestroy()
     overridePendingTransition(0, 0)
     handler.removeCallbacksAndMessages(null)
+
+    component = null
   }
 
   override fun beginProcessing() {
