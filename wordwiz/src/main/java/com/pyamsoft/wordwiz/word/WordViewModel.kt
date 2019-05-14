@@ -18,12 +18,12 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.arch.UiState
-import com.pyamsoft.pydroid.arch.UiViewModel
+import com.pyamsoft.pydroid.arch.impl.BaseUiViewModel
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
-import com.pyamsoft.wordwiz.word.WordViewModel.ProcessState
-import com.pyamsoft.wordwiz.word.WordViewModel.ProcessState.Processing
+import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
+import com.pyamsoft.wordwiz.word.WordProcessState.Processing
+import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -33,18 +33,20 @@ internal class WordViewModel @Inject internal constructor(
   private val interactor: WordProcessInteractor,
   private val component: ComponentName,
   private val text: CharSequence
-) : UiViewModel<ProcessState>(
-    initialState = ProcessState(isProcessing = null, throwable = null, result = null)
+) : BaseUiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
+    initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
 ) {
 
   private var processDisposable by singleDisposable()
 
-  override fun onBind() {
-    process()
+  override fun handleViewEvent(event: WordProcessViewEvent) {
+    return when (event) {
+      is CloseScreen -> publish(Finish)
+    }
   }
 
-  override fun onUnbind() {
-    processDisposable.tryDispose()
+  override fun onBind() {
+    process()
   }
 
   private fun process() {
@@ -52,6 +54,7 @@ internal class WordViewModel @Inject internal constructor(
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .doAfterTerminate { handleProcessComplete() }
+        .doAfterTerminate { processDisposable.tryDispose() }
         .doOnSubscribe { handleProcessBegin() }
         .subscribe({ handleProcessSuccess(it) }, {
           Timber.e(it, "Error handling process request")
@@ -60,37 +63,19 @@ internal class WordViewModel @Inject internal constructor(
   }
 
   private fun handleProcessBegin() {
-    setState {
-      copy(isProcessing = Processing(true))
-    }
+    setState { copy(isProcessing = Processing(true)) }
   }
 
   private fun handleProcessSuccess(result: WordProcessResult) {
-    setState {
-      copy(result = result, throwable = null)
-    }
+    setState { copy(result = result, throwable = null) }
   }
 
   private fun handleProcessError(throwable: Throwable) {
-    setState {
-      copy(result = null, throwable = throwable)
-    }
+    setState { copy(result = null, throwable = throwable) }
   }
 
   private fun handleProcessComplete() {
-    setState {
-      copy(isProcessing = Processing(false))
-    }
-  }
-
-  data class ProcessState(
-    val isProcessing: Processing?,
-    val throwable: Throwable?,
-    val result: WordProcessResult?
-  ) : UiState {
-
-    data class Processing(val isProcessing: Boolean)
-
+    setState { copy(isProcessing = Processing(false)) }
   }
 
 }

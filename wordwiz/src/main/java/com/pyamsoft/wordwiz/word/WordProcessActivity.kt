@@ -19,22 +19,19 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import com.pyamsoft.pydroid.arch.impl.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
 import com.pyamsoft.pydroid.ui.theme.Theming
-import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 
-internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiComponent.Callback {
+internal abstract class WordProcessActivity : ActivityBase() {
 
-  @JvmField @Inject internal var component: WordProcessUiComponent? = null
-
-  private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
+  @JvmField @Inject internal var viewModel: WordViewModel? = null
+  @JvmField @Inject internal var view: WordView? = null
 
   final override val fragmentContainerId: Int = 0
 
@@ -48,22 +45,25 @@ internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiCompo
     super.onCreate(savedInstanceState)
 
     val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    if (text == null) {
+    if (text == null || text.isBlank()) {
       finish()
       return
     }
 
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusWordComponent()
-        .create(componentName, text)
+        .create(this, componentName, text)
         .inject(this)
 
-    requireNotNull(component).bind(this, savedInstanceState, this)
-  }
-
-  final override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    component?.saveState(outState)
+    createComponent(
+        savedInstanceState, this,
+        requireNotNull(viewModel),
+        requireNotNull(view)
+    ) {
+      return@createComponent when (it) {
+        is Finish -> finish()
+      }
+    }
   }
 
   final override fun onStop() {
@@ -81,28 +81,5 @@ internal abstract class WordProcessActivity : ActivityBase(), WordProcessUiCompo
   final override fun onDestroy() {
     super.onDestroy()
     overridePendingTransition(0, 0)
-    handler.removeCallbacksAndMessages(null)
-
-    component = null
-  }
-
-  override fun beginProcessing() {
-    handler.removeCallbacksAndMessages(null)
-  }
-
-  override fun finishProcessing() {
-    handler.removeCallbacksAndMessages(null)
-    handler.postDelayed({ finish() }, 750)
-  }
-
-  override fun hideMessage() {
-    Toaster.bindTo(this)
-        .dismiss()
-  }
-
-  override fun showMessage(message: String) {
-    Toaster.bindTo(this)
-        .short(applicationContext, message)
-        .show()
   }
 }

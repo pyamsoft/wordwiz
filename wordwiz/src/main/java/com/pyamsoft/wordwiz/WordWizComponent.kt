@@ -19,23 +19,17 @@ package com.pyamsoft.wordwiz
 
 import android.content.Context
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.bus.EventBus
-import com.pyamsoft.pydroid.core.bus.RxBus
 import com.pyamsoft.pydroid.core.threads.Enforcer
-import com.pyamsoft.wordwiz.WordWizComponent.WordModule
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
-import com.pyamsoft.wordwiz.settings.SettingsHandler.SettingsEvent
 import com.pyamsoft.wordwiz.word.WordComponent
 import com.pyamsoft.wordwiz.word.WordProcessModule
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
-import dagger.Provides
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [WordModule::class, WordProcessModule::class])
+@Component(modules = [WordProcessModule::class])
 internal interface WordWizComponent {
 
   @CheckResult
@@ -55,23 +49,6 @@ internal interface WordWizComponent {
       @BindsInstance context: Context,
       @BindsInstance enforcer: Enforcer
     ): WordWizComponent
-  }
-
-  @Module
-  abstract class WordModule {
-
-    @Module
-    companion object {
-
-      @JvmStatic
-      @Provides
-      @Singleton
-      @CheckResult
-      internal fun provideSettingsEventBus(): EventBus<SettingsEvent> {
-        return RxBus.create()
-      }
-    }
-
   }
 
 }

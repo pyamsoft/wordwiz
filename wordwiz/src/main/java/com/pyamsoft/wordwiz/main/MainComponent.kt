@@ -22,7 +22,6 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
 import com.pyamsoft.wordwiz.main.MainComponent.MainModule
-import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
@@ -45,14 +44,6 @@ internal interface MainComponent {
 
   @Module
   abstract class MainModule {
-
-    @Binds
-    @CheckResult
-    internal abstract fun bindUiComponent(impl: MainUiComponentImpl): MainUiComponent
-
-    @Binds
-    @CheckResult
-    internal abstract fun bindToolbarComponent(impl: MainToolbarUiComponentImpl): MainToolbarUiComponent
 
     @Module
     companion object {

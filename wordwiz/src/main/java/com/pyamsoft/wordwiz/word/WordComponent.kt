@@ -19,13 +19,11 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import androidx.annotation.CheckResult
-import com.pyamsoft.wordwiz.word.WordComponent.WordModule
-import dagger.Binds
+import androidx.lifecycle.LifecycleOwner
 import dagger.BindsInstance
-import dagger.Module
 import dagger.Subcomponent
 
-@Subcomponent(modules = [WordModule::class])
+@Subcomponent
 internal interface WordComponent {
 
   fun inject(activity: WordProcessActivity)
@@ -35,18 +33,10 @@ internal interface WordComponent {
 
     @CheckResult
     fun create(
+      @BindsInstance owner: LifecycleOwner,
       @BindsInstance componentName: ComponentName,
       @BindsInstance text: CharSequence
     ): WordComponent
-
-  }
-
-  @Module
-  abstract class WordModule {
-
-    @Binds
-    @CheckResult
-    internal abstract fun bindUiComponent(impl: WordProcessUiComponentImpl): WordProcessUiComponent
 
   }
 

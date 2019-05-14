@@ -17,45 +17,39 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.pydroid.arch.UiEventHandler
-import com.pyamsoft.pydroid.arch.UiState
-import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.wordwiz.settings.SettingsHandler.SettingsEvent
-import com.pyamsoft.wordwiz.settings.SettingsViewModel.SettingsState
-import com.pyamsoft.wordwiz.settings.SettingsViewModel.SettingsState.Enabled
+import android.content.Context
+import com.pyamsoft.pydroid.arch.impl.BaseUiViewModel
+import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.LetterCountAction
+import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.WordCountAction
+import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
+import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
+import com.pyamsoft.wordwiz.word.LetterCountActivity
+import com.pyamsoft.wordwiz.word.WordCountActivity
 import javax.inject.Inject
 
 internal class SettingsViewModel @Inject internal constructor(
-  private val handler: UiEventHandler<SettingsEvent, SettingsView.Callback>
-) : UiViewModel<SettingsState>(
-    initialState = SettingsState(isWordCountEnabled = null, isLetterCountEnabled = null)
-), SettingsView.Callback {
+  context: Context
+) : BaseUiViewModel<SettingsViewState, SettingsViewEvent, SettingsControllerEvent>(
+    initialState = SettingsViewState(
+        isWordCountEnabled = WordCountActivity.isEnabled(context),
+        isLetterCountEnabled = LetterCountActivity.isEnabled(context)
+    )
+) {
 
-  override fun onBind() {
-    handler.handle(this)
-        .disposeOnDestroy()
+  private fun onWordCountToggled(enabled: Boolean) {
+    setState { copy(isWordCountEnabled = enabled) }
+    publish(WordCountAction(enabled))
   }
 
-  override fun onUnbind() {
+  private fun onLetterCountToggled(enabled: Boolean) {
+    setState { copy(isLetterCountEnabled = enabled) }
+    publish(LetterCountAction(enabled))
   }
 
-  override fun onWordCountToggled(enabled: Boolean) {
-    setState {
-      copy(isWordCountEnabled = Enabled(enabled))
+  override fun handleViewEvent(event: SettingsViewEvent) {
+    return when (event) {
+      is ToggleWordCount -> onWordCountToggled(event.isEnabled)
+      is ToggleLetterCount -> onLetterCountToggled(event.isEnabled)
     }
-  }
-
-  override fun onLetterCountToggled(enabled: Boolean) {
-    setState {
-      copy(isLetterCountEnabled = Enabled(enabled))
-    }
-  }
-
-  data class SettingsState(
-    val isWordCountEnabled: Enabled?,
-    val isLetterCountEnabled: Enabled?
-  ) : UiState {
-
-    data class Enabled(val isEnabled: Boolean)
   }
 }

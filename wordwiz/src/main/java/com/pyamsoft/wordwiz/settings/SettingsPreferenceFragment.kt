@@ -19,18 +19,23 @@ package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.View
+import com.pyamsoft.pydroid.arch.impl.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.LetterCountAction
+import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.WordCountAction
 import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 import javax.inject.Inject
 
-class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsUiComponent.Callback {
+class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
-  @field:Inject internal lateinit var component: SettingsUiComponent
+  @JvmField @Inject internal var settingsView: SettingsView? = null
+  @JvmField @Inject internal var toolbar: SettingsToolbarView? = null
+  @JvmField @Inject internal var viewModel: SettingsViewModel? = null
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -47,24 +52,30 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(), SettingsUiCo
         .create(requireToolbarActivity(), preferenceScreen)
         .inject(this)
 
-    component.bind(viewLifecycleOwner, savedInstanceState, this)
+    createComponent(
+        savedInstanceState, viewLifecycleOwner,
+        requireNotNull(viewModel),
+        requireNotNull(settingsView),
+        requireNotNull(toolbar)
+    ) {
+      return@createComponent when (it) {
+        is WordCountAction -> onWordCountChanged(it.isEnabled)
+        is LetterCountAction -> onLetterCountChanged(it.isEnabled)
+      }
+    }
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    component.saveState(outState)
+    settingsView?.saveState(outState)
+    toolbar?.saveState(outState)
   }
 
-  override fun onStart() {
-    super.onStart()
-    component.sync()
-  }
-
-  override fun onWordCountChanged(enabled: Boolean) {
+  private fun onWordCountChanged(enabled: Boolean) {
     WordCountActivity.enable(requireContext(), enabled)
   }
 
-  override fun onLetterCountChanged(enabled: Boolean) {
+  private fun onLetterCountChanged(enabled: Boolean) {
     LetterCountActivity.enable(requireContext(), enabled)
   }
 

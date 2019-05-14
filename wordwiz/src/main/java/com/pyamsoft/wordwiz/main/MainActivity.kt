@@ -18,11 +18,11 @@
 package com.pyamsoft.wordwiz.main
 
 import android.os.Bundle
-import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.pyamsoft.pydroid.arch.layout
+import com.pyamsoft.pydroid.arch.impl.doOnDestroy
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
@@ -30,6 +30,7 @@ import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.commit
+import com.pyamsoft.pydroid.ui.util.layout
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
@@ -39,19 +40,19 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : RatingActivity() {
 
-  @JvmField @Inject internal var toolbarComponent: MainToolbarUiComponent? = null
-  @JvmField @Inject internal var component: MainUiComponent? = null
+  @JvmField @Inject internal var toolbar: MainToolbarView? = null
+  @JvmField @Inject internal var view: MainFrameView? = null
 
   override val versionName: String = BuildConfig.VERSION_NAME
 
   override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val snackbarRoot: View by lazy(NONE) {
+  override val snackbarRoot: ViewGroup by lazy(NONE) {
     findViewById<CoordinatorLayout>(R.id.snackbar_root)
   }
 
   override val fragmentContainerId: Int
-    get() = requireNotNull(component).id()
+    get() = requireNotNull(view).id()
 
   override val changeLogLines: ChangeLogBuilder = buildChangeLog {
     change("New icon style")
@@ -73,10 +74,17 @@ class MainActivity : RatingActivity() {
         .create(this, layoutRoot)
         .inject(this)
 
-    val component = requireNotNull(component)
-    val toolbarComponent = requireNotNull(toolbarComponent)
-    component.bind(layoutRoot, this, savedInstanceState, Unit)
-    toolbarComponent.bind(layoutRoot, this, savedInstanceState, Unit)
+    val component = requireNotNull(view)
+    val toolbarComponent = requireNotNull(toolbar)
+
+    component.inflate(savedInstanceState)
+    toolbarComponent.inflate(savedInstanceState)
+
+    this.doOnDestroy {
+      component.teardown()
+      toolbarComponent.teardown()
+    }
+
     layoutRoot.layout {
 
       toolbarComponent.also {
@@ -113,13 +121,13 @@ class MainActivity : RatingActivity() {
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    toolbarComponent?.saveState(outState)
-    component?.saveState(outState)
+    toolbar?.saveState(outState)
+    view?.saveState(outState)
   }
 
   override fun onDestroy() {
     super.onDestroy()
-    component = null
-    toolbarComponent = null
+    view = null
+    toolbar = null
   }
 }

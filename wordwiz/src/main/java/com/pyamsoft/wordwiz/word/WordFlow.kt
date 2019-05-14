@@ -15,18 +15,30 @@
  *
  */
 
-package com.pyamsoft.wordwiz.settings
+package com.pyamsoft.wordwiz.word
 
-import com.pyamsoft.pydroid.arch.UiComponent
+import com.pyamsoft.pydroid.arch.UiControllerEvent
+import com.pyamsoft.pydroid.arch.UiViewEvent
+import com.pyamsoft.pydroid.arch.UiViewState
 
-internal interface SettingsUiComponent : UiComponent<SettingsUiComponent.Callback> {
+data class WordProcessState(
+  val isProcessing: Processing?,
+  val throwable: Throwable?,
+  val result: WordProcessResult?
+) : UiViewState {
 
-  fun sync()
+  data class Processing(val isProcessing: Boolean)
 
-  interface Callback {
+}
 
-    fun onWordCountChanged(enabled: Boolean)
+sealed class WordProcessViewEvent : UiViewEvent {
 
-    fun onLetterCountChanged(enabled: Boolean)
-  }
+  object CloseScreen : WordProcessViewEvent()
+
+}
+
+sealed class WordProcessControllerEvent : UiControllerEvent {
+
+  object Finish : WordProcessControllerEvent()
+
 }

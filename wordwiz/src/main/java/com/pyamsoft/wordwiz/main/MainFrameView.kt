@@ -19,16 +19,24 @@ package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.pyamsoft.pydroid.arch.BaseUiView
+import com.pyamsoft.pydroid.arch.impl.BaseUiView
+import com.pyamsoft.pydroid.arch.impl.UnitViewEvent
+import com.pyamsoft.pydroid.arch.impl.UnitViewState
 import com.pyamsoft.wordwiz.R
 import javax.inject.Inject
 
 internal class MainFrameView @Inject internal constructor(
   parent: ViewGroup
-) : BaseUiView<Unit>(parent, Unit) {
+) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
 
   override val layoutRoot by boundView<FrameLayout>(R.id.layout_frame)
 
   override val layout: Int = R.layout.layout_frame
+
+  override fun onRender(
+    state: UnitViewState,
+    oldState: UnitViewState?
+  ) {
+  }
 
 }

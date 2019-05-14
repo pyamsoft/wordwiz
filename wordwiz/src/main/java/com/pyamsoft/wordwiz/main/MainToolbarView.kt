@@ -22,7 +22,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
-import com.pyamsoft.pydroid.arch.BaseUiView
+import com.pyamsoft.pydroid.arch.impl.BaseUiView
+import com.pyamsoft.pydroid.arch.impl.UnitViewEvent
+import com.pyamsoft.pydroid.arch.impl.UnitViewState
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
@@ -31,7 +33,7 @@ import javax.inject.Inject
 internal class MainToolbarView @Inject internal constructor(
   parent: ViewGroup,
   private val toolbarActivityProvider: ToolbarActivityProvider
-) : BaseUiView<Unit>(parent, Unit) {
+) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
 
   override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
 
@@ -48,8 +50,13 @@ internal class MainToolbarView @Inject internal constructor(
     }
   }
 
+  override fun onRender(
+    state: UnitViewState,
+    oldState: UnitViewState?
+  ) {
+  }
+
   override fun onTeardown() {
-    super.onTeardown()
     toolbarActivityProvider.setToolbar(null)
   }
 
