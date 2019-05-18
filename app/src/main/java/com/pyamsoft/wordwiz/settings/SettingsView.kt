@@ -20,7 +20,6 @@ package com.pyamsoft.wordwiz.settings
 import androidx.lifecycle.LifecycleObserver
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
-import com.pyamsoft.pydroid.arch.impl.onChange
 import com.pyamsoft.pydroid.ui.arch.PrefUiView
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
@@ -39,7 +38,7 @@ internal class SettingsView @Inject internal constructor(
     state: SettingsViewState,
     oldState: SettingsViewState?
   ) {
-    state.onChange(oldState, field = { it.isWordCountEnabled }) { enabled ->
+    state.isWordCountEnabled.let { enabled ->
       wordCount.isChecked = enabled
       wordCount.setOnPreferenceClickListener {
         publish(ToggleWordCount(!enabled))
@@ -47,7 +46,7 @@ internal class SettingsView @Inject internal constructor(
       }
     }
 
-    state.onChange(oldState, field = { it.isLetterCountEnabled }) { enabled ->
+    state.isLetterCountEnabled.let { enabled ->
       letterCount.isChecked = enabled
       letterCount.setOnPreferenceClickListener {
         publish(ToggleLetterCount(!enabled))

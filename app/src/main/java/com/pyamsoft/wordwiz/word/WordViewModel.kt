@@ -18,7 +18,7 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import com.pyamsoft.pydroid.arch.impl.BaseUiViewModel
+import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.core.singleDisposable
 import com.pyamsoft.pydroid.core.tryDispose
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
@@ -33,7 +33,7 @@ internal class WordViewModel @Inject internal constructor(
   private val interactor: WordProcessInteractor,
   private val component: ComponentName,
   private val text: CharSequence
-) : BaseUiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
+) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
     initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
 ) {
 
@@ -45,11 +45,7 @@ internal class WordViewModel @Inject internal constructor(
     }
   }
 
-  override fun onBind() {
-    process()
-  }
-
-  private fun process() {
+  fun process() {
     processDisposable = interactor.getProcessType(component, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())

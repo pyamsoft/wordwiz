@@ -18,12 +18,10 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.Context
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.arch.impl.AbstractUiView
-import com.pyamsoft.pydroid.arch.impl.onChange
+import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.arch.InvalidIdException
 import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
@@ -36,7 +34,7 @@ import kotlin.LazyThreadSafetyMode.NONE
 internal class WordView @Inject internal constructor(
   private val context: Context,
   private val owner: LifecycleOwner
-) : AbstractUiView<WordProcessState, WordProcessViewEvent>() {
+) : UiView<WordProcessState, WordProcessViewEvent>() {
 
   private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
@@ -44,14 +42,11 @@ internal class WordView @Inject internal constructor(
     throw InvalidIdException
   }
 
-  override fun inflate(savedInstanceState: Bundle?) {
-  }
-
   override fun render(
     state: WordProcessState,
     oldState: WordProcessState?
   ) {
-    state.onChange(oldState, field = { it.isProcessing }) { processing ->
+    state.isProcessing.let { processing ->
       if (processing != null) {
         clear()
         if (!processing.isProcessing) {
@@ -60,7 +55,7 @@ internal class WordView @Inject internal constructor(
       }
     }
 
-    state.onChange(oldState, field = { it.result }) { result ->
+    state.result.let { result ->
       if (result == null) {
         hideMessage()
       } else {
@@ -72,7 +67,7 @@ internal class WordView @Inject internal constructor(
       }
     }
 
-    state.onChange(oldState, field = { it.throwable }) { throwable ->
+    state.throwable.let { throwable ->
       if (throwable == null) {
         hideMessage()
       } else {
@@ -90,9 +85,6 @@ internal class WordView @Inject internal constructor(
     Toaster.bindTo(owner)
         .short(context.applicationContext, message)
         .show()
-  }
-
-  override fun saveState(outState: Bundle) {
   }
 
   override fun teardown() {

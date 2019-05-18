@@ -19,9 +19,9 @@ package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.pyamsoft.pydroid.arch.impl.BaseUiView
-import com.pyamsoft.pydroid.arch.impl.UnitViewEvent
-import com.pyamsoft.pydroid.arch.impl.UnitViewState
+import com.pyamsoft.pydroid.arch.BaseUiView
+import com.pyamsoft.pydroid.arch.UnitViewEvent
+import com.pyamsoft.pydroid.arch.UnitViewState
 import com.pyamsoft.wordwiz.R
 import javax.inject.Inject
 

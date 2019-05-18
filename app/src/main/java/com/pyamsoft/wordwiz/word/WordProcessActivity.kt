@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
-import com.pyamsoft.pydroid.arch.impl.createComponent
+import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
 import com.pyamsoft.pydroid.ui.theme.Theming
@@ -64,6 +64,8 @@ internal abstract class WordProcessActivity : ActivityBase() {
         is Finish -> finish()
       }
     }
+
+    requireNotNull(viewModel).process()
   }
 
   final override fun onStop() {

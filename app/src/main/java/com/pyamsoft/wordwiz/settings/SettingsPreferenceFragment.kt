@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.View
-import com.pyamsoft.pydroid.arch.impl.createComponent
+import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment

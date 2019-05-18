@@ -15,4 +15,4 @@
  *
  */
 
-include ':wordwiz', ':wordwiz-word'
+include ':app', ':wordwiz-word'
