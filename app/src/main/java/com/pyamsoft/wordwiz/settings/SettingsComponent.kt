@@ -18,12 +18,20 @@
 package com.pyamsoft.wordwiz.settings
 
 import androidx.annotation.CheckResult
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceScreen
+import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
+import com.pyamsoft.wordwiz.ViewModelKey
+import com.pyamsoft.wordwiz.WordWizViewModelFactory
+import com.pyamsoft.wordwiz.settings.SettingsComponent.ViewModelModule
+import dagger.Binds
 import dagger.BindsInstance
+import dagger.Module
 import dagger.Subcomponent
+import dagger.multibindings.IntoMap
 
-@Subcomponent
+@Subcomponent(modules = [ViewModelModule::class])
 internal interface SettingsComponent {
 
   fun inject(fragment: SettingsPreferenceFragment)
@@ -36,5 +44,17 @@ internal interface SettingsComponent {
       @BindsInstance toolbarActivity: ToolbarActivity,
       @BindsInstance preferenceScreen: PreferenceScreen
     ): SettingsComponent
+  }
+
+  @Module
+  abstract class ViewModelModule {
+
+    @Binds
+    internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    internal abstract fun settingsViewModel(viewModel: SettingsViewModel): UiViewModel<*, *, *>
   }
 }

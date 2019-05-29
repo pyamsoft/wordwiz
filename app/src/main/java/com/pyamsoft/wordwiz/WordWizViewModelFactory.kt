@@ -17,22 +17,13 @@
 
 package com.pyamsoft.wordwiz
 
-import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.arch.UiViewModelFactory
-import com.pyamsoft.wordwiz.settings.SettingsViewModel
-import com.pyamsoft.wordwiz.word.WordViewModel
-import dagger.Binds
 import dagger.MapKey
-import dagger.Module
-import dagger.multibindings.IntoMap
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
 import kotlin.reflect.KClass
 
-@Singleton
 internal class WordWizViewModelFactory @Inject internal constructor(
   private val viewModels: MutableMap<Class<out UiViewModel<*, *, *>>, Provider<UiViewModel<*, *, *>>>
 ) : UiViewModelFactory() {
@@ -51,21 +42,5 @@ internal class WordWizViewModelFactory @Inject internal constructor(
 )
 @Retention(AnnotationRetention.RUNTIME)
 @MapKey
-private annotation class ViewModelKey(val value: KClass<out UiViewModel<*, *, *>>)
+internal annotation class ViewModelKey(val value: KClass<out UiViewModel<*, *, *>>)
 
-@Module
-internal abstract class ViewModelModule {
-
-  @Binds
-  internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(SettingsViewModel::class)
-  internal abstract fun settingsViewModel(viewModel: SettingsViewModel): UiViewModel<*, *, *>
-
-  @Binds
-  @IntoMap
-  @ViewModelKey(WordViewModel::class)
-  internal abstract fun wordViewModel(viewModel: WordViewModel): UiViewModel<*, *, *>
-}

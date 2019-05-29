@@ -47,9 +47,15 @@ internal abstract class WordProcessActivity : ActivityBase() {
     }
     super.onCreate(savedInstanceState)
 
+    val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+    if (text == null || text.isBlank()) {
+      finish()
+      return
+    }
+
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusWordComponent()
-        .create(this)
+        .create(this, componentName, text)
         .inject(this)
 
     ViewModelProviders.of(this, factory)
@@ -65,16 +71,6 @@ internal abstract class WordProcessActivity : ActivityBase() {
       return@createComponent when (it) {
         is Finish -> finish()
       }
-    }
-
-    if (savedInstanceState == null) {
-      val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-      if (text == null || text.isBlank()) {
-        finish()
-        return
-      }
-
-      requireNotNull(viewModel).process(componentName, text)
     }
   }
 

@@ -17,12 +17,21 @@
 
 package com.pyamsoft.wordwiz.word
 
+import android.content.ComponentName
 import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
+import com.pyamsoft.pydroid.arch.UiViewModel
+import com.pyamsoft.wordwiz.ViewModelKey
+import com.pyamsoft.wordwiz.WordWizViewModelFactory
+import com.pyamsoft.wordwiz.word.WordComponent.ViewModelModule
+import dagger.Binds
 import dagger.BindsInstance
+import dagger.Module
 import dagger.Subcomponent
+import dagger.multibindings.IntoMap
 
-@Subcomponent
+@Subcomponent(modules = [ViewModelModule::class])
 internal interface WordComponent {
 
   fun inject(activity: WordProcessActivity)
@@ -31,8 +40,24 @@ internal interface WordComponent {
   interface Factory {
 
     @CheckResult
-    fun create(@BindsInstance owner: LifecycleOwner): WordComponent
+    fun create(
+      @BindsInstance owner: LifecycleOwner,
+      @BindsInstance componentName: ComponentName,
+      @BindsInstance text: CharSequence
+    ): WordComponent
 
+  }
+
+  @Module
+  abstract class ViewModelModule {
+
+    @Binds
+    internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WordViewModel::class)
+    internal abstract fun wordViewModel(viewModel: WordViewModel): UiViewModel<*, *, *>
   }
 
 }

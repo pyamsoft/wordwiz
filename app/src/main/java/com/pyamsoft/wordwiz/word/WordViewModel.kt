@@ -30,12 +30,18 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class WordViewModel @Inject internal constructor(
-  private val interactor: WordProcessInteractor
+  private val interactor: WordProcessInteractor,
+  private val component: ComponentName,
+  private val text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
     initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
 ) {
 
   private var processDisposable by singleDisposable()
+
+  init {
+    process()
+  }
 
   override fun handleViewEvent(event: WordProcessViewEvent) {
     return when (event) {
@@ -43,10 +49,7 @@ internal class WordViewModel @Inject internal constructor(
     }
   }
 
-  internal fun process(
-    component: ComponentName,
-    text: CharSequence
-  ) {
+  private fun process() {
     processDisposable = interactor.getProcessType(component, text)
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
