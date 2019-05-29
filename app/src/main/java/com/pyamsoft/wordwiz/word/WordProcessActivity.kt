@@ -19,6 +19,8 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
@@ -30,8 +32,9 @@ import javax.inject.Inject
 
 internal abstract class WordProcessActivity : ActivityBase() {
 
-  @JvmField @Inject internal var viewModel: WordViewModel? = null
+  @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
   @JvmField @Inject internal var view: WordView? = null
+  private var viewModel: WordViewModel? = null
 
   final override val fragmentContainerId: Int = 0
 
@@ -44,16 +47,15 @@ internal abstract class WordProcessActivity : ActivityBase() {
     }
     super.onCreate(savedInstanceState)
 
-    val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    if (text == null || text.isBlank()) {
-      finish()
-      return
-    }
-
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusWordComponent()
-        .create(this, componentName, text)
+        .create(this)
         .inject(this)
+
+    ViewModelProviders.of(this, factory)
+        .let { factory ->
+          viewModel = factory.get(WordViewModel::class.java)
+        }
 
     createComponent(
         savedInstanceState, this,
@@ -65,7 +67,15 @@ internal abstract class WordProcessActivity : ActivityBase() {
       }
     }
 
-    requireNotNull(viewModel).process()
+    if (savedInstanceState == null) {
+      val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+      if (text == null || text.isBlank()) {
+        finish()
+        return
+      }
+
+      requireNotNull(viewModel).process(componentName, text)
+    }
   }
 
   final override fun onStop() {
@@ -83,5 +93,9 @@ internal abstract class WordProcessActivity : ActivityBase() {
   final override fun onDestroy() {
     super.onDestroy()
     overridePendingTransition(0, 0)
+
+    factory = null
+    view = null
+    viewModel = null
   }
 }

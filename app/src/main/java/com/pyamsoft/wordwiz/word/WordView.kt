@@ -21,6 +21,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
+import com.pyamsoft.pydroid.arch.UiSavedState
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.arch.InvalidIdException
 import com.pyamsoft.pydroid.ui.util.Toaster
@@ -44,7 +45,7 @@ internal class WordView @Inject internal constructor(
 
   override fun render(
     state: WordProcessState,
-    oldState: WordProcessState?
+    savedState: UiSavedState
   ) {
     state.isProcessing.let { processing ->
       if (processing != null) {

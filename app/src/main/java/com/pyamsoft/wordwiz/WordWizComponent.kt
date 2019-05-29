@@ -29,7 +29,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [WordProcessModule::class])
+@Component(modules = [WordProcessModule::class, ViewModelModule::class])
 internal interface WordWizComponent {
 
   @CheckResult

@@ -19,6 +19,8 @@ package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
@@ -33,9 +35,10 @@ import javax.inject.Inject
 
 class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
+  @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
   @JvmField @Inject internal var settingsView: SettingsView? = null
   @JvmField @Inject internal var toolbar: SettingsToolbarView? = null
-  @JvmField @Inject internal var viewModel: SettingsViewModel? = null
+  private var viewModel: SettingsViewModel? = null
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -51,6 +54,11 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
         .plusSettingsComponent()
         .create(requireToolbarActivity(), preferenceScreen)
         .inject(this)
+
+    ViewModelProviders.of(this, factory)
+        .let { factory ->
+          viewModel = factory.get(SettingsViewModel::class.java)
+        }
 
     createComponent(
         savedInstanceState, viewLifecycleOwner,
@@ -69,6 +77,14 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
     super.onSaveInstanceState(outState)
     settingsView?.saveState(outState)
     toolbar?.saveState(outState)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    viewModel = null
+    settingsView = null
+    toolbar = null
+    factory = null
   }
 
   private fun onWordCountChanged(enabled: Boolean) {

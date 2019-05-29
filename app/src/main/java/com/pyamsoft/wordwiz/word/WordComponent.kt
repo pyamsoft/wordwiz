@@ -17,7 +17,6 @@
 
 package com.pyamsoft.wordwiz.word
 
-import android.content.ComponentName
 import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
 import dagger.BindsInstance
@@ -32,11 +31,7 @@ internal interface WordComponent {
   interface Factory {
 
     @CheckResult
-    fun create(
-      @BindsInstance owner: LifecycleOwner,
-      @BindsInstance componentName: ComponentName,
-      @BindsInstance text: CharSequence
-    ): WordComponent
+    fun create(@BindsInstance owner: LifecycleOwner): WordComponent
 
   }
 
