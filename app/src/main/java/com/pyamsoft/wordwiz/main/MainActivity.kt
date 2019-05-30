@@ -125,9 +125,9 @@ class MainActivity : RatingActivity() {
     val tag = SettingsFragment.TAG
     if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
     ) {
-      fragmentManager.beginTransaction()
-          .add(fragmentContainerId, SettingsFragment(), tag)
-          .commit(this)
+      fragmentManager.commit(this) {
+        add(fragmentContainerId, SettingsFragment(), tag)
+      }
     }
   }
 
