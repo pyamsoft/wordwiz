@@ -20,14 +20,10 @@ package com.pyamsoft.wordwiz.main
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
-import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
-import com.pyamsoft.wordwiz.main.MainComponent.MainModule
 import dagger.BindsInstance
-import dagger.Module
-import dagger.Provides
 import dagger.Subcomponent
 
-@Subcomponent(modules = [MainModule::class])
+@Subcomponent
 internal interface MainComponent {
 
   fun inject(activity: MainActivity)
@@ -40,20 +36,6 @@ internal interface MainComponent {
       @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
       @BindsInstance layoutRoot: ViewGroup
     ): MainComponent
-  }
-
-  @Module
-  abstract class MainModule {
-
-    @Module
-    companion object {
-
-      @JvmStatic
-      @Provides
-      internal fun provideDropshadow(parent: ViewGroup): DropshadowView {
-        return DropshadowView(parent)
-      }
-    }
   }
 
 }
