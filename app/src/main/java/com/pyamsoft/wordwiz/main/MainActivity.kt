@@ -61,11 +61,7 @@ class MainActivity : RatingActivity() {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    if (Injector.obtain<Theming>(applicationContext).isDarkTheme()) {
-      setTheme(R.style.Theme_WordWiz_Dark)
-    } else {
-      setTheme(R.style.Theme_WordWiz_Light)
-    }
+    setTheme(R.style.Theme_WordWiz)
     super.onCreate(savedInstanceState)
     setContentView(R.layout.snackbar_screen)
 

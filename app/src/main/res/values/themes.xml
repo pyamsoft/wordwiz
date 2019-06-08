@@ -19,19 +19,19 @@
 
 <resources>
 
-  <style name="Base.Theme.WordWiz.Light" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+  <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
     <item name="colorPrimary">@color/purple500</item>
     <item name="colorPrimaryDark">@color/purple700</item>
     <item name="colorAccent">@color/lightblueA200</item>
   </style>
 
   <!-- Normal App Theme -->
-  <style name="Theme.WordWiz.Light" parent="@style/Base.Theme.WordWiz.Light">
+  <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
   </style>
 
   <!-- Transparent App Theme -->
-  <style name="Theme.WordWiz.Light.Transparent" parent="@style/Theme.WordWiz.Light">
+  <style name="Theme.WordWiz.Transparent" parent="@style/Theme.WordWiz">
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowBackground">@android:color/transparent</item>
     <item name="android:colorBackgroundCacheHint">@null</item>
@@ -42,7 +42,7 @@
   </style>
 
   <!-- Splash screen-->
-  <style name="Theme.WordWiz.Light.Splash" parent="@style/Theme.WordWiz.Light">
+  <style name="Theme.WordWiz.Splash" parent="@style/Theme.WordWiz">
     <item name="android:windowBackground">@drawable/splash_screen</item>
   </style>
 

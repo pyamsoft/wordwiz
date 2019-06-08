@@ -40,11 +40,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
 
   final override fun onCreate(savedInstanceState: Bundle?) {
     overridePendingTransition(0, 0)
-    if (Injector.obtain<Theming>(applicationContext).isDarkTheme()) {
-      setTheme(R.style.Theme_WordWiz_Dark_Transparent)
-    } else {
-      setTheme(R.style.Theme_WordWiz_Light_Transparent)
-    }
+    setTheme(R.style.Theme_WordWiz_Transparent)
     super.onCreate(savedInstanceState)
 
     val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)

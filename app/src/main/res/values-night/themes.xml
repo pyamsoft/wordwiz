@@ -19,19 +19,19 @@
 
 <resources>
 
-  <style name="Base.Theme.WordWiz.Dark" parent="@style/Theme.MaterialComponents.NoActionBar">
+  <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.NoActionBar">
     <item name="colorPrimary">@color/purple500</item>
     <item name="colorPrimaryDark">@color/purple700</item>
     <item name="colorAccent">@color/lightblueA200</item>
   </style>
 
   <!-- Normal App Theme -->
-  <style name="Theme.WordWiz.Dark" parent="@style/Base.Theme.WordWiz.Dark">
+  <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
   </style>
 
   <!-- Transparent App Theme -->
-  <style name="Theme.WordWiz.Dark.Transparent" parent="@style/Theme.WordWiz.Dark">
+  <style name="Theme.WordWiz.Transparent" parent="@style/Theme.WordWiz">
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowBackground">@android:color/transparent</item>
     <item name="android:colorBackgroundCacheHint">@null</item>
