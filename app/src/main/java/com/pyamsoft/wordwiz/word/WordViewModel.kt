@@ -41,7 +41,7 @@ internal class WordViewModel @Inject internal constructor(
 
   private var processJob by singleJob()
 
-  init {
+  override fun onInit() {
     process()
   }
 
