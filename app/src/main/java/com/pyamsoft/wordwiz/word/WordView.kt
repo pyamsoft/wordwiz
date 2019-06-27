@@ -88,7 +88,7 @@ internal class WordView @Inject internal constructor(
         .show()
   }
 
-  override fun teardown() {
+  override fun doTeardown() {
     clear()
     hideMessage()
   }

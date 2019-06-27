@@ -19,13 +19,12 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import androidx.annotation.CheckResult
-import io.reactivex.Single
 
 interface WordProcessInteractor {
 
   @CheckResult
-  fun getProcessType(
+  suspend fun getProcessType(
     componentName: ComponentName,
     text: CharSequence
-  ): Single<WordProcessResult>
+  ): WordProcessResult
 }

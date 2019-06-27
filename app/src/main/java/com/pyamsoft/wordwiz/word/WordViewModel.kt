@@ -18,14 +18,16 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
+import androidx.lifecycle.viewModelScope
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.pydroid.core.singleDisposable
-import com.pyamsoft.pydroid.core.tryDispose
+import com.pyamsoft.pydroid.arch.singleJob
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,10 +39,14 @@ internal class WordViewModel @Inject internal constructor(
     initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
 ) {
 
-  private var processDisposable by singleDisposable()
+  private var processJob by singleJob()
 
   init {
     process()
+  }
+
+  override fun onTeardown() {
+    processJob.cancel()
   }
 
   override fun handleViewEvent(event: WordProcessViewEvent) {
@@ -50,16 +56,22 @@ internal class WordViewModel @Inject internal constructor(
   }
 
   private fun process() {
-    processDisposable = interactor.getProcessType(component, text)
-        .subscribeOn(Schedulers.computation())
-        .observeOn(AndroidSchedulers.mainThread())
-        .doAfterTerminate { handleProcessComplete() }
-        .doAfterTerminate { processDisposable.tryDispose() }
-        .doOnSubscribe { handleProcessBegin() }
-        .subscribe({ handleProcessSuccess(it) }, {
-          Timber.e(it, "Error handling process request")
-          handleProcessError(it)
-        })
+    processJob = viewModelScope.launch {
+      handleProcessBegin()
+      try {
+        val result = async(context = Dispatchers.Default) {
+          interactor.getProcessType(component, text)
+        }
+        handleProcessSuccess(result.await())
+      } catch (e: Throwable) {
+        if (e !is CancellationException) {
+          Timber.e(e, "Error handling process request")
+          handleProcessError(e)
+        }
+      } finally {
+        handleProcessComplete()
+      }
+    }
   }
 
   private fun handleProcessBegin() {

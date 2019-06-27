@@ -22,10 +22,9 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.threads.Enforcer
+import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
-import io.reactivex.Single
 import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
@@ -86,24 +85,23 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
     return count
   }
 
-  override fun getProcessType(
+  override suspend fun getProcessType(
     componentName: ComponentName,
     text: CharSequence
-  ): Single<WordProcessResult> {
-    return Single.fromCallable {
-      enforcer.assertNotOnMainThread()
-      val result: WordProcessResult
-      try {
-        Timber.d("Attempt to load the label this activity launched with")
-        val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
-        val label = activityInfo.loadLabel(packageManager)
-        result = getProcessTypeForLabel(label, text)
-      } catch (e: PackageManager.NameNotFoundException) {
-        Timber.e(e, "Name not found ERROR")
-        throw RuntimeException("Name not found for ComponentName: $componentName")
-      }
-      return@fromCallable result
+  ): WordProcessResult {
+    enforcer.assertNotOnMainThread()
+    val result: WordProcessResult
+    try {
+      Timber.d("Attempt to load the label this activity launched with")
+      val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
+      val label = activityInfo.loadLabel(packageManager)
+      result = getProcessTypeForLabel(label, text)
+    } catch (e: PackageManager.NameNotFoundException) {
+      Timber.e(e, "Name not found ERROR")
+      throw RuntimeException("Name not found for ComponentName: $componentName")
     }
+
+    return result
   }
 
   @CheckResult

@@ -19,7 +19,7 @@ package com.pyamsoft.wordwiz
 
 import android.content.Context
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.core.threads.Enforcer
+import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.word.WordComponent

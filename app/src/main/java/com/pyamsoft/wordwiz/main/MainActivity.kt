@@ -22,13 +22,13 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.pyamsoft.pydroid.arch.doOnDestroy
+import com.pyamsoft.pydroid.arch.UnitViewModel
+import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
-import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.commit
 import com.pyamsoft.pydroid.ui.util.layout
 import com.pyamsoft.pydroid.ui.widget.shadow.DropshadowView
@@ -75,15 +75,11 @@ class MainActivity : RatingActivity() {
     val toolbarComponent = requireNotNull(toolbar)
     val dropshadow = DropshadowView.create(layoutRoot)
 
-    component.inflate(savedInstanceState)
-    toolbarComponent.inflate(savedInstanceState)
-    dropshadow.inflate(savedInstanceState)
-
-    this.doOnDestroy {
-      component.teardown()
-      toolbarComponent.teardown()
-      dropshadow.teardown()
-    }
+    createComponent(
+        savedInstanceState, this,
+        UnitViewModel.create(),
+        component, toolbarComponent, dropshadow
+    ) {}
 
     layoutRoot.layout {
 
