@@ -21,6 +21,7 @@ import android.content.ComponentName
 import androidx.lifecycle.viewModelScope
 import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.arch.singleJob
+import com.pyamsoft.pydroid.arch.tryCancel
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
@@ -46,7 +47,7 @@ internal class WordViewModel @Inject internal constructor(
   }
 
   override fun onTeardown() {
-    processJob.cancel()
+    processJob.tryCancel()
   }
 
   override fun handleViewEvent(event: WordProcessViewEvent) {
