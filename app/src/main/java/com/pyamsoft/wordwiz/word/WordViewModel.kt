@@ -19,15 +19,15 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
 import androidx.lifecycle.viewModelScope
+import com.pyamsoft.highlander.highlander
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.pydroid.arch.singleJob
-import com.pyamsoft.pydroid.arch.tryCancel
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,24 +40,8 @@ internal class WordViewModel @Inject internal constructor(
     initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
 ) {
 
-  private var processJob by singleJob()
-
-  override fun onInit() {
-    process()
-  }
-
-  override fun onTeardown() {
-    processJob.tryCancel()
-  }
-
-  override fun handleViewEvent(event: WordProcessViewEvent) {
-    return when (event) {
-      is CloseScreen -> publish(Finish)
-    }
-  }
-
-  private fun process() {
-    processJob = viewModelScope.launch {
+  private val processRunner = highlander<Unit> {
+    coroutineScope {
       handleProcessBegin()
       try {
         val result = async(context = Dispatchers.Default) {
@@ -73,6 +57,20 @@ internal class WordViewModel @Inject internal constructor(
         handleProcessComplete()
       }
     }
+  }
+
+  override fun onInit() {
+    process()
+  }
+
+  override fun handleViewEvent(event: WordProcessViewEvent) {
+    return when (event) {
+      is CloseScreen -> publish(Finish)
+    }
+  }
+
+  private fun process() {
+    viewModelScope.launch { processRunner.call() }
   }
 
   private fun handleProcessBegin() {
