@@ -26,9 +26,8 @@ import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,21 +40,19 @@ internal class WordViewModel @Inject internal constructor(
 ) {
 
   private val processRunner = highlander<Unit> {
-    coroutineScope {
-      handleProcessBegin()
-      try {
-        val result = async(context = Dispatchers.Default) {
-          interactor.getProcessType(component, text)
-        }
-        handleProcessSuccess(result.await())
-      } catch (e: Throwable) {
-        if (e !is CancellationException) {
-          Timber.e(e, "Error handling process request")
-          handleProcessError(e)
-        }
-      } finally {
-        handleProcessComplete()
+    handleProcessBegin()
+    try {
+      val result = withContext(context = Dispatchers.Default) {
+        interactor.getProcessType(component, text)
       }
+      handleProcessSuccess(result)
+    } catch (e: Throwable) {
+      if (e !is CancellationException) {
+        Timber.e(e, "Error handling process request")
+        handleProcessError(e)
+      }
+    } finally {
+      handleProcessComplete()
     }
   }
 
