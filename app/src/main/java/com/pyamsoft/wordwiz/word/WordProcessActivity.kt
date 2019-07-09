@@ -20,11 +20,10 @@ package com.pyamsoft.wordwiz.word
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
-import com.pyamsoft.pydroid.ui.theme.Theming
+import com.pyamsoft.pydroid.ui.arch.factory
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
@@ -34,7 +33,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
 
   @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
   @JvmField @Inject internal var view: WordView? = null
-  private var viewModel: WordViewModel? = null
+  private val viewModel by factory<WordViewModel> { factory }
 
   final override val fragmentContainerId: Int = 0
 
@@ -54,14 +53,9 @@ internal abstract class WordProcessActivity : ActivityBase() {
         .create(this, componentName, text)
         .inject(this)
 
-    ViewModelProviders.of(this, factory)
-        .let { factory ->
-          viewModel = factory.get(WordViewModel::class.java)
-        }
-
     createComponent(
         savedInstanceState, this,
-        requireNotNull(viewModel),
+        viewModel,
         requireNotNull(view)
     ) {
       return@createComponent when (it) {
@@ -88,6 +82,5 @@ internal abstract class WordProcessActivity : ActivityBase() {
 
     factory = null
     view = null
-    viewModel = null
   }
 }

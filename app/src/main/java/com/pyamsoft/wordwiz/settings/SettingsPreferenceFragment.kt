@@ -20,10 +20,10 @@ package com.pyamsoft.wordwiz.settings
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
+import com.pyamsoft.pydroid.ui.arch.factory
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
@@ -38,7 +38,7 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
   @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
   @JvmField @Inject internal var settingsView: SettingsView? = null
   @JvmField @Inject internal var toolbar: SettingsToolbarView? = null
-  private var viewModel: SettingsViewModel? = null
+  private val viewModel by factory<SettingsViewModel> { factory }
 
   override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -55,14 +55,9 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
         .create(requireToolbarActivity(), preferenceScreen)
         .inject(this)
 
-    ViewModelProviders.of(this, factory)
-        .let { factory ->
-          viewModel = factory.get(SettingsViewModel::class.java)
-        }
-
     createComponent(
         savedInstanceState, viewLifecycleOwner,
-        requireNotNull(viewModel),
+        viewModel,
         requireNotNull(settingsView),
         requireNotNull(toolbar)
     ) {
@@ -81,7 +76,6 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
   override fun onDestroyView() {
     super.onDestroyView()
-    viewModel = null
     settingsView = null
     toolbar = null
     factory = null
