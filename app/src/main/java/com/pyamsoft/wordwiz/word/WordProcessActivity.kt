@@ -26,6 +26,7 @@ import com.pyamsoft.pydroid.ui.app.ActivityBase
 import com.pyamsoft.pydroid.ui.arch.factory
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import javax.inject.Inject
 
@@ -60,6 +61,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
     ) {
       return@createComponent when (it) {
         is Finish -> finish()
+        is Error -> requireNotNull(view).showError(it.throwable)
       }
     }
   }

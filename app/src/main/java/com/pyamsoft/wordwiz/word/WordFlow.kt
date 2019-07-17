@@ -23,11 +23,10 @@ import com.pyamsoft.pydroid.arch.UiViewState
 
 data class WordProcessState(
   val isProcessing: Processing?,
-  val throwable: Throwable?,
   val result: WordProcessResult?
 ) : UiViewState {
 
-  data class Processing(val isProcessing: Boolean)
+  data class Processing internal constructor(val isProcessing: Boolean)
 
 }
 
@@ -40,5 +39,7 @@ sealed class WordProcessViewEvent : UiViewEvent {
 sealed class WordProcessControllerEvent : UiControllerEvent {
 
   object Finish : WordProcessControllerEvent()
+
+  data class Error internal constructor(val throwable: Throwable) : WordProcessControllerEvent()
 
 }

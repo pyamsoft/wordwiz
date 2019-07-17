@@ -21,10 +21,10 @@ import android.content.ComponentName
 import androidx.lifecycle.viewModelScope
 import com.pyamsoft.highlander.highlander
 import com.pyamsoft.pydroid.arch.UiViewModel
+import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,7 +36,7 @@ internal class WordViewModel @Inject internal constructor(
   private val component: ComponentName,
   private val text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
-    initialState = WordProcessState(isProcessing = null, throwable = null, result = null)
+    initialState = WordProcessState(isProcessing = null, result = null)
 ) {
 
   private val processRunner = highlander<Unit> {
@@ -46,8 +46,8 @@ internal class WordViewModel @Inject internal constructor(
         interactor.getProcessType(component, text)
       }
       handleProcessSuccess(result)
-    } catch (e: Throwable) {
-      if (e !is CancellationException) {
+    } catch (error: Throwable) {
+      error.onActualError { e ->
         Timber.e(e, "Error handling process request")
         handleProcessError(e)
       }
@@ -75,11 +75,11 @@ internal class WordViewModel @Inject internal constructor(
   }
 
   private fun handleProcessSuccess(result: WordProcessResult) {
-    setState { copy(result = result, throwable = null) }
+    setState { copy(result = result) }
   }
 
   private fun handleProcessError(throwable: Throwable) {
-    setState { copy(result = null, throwable = throwable) }
+    publish(Error(throwable))
   }
 
   private fun handleProcessComplete() {

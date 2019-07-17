@@ -67,19 +67,15 @@ internal class WordView @Inject internal constructor(
         }
       }
     }
-
-    state.throwable.let { throwable ->
-      if (throwable == null) {
-        hideMessage()
-      } else {
-        showMessage(throwable.message ?: "Error processing text")
-      }
-    }
   }
 
   private fun hideMessage() {
     Toaster.bindTo(owner)
         .dismiss()
+  }
+
+  fun showError(throwable: Throwable) {
+    showMessage(throwable.message ?: "An unexpected error occurred.")
   }
 
   private fun showMessage(message: String) {
