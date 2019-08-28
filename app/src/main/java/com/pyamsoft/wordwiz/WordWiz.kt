@@ -38,6 +38,7 @@ class WordWiz : Application() {
     PYDroid.init(
         this,
         getString(R.string.app_name),
+        "https://github.com/pyamsoft/wordwiz",
         "https://github.com/pyamsoft/wordwiz/issues",
         BuildConfig.VERSION_CODE,
         BuildConfig.DEBUG

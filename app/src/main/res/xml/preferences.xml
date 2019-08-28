@@ -15,11 +15,11 @@
   ~
   -->
 
-<PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <PreferenceCategory android:title="Text Selection Actions">
+  <androidx.preference.PreferenceCategory android:title="Text Selection Actions">
 
     <com.pyamsoft.pydroid.ui.preference.SwitchPreferenceCompat
         android:key="@string/word_count_key"
@@ -33,6 +33,6 @@
         android:title="@string/label_letter_count"
         app:iconCompat="@drawable/ic_reader_24dp"/>
 
-  </PreferenceCategory>
+  </androidx.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>
