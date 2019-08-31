@@ -17,6 +17,7 @@
 
 package com.pyamsoft.wordwiz.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -27,14 +28,22 @@ import com.pyamsoft.pydroid.arch.UiSavedState
 import com.pyamsoft.pydroid.arch.UnitViewEvent
 import com.pyamsoft.pydroid.arch.UnitViewState
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
+import com.pyamsoft.pydroid.ui.privacy.addPrivacy
+import com.pyamsoft.pydroid.ui.privacy.removePrivacy
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
+import com.pyamsoft.wordwiz.WordWiz
 import javax.inject.Inject
 
 internal class MainToolbarView @Inject internal constructor(
   parent: ViewGroup,
+  activity: Activity,
+  private val theming: Theming,
   private val toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
+
+  private var activity: Activity? = activity
 
   override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
 
@@ -44,10 +53,19 @@ internal class MainToolbarView @Inject internal constructor(
     view: View,
     savedInstanceState: Bundle?
   ) {
+    val theme: Int
+    if (theming.isDarkTheme(requireNotNull(activity))) {
+      theme = R.style.ThemeOverlay_AppCompat
+    } else {
+      theme = R.style.ThemeOverlay_AppCompat_Light
+    }
+
     layoutRoot.apply {
+      popupTheme = theme
       toolbarActivityProvider.setToolbar(this)
       setTitle(R.string.app_name)
       ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
+      addPrivacy(WordWiz.PRIVACY_POLICY_URL, WordWiz.TERMS_CONDITIONS_URL)
     }
   }
 
@@ -59,6 +77,8 @@ internal class MainToolbarView @Inject internal constructor(
 
   override fun onTeardown() {
     toolbarActivityProvider.setToolbar(null)
+    layoutRoot.removePrivacy()
+    activity = null
   }
 
 }

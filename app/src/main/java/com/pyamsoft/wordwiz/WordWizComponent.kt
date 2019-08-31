@@ -20,6 +20,7 @@ package com.pyamsoft.wordwiz
 import android.content.Context
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
+import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
 import com.pyamsoft.wordwiz.word.WordComponent
@@ -47,6 +48,7 @@ internal interface WordWizComponent {
     @CheckResult
     fun create(
       @BindsInstance context: Context,
+      @BindsInstance theming: Theming,
       @BindsInstance enforcer: Enforcer
     ): WordWizComponent
   }

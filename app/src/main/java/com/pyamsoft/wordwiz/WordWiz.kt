@@ -40,11 +40,13 @@ class WordWiz : Application() {
         getString(R.string.app_name),
         "https://github.com/pyamsoft/wordwiz",
         "https://github.com/pyamsoft/wordwiz/issues",
+        PRIVACY_POLICY_URL,
+        TERMS_CONDITIONS_URL,
         BuildConfig.VERSION_CODE,
         BuildConfig.DEBUG
     ) { provider ->
       component = DaggerWordWizComponent.factory()
-          .create(this, provider.enforcer())
+          .create(this, provider.theming(), provider.enforcer())
     }
   }
 
@@ -61,4 +63,9 @@ class WordWiz : Application() {
     return super.getSystemService(name)
   }
 
+  companion object {
+    const val PRIVACY_POLICY_URL = "https://pyamsoft.blogspot.com/p/wordwiz-privacy-policy.html"
+    const val TERMS_CONDITIONS_URL =
+      "https://pyamsoft.blogspot.com/p/wordwiz-terms-and-conditions.html"
+  }
 }

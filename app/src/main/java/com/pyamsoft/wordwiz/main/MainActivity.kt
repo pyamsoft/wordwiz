@@ -68,7 +68,7 @@ class MainActivity : RatingActivity() {
     val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
     Injector.obtain<WordWizComponent>(applicationContext)
         .plusMainComponent()
-        .create(this, layoutRoot)
+        .create(this, this, layoutRoot)
         .inject(this)
 
     val component = requireNotNull(view)
