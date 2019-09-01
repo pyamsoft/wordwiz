@@ -28,37 +28,36 @@ import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
 import javax.inject.Inject
 
 internal class SettingsView @Inject internal constructor(
-  preferenceScreen: PreferenceScreen
+    preferenceScreen: PreferenceScreen
 ) : PrefUiView<SettingsViewState, SettingsViewEvent>(preferenceScreen),
     LifecycleObserver {
 
-  private val wordCount by boundPref<SwitchPreferenceCompat>(R.string.word_count_key)
-  private val letterCount by boundPref<SwitchPreferenceCompat>(R.string.letter_count_key)
+    private val wordCount by boundPref<SwitchPreferenceCompat>(R.string.word_count_key)
+    private val letterCount by boundPref<SwitchPreferenceCompat>(R.string.letter_count_key)
 
-  override fun onRender(
-    state: SettingsViewState,
-    savedState: UiSavedState
-  ) {
-    state.isWordCountEnabled.let { enabled ->
-      wordCount.isChecked = enabled
-      wordCount.setOnPreferenceClickListener {
-        publish(ToggleWordCount(!enabled))
-        return@setOnPreferenceClickListener true
-      }
+    override fun onRender(
+        state: SettingsViewState,
+        savedState: UiSavedState
+    ) {
+        state.isWordCountEnabled.let { enabled ->
+            wordCount.isChecked = enabled
+            wordCount.setOnPreferenceClickListener {
+                publish(ToggleWordCount(!enabled))
+                return@setOnPreferenceClickListener true
+            }
+        }
+
+        state.isLetterCountEnabled.let { enabled ->
+            letterCount.isChecked = enabled
+            letterCount.setOnPreferenceClickListener {
+                publish(ToggleLetterCount(!enabled))
+                return@setOnPreferenceClickListener true
+            }
+        }
     }
 
-    state.isLetterCountEnabled.let { enabled ->
-      letterCount.isChecked = enabled
-      letterCount.setOnPreferenceClickListener {
-        publish(ToggleLetterCount(!enabled))
-        return@setOnPreferenceClickListener true
-      }
+    override fun onTeardown() {
+        wordCount.onPreferenceClickListener = null
+        letterCount.onPreferenceClickListener = null
     }
-  }
-
-  override fun onTeardown() {
-    wordCount.onPreferenceClickListener = null
-    letterCount.onPreferenceClickListener = null
-  }
-
 }

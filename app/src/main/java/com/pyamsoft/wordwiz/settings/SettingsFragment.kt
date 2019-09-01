@@ -19,17 +19,16 @@ package com.pyamsoft.wordwiz.settings
 
 import com.pyamsoft.pydroid.ui.settings.AppSettingsFragment
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
-import com.pyamsoft.wordwiz.settings.SettingsPreferenceFragment.Companion
 
 class SettingsFragment : AppSettingsFragment() {
 
-  override fun provideSettingsFragment(): AppSettingsPreferenceFragment =
-    SettingsPreferenceFragment()
+    override fun provideSettingsFragment(): AppSettingsPreferenceFragment =
+        SettingsPreferenceFragment()
 
-  override fun provideSettingsTag(): String =
-    SettingsPreferenceFragment.TAG
+    override fun provideSettingsTag(): String =
+        SettingsPreferenceFragment.TAG
 
-  companion object {
-    const val TAG = "SettingsFragment"
-  }
+    companion object {
+        const val TAG = "SettingsFragment"
+    }
 }

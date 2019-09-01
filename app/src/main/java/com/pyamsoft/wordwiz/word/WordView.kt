@@ -33,64 +33,63 @@ import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
 internal class WordView @Inject internal constructor(
-  private val context: Context,
-  private val owner: LifecycleOwner
+    private val context: Context,
+    private val owner: LifecycleOwner
 ) : UiView<WordProcessState, WordProcessViewEvent>() {
 
-  private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
+    private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
-  override fun id(): Int {
-    throw InvalidIdException
-  }
+    override fun id(): Int {
+        throw InvalidIdException
+    }
 
-  override fun render(
-    state: WordProcessState,
-    savedState: UiSavedState
-  ) {
-    state.isProcessing.let { processing ->
-      if (processing != null) {
+    override fun render(
+        state: WordProcessState,
+        savedState: UiSavedState
+    ) {
+        state.isProcessing.let { processing ->
+            if (processing != null) {
+                clear()
+                if (!processing.isProcessing) {
+                    handler.postDelayed({ publish(CloseScreen) }, 750)
+                }
+            }
+        }
+
+        state.result.let { result ->
+            if (result == null) {
+                hideMessage()
+            } else {
+                return when (result.type) {
+                    WORD_COUNT -> showMessage("Word count: ${result.count}")
+                    LETTER_COUNT -> showMessage("Letter count: ${result.count}")
+                    else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
+                }
+            }
+        }
+    }
+
+    private fun hideMessage() {
+        Toaster.bindTo(owner)
+            .dismiss()
+    }
+
+    fun showError(throwable: Throwable) {
+        showMessage(throwable.message ?: "An unexpected error occurred.")
+    }
+
+    private fun showMessage(message: String) {
+        Toaster.bindTo(owner)
+            .short(context.applicationContext, message)
+            .show()
+    }
+
+    override fun doTeardown() {
         clear()
-        if (!processing.isProcessing) {
-          handler.postDelayed({ publish(CloseScreen) }, 750)
-        }
-      }
-    }
-
-    state.result.let { result ->
-      if (result == null) {
         hideMessage()
-      } else {
-        return when (result.type) {
-          WORD_COUNT -> showMessage("Word count: ${result.count}")
-          LETTER_COUNT -> showMessage("Letter count: ${result.count}")
-          else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
-        }
-      }
     }
-  }
 
-  private fun hideMessage() {
-    Toaster.bindTo(owner)
-        .dismiss()
-  }
-
-  fun showError(throwable: Throwable) {
-    showMessage(throwable.message ?: "An unexpected error occurred.")
-  }
-
-  private fun showMessage(message: String) {
-    Toaster.bindTo(owner)
-        .short(context.applicationContext, message)
-        .show()
-  }
-
-  override fun doTeardown() {
-    clear()
-    hideMessage()
-  }
-
-  private fun clear() {
-    handler.removeCallbacksAndMessages(null)
-  }
-
+    private fun clear() {
+        handler.removeCallbacksAndMessages(null)
+    }
 }

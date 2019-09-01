@@ -18,6 +18,6 @@
 package com.pyamsoft.wordwiz.word
 
 data class WordProcessResult(
-  val type: ProcessType,
-  val count: Int
+    val type: ProcessType,
+    val count: Int
 )

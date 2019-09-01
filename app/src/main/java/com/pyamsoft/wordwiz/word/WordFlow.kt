@@ -22,24 +22,21 @@ import com.pyamsoft.pydroid.arch.UiViewEvent
 import com.pyamsoft.pydroid.arch.UiViewState
 
 data class WordProcessState(
-  val isProcessing: Processing?,
-  val result: WordProcessResult?
+    val isProcessing: Processing?,
+    val result: WordProcessResult?
 ) : UiViewState {
 
-  data class Processing internal constructor(val isProcessing: Boolean)
-
+    data class Processing internal constructor(val isProcessing: Boolean)
 }
 
 sealed class WordProcessViewEvent : UiViewEvent {
 
-  object CloseScreen : WordProcessViewEvent()
-
+    object CloseScreen : WordProcessViewEvent()
 }
 
 sealed class WordProcessControllerEvent : UiControllerEvent {
 
-  object Finish : WordProcessControllerEvent()
+    object Finish : WordProcessControllerEvent()
 
-  data class Error internal constructor(val throwable: Throwable) : WordProcessControllerEvent()
-
+    data class Error internal constructor(val throwable: Throwable) : WordProcessControllerEvent()
 }

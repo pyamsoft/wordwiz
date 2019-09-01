@@ -34,30 +34,28 @@ import dagger.multibindings.IntoMap
 @Subcomponent(modules = [ViewModelModule::class])
 internal interface WordComponent {
 
-  fun inject(activity: WordProcessActivity)
+    fun inject(activity: WordProcessActivity)
 
-  @Subcomponent.Factory
-  interface Factory {
+    @Subcomponent.Factory
+    interface Factory {
 
-    @CheckResult
-    fun create(
-      @BindsInstance owner: LifecycleOwner,
-      @BindsInstance componentName: ComponentName,
-      @BindsInstance text: CharSequence
-    ): WordComponent
+        @CheckResult
+        fun create(
+            @BindsInstance owner: LifecycleOwner,
+            @BindsInstance componentName: ComponentName,
+            @BindsInstance text: CharSequence
+        ): WordComponent
+    }
 
-  }
+    @Module
+    abstract class ViewModelModule {
 
-  @Module
-  abstract class ViewModelModule {
+        @Binds
+        internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
 
-    @Binds
-    internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(WordViewModel::class)
-    internal abstract fun wordViewModel(viewModel: WordViewModel): UiViewModel<*, *, *>
-  }
-
+        @Binds
+        @IntoMap
+        @ViewModelKey(WordViewModel::class)
+        internal abstract fun wordViewModel(viewModel: WordViewModel): UiViewModel<*, *, *>
+    }
 }

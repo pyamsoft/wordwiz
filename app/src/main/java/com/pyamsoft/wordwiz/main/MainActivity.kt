@@ -41,96 +41,99 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 class MainActivity : RatingActivity() {
 
-  @JvmField @Inject internal var toolbar: MainToolbarView? = null
-  @JvmField @Inject internal var view: MainFrameView? = null
+    @JvmField
+    @Inject
+    internal var toolbar: MainToolbarView? = null
+    @JvmField
+    @Inject
+    internal var view: MainFrameView? = null
 
-  override val versionName: String = BuildConfig.VERSION_NAME
+    override val versionName: String = BuildConfig.VERSION_NAME
 
-  override val applicationIcon: Int = R.mipmap.ic_launcher
+    override val applicationIcon: Int = R.mipmap.ic_launcher
 
-  override val snackbarRoot: ViewGroup by lazy(NONE) {
-    findViewById<CoordinatorLayout>(R.id.snackbar_root)
-  }
-
-  override val fragmentContainerId: Int
-    get() = requireNotNull(view).id()
-
-  override val changeLogLines: ChangeLogBuilder = buildChangeLog {
-    change("New icon style")
-    change("Better open source license viewing experience")
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.Theme_WordWiz)
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.snackbar_screen)
-
-    val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
-    Injector.obtain<WordWizComponent>(applicationContext)
-        .plusMainComponent()
-        .create(this, this, layoutRoot)
-        .inject(this)
-
-    val component = requireNotNull(view)
-    val toolbarComponent = requireNotNull(toolbar)
-    val dropshadow = DropshadowView.create(layoutRoot)
-
-    createComponent(
-        savedInstanceState, this,
-        UnitViewModel.create(),
-        component, toolbarComponent, dropshadow
-    ) {}
-
-    layoutRoot.layout {
-
-      toolbarComponent.also {
-        connect(it.id(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-        connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-        connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
-      }
-
-      dropshadow.also {
-        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
-        connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-        connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
-      }
-
-      component.also {
-        connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
-        connect(it.id(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-        connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-        connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-        constrainHeight(it.id(), ConstraintSet.MATCH_CONSTRAINT)
-        constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
-      }
+    override val snackbarRoot: ViewGroup by lazy(NONE) {
+        findViewById<CoordinatorLayout>(R.id.snackbar_root)
     }
 
+    override val fragmentContainerId: Int
+        get() = requireNotNull(view).id()
 
-    showPreferenceFragment()
-  }
-
-  private fun showPreferenceFragment() {
-    val fragmentManager = supportFragmentManager
-    val tag = SettingsFragment.TAG
-    if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
-    ) {
-      fragmentManager.commit(this) {
-        add(fragmentContainerId, SettingsFragment(), tag)
-      }
+    override val changeLogLines: ChangeLogBuilder = buildChangeLog {
+        change("New icon style")
+        change("Better open source license viewing experience")
     }
-  }
 
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    toolbar?.saveState(outState)
-    view?.saveState(outState)
-  }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_WordWiz)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.snackbar_screen)
 
-  override fun onDestroy() {
-    super.onDestroy()
-    view = null
-    toolbar = null
-  }
+        val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
+        Injector.obtain<WordWizComponent>(applicationContext)
+            .plusMainComponent()
+            .create(this, this, layoutRoot)
+            .inject(this)
+
+        val component = requireNotNull(view)
+        val toolbarComponent = requireNotNull(toolbar)
+        val dropshadow = DropshadowView.create(layoutRoot)
+
+        createComponent(
+            savedInstanceState, this,
+            UnitViewModel.create(),
+            component, toolbarComponent, dropshadow
+        ) {}
+
+        layoutRoot.layout {
+
+            toolbarComponent.also {
+                connect(it.id(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+            }
+
+            dropshadow.also {
+                connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+                connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+            }
+
+            component.also {
+                connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
+                connect(it.id(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                constrainHeight(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+                constrainWidth(it.id(), ConstraintSet.MATCH_CONSTRAINT)
+            }
+        }
+
+        showPreferenceFragment()
+    }
+
+    private fun showPreferenceFragment() {
+        val fragmentManager = supportFragmentManager
+        val tag = SettingsFragment.TAG
+        if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
+        ) {
+            fragmentManager.commit(this) {
+                add(fragmentContainerId, SettingsFragment(), tag)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        toolbar?.saveState(outState)
+        view?.saveState(outState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        view = null
+        toolbar = null
+    }
 }

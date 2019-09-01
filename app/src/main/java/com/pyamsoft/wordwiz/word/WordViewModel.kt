@@ -32,58 +32,57 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class WordViewModel @Inject internal constructor(
-  private val interactor: WordProcessInteractor,
-  private val component: ComponentName,
-  private val text: CharSequence
+    private val interactor: WordProcessInteractor,
+    private val component: ComponentName,
+    private val text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
     initialState = WordProcessState(isProcessing = null, result = null)
 ) {
 
-  private val processRunner = highlander<Unit> {
-    handleProcessBegin()
-    try {
-      val result = withContext(context = Dispatchers.Default) {
-        interactor.getProcessType(component, text)
-      }
-      handleProcessSuccess(result)
-    } catch (error: Throwable) {
-      error.onActualError { e ->
-        Timber.e(e, "Error handling process request")
-        handleProcessError(e)
-      }
-    } finally {
-      handleProcessComplete()
+    private val processRunner = highlander<Unit> {
+        handleProcessBegin()
+        try {
+            val result = withContext(context = Dispatchers.Default) {
+                interactor.getProcessType(component, text)
+            }
+            handleProcessSuccess(result)
+        } catch (error: Throwable) {
+            error.onActualError { e ->
+                Timber.e(e, "Error handling process request")
+                handleProcessError(e)
+            }
+        } finally {
+            handleProcessComplete()
+        }
     }
-  }
 
-  override fun onInit() {
-    process()
-  }
-
-  override fun handleViewEvent(event: WordProcessViewEvent) {
-    return when (event) {
-      is CloseScreen -> publish(Finish)
+    override fun onInit() {
+        process()
     }
-  }
 
-  private fun process() {
-    viewModelScope.launch { processRunner.call() }
-  }
+    override fun handleViewEvent(event: WordProcessViewEvent) {
+        return when (event) {
+            is CloseScreen -> publish(Finish)
+        }
+    }
 
-  private fun handleProcessBegin() {
-    setState { copy(isProcessing = Processing(true)) }
-  }
+    private fun process() {
+        viewModelScope.launch { processRunner.call() }
+    }
 
-  private fun handleProcessSuccess(result: WordProcessResult) {
-    setState { copy(result = result) }
-  }
+    private fun handleProcessBegin() {
+        setState { copy(isProcessing = Processing(true)) }
+    }
 
-  private fun handleProcessError(throwable: Throwable) {
-    publish(Error(throwable))
-  }
+    private fun handleProcessSuccess(result: WordProcessResult) {
+        setState { copy(result = result) }
+    }
 
-  private fun handleProcessComplete() {
-    setState { copy(isProcessing = Processing(false)) }
-  }
+    private fun handleProcessError(throwable: Throwable) {
+        publish(Error(throwable))
+    }
 
+    private fun handleProcessComplete() {
+        setState { copy(isProcessing = Processing(false)) }
+    }
 }

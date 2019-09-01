@@ -15,4 +15,4 @@
   ~
   -->
 
-<manifest package="com.pyamsoft.wordwiz.word"/>
+<manifest package="com.pyamsoft.wordwiz.word" />

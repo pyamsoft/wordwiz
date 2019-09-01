@@ -32,57 +32,61 @@ import javax.inject.Inject
 
 internal abstract class WordProcessActivity : ActivityBase() {
 
-  @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
-  @JvmField @Inject internal var view: WordView? = null
-  private val viewModel by factory<WordViewModel> { factory }
+    @JvmField
+    @Inject
+    internal var factory: ViewModelProvider.Factory? = null
+    @JvmField
+    @Inject
+    internal var view: WordView? = null
+    private val viewModel by factory<WordViewModel> { factory }
 
-  final override val fragmentContainerId: Int = 0
+    final override val fragmentContainerId: Int = 0
 
-  final override fun onCreate(savedInstanceState: Bundle?) {
-    overridePendingTransition(0, 0)
-    setTheme(R.style.Theme_WordWiz_Transparent)
-    super.onCreate(savedInstanceState)
+    final override fun onCreate(savedInstanceState: Bundle?) {
+        overridePendingTransition(0, 0)
+        setTheme(R.style.Theme_WordWiz_Transparent)
+        super.onCreate(savedInstanceState)
 
-    val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-    if (text == null || text.isBlank()) {
-      finish()
-      return
+        val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+        if (text == null || text.isBlank()) {
+            finish()
+            return
+        }
+
+        Injector.obtain<WordWizComponent>(applicationContext)
+            .plusWordComponent()
+            .create(this, componentName, text)
+            .inject(this)
+
+        createComponent(
+            savedInstanceState, this,
+            viewModel,
+            requireNotNull(view)
+        ) {
+            return@createComponent when (it) {
+                is Finish -> finish()
+                is Error -> requireNotNull(view).showError(it.throwable)
+            }
+        }
     }
 
-    Injector.obtain<WordWizComponent>(applicationContext)
-        .plusWordComponent()
-        .create(this, componentName, text)
-        .inject(this)
-
-    createComponent(
-        savedInstanceState, this,
-        viewModel,
-        requireNotNull(view)
-    ) {
-      return@createComponent when (it) {
-        is Finish -> finish()
-        is Error -> requireNotNull(view).showError(it.throwable)
-      }
+    final override fun onStop() {
+        super.onStop()
+        if (!isFinishing && !isChangingConfigurations) {
+            finish()
+        }
     }
-  }
 
-  final override fun onStop() {
-    super.onStop()
-    if (!isFinishing && !isChangingConfigurations) {
-      finish()
+    final override fun finish() {
+        super.finish()
+        overridePendingTransition(0, 0)
     }
-  }
 
-  final override fun finish() {
-    super.finish()
-    overridePendingTransition(0, 0)
-  }
+    final override fun onDestroy() {
+        super.onDestroy()
+        overridePendingTransition(0, 0)
 
-  final override fun onDestroy() {
-    super.onDestroy()
-    overridePendingTransition(0, 0)
-
-    factory = null
-    view = null
-  }
+        factory = null
+        view = null
+    }
 }

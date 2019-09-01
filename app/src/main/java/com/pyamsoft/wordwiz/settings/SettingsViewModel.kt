@@ -28,7 +28,7 @@ import com.pyamsoft.wordwiz.word.WordCountActivity
 import javax.inject.Inject
 
 internal class SettingsViewModel @Inject internal constructor(
-  context: Context
+    context: Context
 ) : UiViewModel<SettingsViewState, SettingsViewEvent, SettingsControllerEvent>(
     initialState = SettingsViewState(
         isWordCountEnabled = WordCountActivity.isEnabled(context),
@@ -36,23 +36,23 @@ internal class SettingsViewModel @Inject internal constructor(
     )
 ) {
 
-  override fun onInit() {
-  }
-
-  private fun onWordCountToggled(enabled: Boolean) {
-    setState { copy(isWordCountEnabled = enabled) }
-    publish(WordCountAction(enabled))
-  }
-
-  private fun onLetterCountToggled(enabled: Boolean) {
-    setState { copy(isLetterCountEnabled = enabled) }
-    publish(LetterCountAction(enabled))
-  }
-
-  override fun handleViewEvent(event: SettingsViewEvent) {
-    return when (event) {
-      is ToggleWordCount -> onWordCountToggled(event.isEnabled)
-      is ToggleLetterCount -> onLetterCountToggled(event.isEnabled)
+    override fun onInit() {
     }
-  }
+
+    private fun onWordCountToggled(enabled: Boolean) {
+        setState { copy(isWordCountEnabled = enabled) }
+        publish(WordCountAction(enabled))
+    }
+
+    private fun onLetterCountToggled(enabled: Boolean) {
+        setState { copy(isLetterCountEnabled = enabled) }
+        publish(LetterCountAction(enabled))
+    }
+
+    override fun handleViewEvent(event: SettingsViewEvent) {
+        return when (event) {
+            is ToggleWordCount -> onWordCountToggled(event.isEnabled)
+            is ToggleLetterCount -> onLetterCountToggled(event.isEnabled)
+        }
+    }
 }

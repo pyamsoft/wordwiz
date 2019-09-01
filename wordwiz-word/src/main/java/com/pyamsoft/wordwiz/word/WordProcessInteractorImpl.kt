@@ -31,99 +31,99 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
-  context: Context,
-  private val enforcer: Enforcer
+    context: Context,
+    private val enforcer: Enforcer
 ) : WordProcessInteractor {
 
-  private val packageManager: PackageManager = context.packageManager
-  private val labelTypeWordCount: String = context.getString(R.string.label_word_count)
-  private val labelTypeLetterCount: String = context.getString(R.string.label_letter_count)
-  private val labelTypeOccurrences: String = context.getString(R.string.label_occurrence_count)
+    private val packageManager: PackageManager = context.packageManager
+    private val labelTypeWordCount: String = context.getString(R.string.label_word_count)
+    private val labelTypeLetterCount: String = context.getString(R.string.label_letter_count)
+    private val labelTypeOccurrences: String = context.getString(R.string.label_occurrence_count)
 
-  @CheckResult
-  private fun tokenizeString(text: CharSequence): Array<String> {
-    enforcer.assertNotOnMainThread()
-    Timber.d("Tokenize string by spaces")
-    return text.toString()
-        .split(SPLIT_BY_WHITESPACE.toRegex())
-        .dropLastWhile { it.isEmpty() }
-        .toTypedArray()
-  }
-
-  @CheckResult
-  private fun getWordCount(text: CharSequence): Int {
-    enforcer.assertNotOnMainThread()
-    val tokens = tokenizeString(text)
-
-    Timber.d("String tokenized: %s", Arrays.toString(tokens))
-    return tokens.size
-  }
-
-  @CheckResult
-  private fun getLetterCount(text: CharSequence): Int {
-    enforcer.assertNotOnMainThread()
-    val tokens = tokenizeString(text)
-
-    Timber.d("Get a sub of letter counts")
-    return tokens.sumBy { it.length }
-  }
-
-  @CheckResult
-  private fun getOccurrences(
-    text: CharSequence,
-    snip: String
-  ): Int {
-    enforcer.assertNotOnMainThread()
-    Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
-    val pattern = Pattern.compile(snip, Pattern.LITERAL)
-    val matcher = pattern.matcher(text)
-    var count = 0
-    while (matcher.find()) {
-      ++count
+    @CheckResult
+    private fun tokenizeString(text: CharSequence): Array<String> {
+        enforcer.assertNotOnMainThread()
+        Timber.d("Tokenize string by spaces")
+        return text.toString()
+            .split(SPLIT_BY_WHITESPACE.toRegex())
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
     }
 
-    return count
-  }
+    @CheckResult
+    private fun getWordCount(text: CharSequence): Int {
+        enforcer.assertNotOnMainThread()
+        val tokens = tokenizeString(text)
 
-  override suspend fun getProcessType(
-    componentName: ComponentName,
-    text: CharSequence
-  ): WordProcessResult {
-    enforcer.assertNotOnMainThread()
-    val result: WordProcessResult
-    try {
-      Timber.d("Attempt to load the label this activity launched with")
-      val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
-      val label = activityInfo.loadLabel(packageManager)
-      result = getProcessTypeForLabel(label, text)
-    } catch (e: PackageManager.NameNotFoundException) {
-      Timber.e(e, "Name not found ERROR")
-      throw RuntimeException("Name not found for ComponentName: $componentName")
+        Timber.d("String tokenized: %s", Arrays.toString(tokens))
+        return tokens.size
     }
 
-    return result
-  }
+    @CheckResult
+    private fun getLetterCount(text: CharSequence): Int {
+        enforcer.assertNotOnMainThread()
+        val tokens = tokenizeString(text)
 
-  @CheckResult
-  private fun getProcessTypeForLabel(
-    label: CharSequence,
-    text: CharSequence
-  ): WordProcessResult {
-    enforcer.assertNotOnMainThread()
-    return when (label) {
-      labelTypeWordCount -> WordProcessResult(
-          WORD_COUNT, getWordCount(text)
-      )
-      labelTypeLetterCount -> WordProcessResult(
-          LETTER_COUNT, getLetterCount(text)
-      )
-      labelTypeOccurrences -> throw RuntimeException("Not ready yet")
-      else -> throw IllegalArgumentException("Invalid label: $label")
+        Timber.d("Get a sub of letter counts")
+        return tokens.sumBy { it.length }
     }
-  }
 
-  companion object {
+    @CheckResult
+    private fun getOccurrences(
+        text: CharSequence,
+        snip: String
+    ): Int {
+        enforcer.assertNotOnMainThread()
+        Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
+        val pattern = Pattern.compile(snip, Pattern.LITERAL)
+        val matcher = pattern.matcher(text)
+        var count = 0
+        while (matcher.find()) {
+            ++count
+        }
 
-    private const val SPLIT_BY_WHITESPACE = "\\s+"
-  }
+        return count
+    }
+
+    override suspend fun getProcessType(
+        componentName: ComponentName,
+        text: CharSequence
+    ): WordProcessResult {
+        enforcer.assertNotOnMainThread()
+        val result: WordProcessResult
+        try {
+            Timber.d("Attempt to load the label this activity launched with")
+            val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, 0)
+            val label = activityInfo.loadLabel(packageManager)
+            result = getProcessTypeForLabel(label, text)
+        } catch (e: PackageManager.NameNotFoundException) {
+            Timber.e(e, "Name not found ERROR")
+            throw RuntimeException("Name not found for ComponentName: $componentName")
+        }
+
+        return result
+    }
+
+    @CheckResult
+    private fun getProcessTypeForLabel(
+        label: CharSequence,
+        text: CharSequence
+    ): WordProcessResult {
+        enforcer.assertNotOnMainThread()
+        return when (label) {
+            labelTypeWordCount -> WordProcessResult(
+                WORD_COUNT, getWordCount(text)
+            )
+            labelTypeLetterCount -> WordProcessResult(
+                LETTER_COUNT, getLetterCount(text)
+            )
+            labelTypeOccurrences -> throw RuntimeException("Not ready yet")
+            else -> throw IllegalArgumentException("Invalid label: $label")
+        }
+    }
+
+    companion object {
+
+        private const val SPLIT_BY_WHITESPACE = "\\s+"
+    }
 }

@@ -19,31 +19,31 @@
 
 <resources>
 
-  <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
-    <item name="colorPrimary">@color/purple500</item>
-    <item name="colorPrimaryDark">@color/purple700</item>
-    <item name="colorAccent">@color/lightblueA200</item>
-  </style>
+    <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/purple500</item>
+        <item name="colorPrimaryDark">@color/purple700</item>
+        <item name="colorAccent">@color/lightblueA200</item>
+    </style>
 
-  <!-- Normal App Theme -->
-  <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
-    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-  </style>
+    <!-- Normal App Theme -->
+    <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
 
-  <!-- Transparent App Theme -->
-  <style name="Theme.WordWiz.Transparent" parent="@style/Theme.WordWiz">
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowBackground">@android:color/transparent</item>
-    <item name="android:colorBackgroundCacheHint">@null</item>
-    <item name="android:windowIsTranslucent">true</item>
-    <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-    <item name="android:windowAnimationStyle">@null</item>
-  </style>
+    <!-- Transparent App Theme -->
+    <style name="Theme.WordWiz.Transparent" parent="@style/Theme.WordWiz">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 
-  <!-- Splash screen-->
-  <style name="Theme.WordWiz.Splash" parent="@style/Theme.WordWiz">
-    <item name="android:windowBackground">@drawable/splash_screen</item>
-  </style>
+    <!-- Splash screen-->
+    <style name="Theme.WordWiz.Splash" parent="@style/Theme.WordWiz">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
 
 </resources>

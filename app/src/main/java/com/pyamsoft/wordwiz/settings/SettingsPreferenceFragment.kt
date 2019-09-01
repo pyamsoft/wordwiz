@@ -35,62 +35,68 @@ import javax.inject.Inject
 
 class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
-  @JvmField @Inject internal var factory: ViewModelProvider.Factory? = null
-  @JvmField @Inject internal var settingsView: SettingsView? = null
-  @JvmField @Inject internal var toolbar: SettingsToolbarView? = null
-  private val viewModel by factory<SettingsViewModel> { factory }
+    @JvmField
+    @Inject
+    internal var factory: ViewModelProvider.Factory? = null
+    @JvmField
+    @Inject
+    internal var settingsView: SettingsView? = null
+    @JvmField
+    @Inject
+    internal var toolbar: SettingsToolbarView? = null
+    private val viewModel by factory<SettingsViewModel> { factory }
 
-  override val preferenceXmlResId: Int = R.xml.preferences
+    override val preferenceXmlResId: Int = R.xml.preferences
 
-  override val hideClearAll: Boolean = true
+    override val hideClearAll: Boolean = true
 
-  override fun onViewCreated(
-    view: View,
-    savedInstanceState: Bundle?
-  ) {
-    super.onViewCreated(view, savedInstanceState)
-
-    Injector.obtain<WordWizComponent>(requireContext().applicationContext)
-        .plusSettingsComponent()
-        .create(requireToolbarActivity(), preferenceScreen)
-        .inject(this)
-
-    createComponent(
-        savedInstanceState, viewLifecycleOwner,
-        viewModel,
-        requireNotNull(settingsView),
-        requireNotNull(toolbar)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
     ) {
-      return@createComponent when (it) {
-        is WordCountAction -> onWordCountChanged(it.isEnabled)
-        is LetterCountAction -> onLetterCountChanged(it.isEnabled)
-      }
+        super.onViewCreated(view, savedInstanceState)
+
+        Injector.obtain<WordWizComponent>(requireContext().applicationContext)
+            .plusSettingsComponent()
+            .create(requireToolbarActivity(), preferenceScreen)
+            .inject(this)
+
+        createComponent(
+            savedInstanceState, viewLifecycleOwner,
+            viewModel,
+            requireNotNull(settingsView),
+            requireNotNull(toolbar)
+        ) {
+            return@createComponent when (it) {
+                is WordCountAction -> onWordCountChanged(it.isEnabled)
+                is LetterCountAction -> onLetterCountChanged(it.isEnabled)
+            }
+        }
     }
-  }
 
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    settingsView?.saveState(outState)
-    toolbar?.saveState(outState)
-  }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        settingsView?.saveState(outState)
+        toolbar?.saveState(outState)
+    }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    settingsView = null
-    toolbar = null
-    factory = null
-  }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        settingsView = null
+        toolbar = null
+        factory = null
+    }
 
-  private fun onWordCountChanged(enabled: Boolean) {
-    WordCountActivity.enable(requireContext(), enabled)
-  }
+    private fun onWordCountChanged(enabled: Boolean) {
+        WordCountActivity.enable(requireContext(), enabled)
+    }
 
-  private fun onLetterCountChanged(enabled: Boolean) {
-    LetterCountActivity.enable(requireContext(), enabled)
-  }
+    private fun onLetterCountChanged(enabled: Boolean) {
+        LetterCountActivity.enable(requireContext(), enabled)
+    }
 
-  companion object {
+    companion object {
 
-    const val TAG = "SettingsPreferenceFragment"
-  }
+        const val TAG = "SettingsPreferenceFragment"
+    }
 }

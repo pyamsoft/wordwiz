@@ -22,9 +22,9 @@ import androidx.annotation.CheckResult
 
 interface WordProcessInteractor {
 
-  @CheckResult
-  suspend fun getProcessType(
-    componentName: ComponentName,
-    text: CharSequence
-  ): WordProcessResult
+    @CheckResult
+    suspend fun getProcessType(
+        componentName: ComponentName,
+        text: CharSequence
+    ): WordProcessResult
 }

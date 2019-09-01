@@ -25,47 +25,45 @@ import timber.log.Timber
 
 internal abstract class WordActivity<out T : WordProcessActivity> {
 
-  @CheckResult
-  abstract fun provideClassType(): Class<out T>
+    @CheckResult
+    abstract fun provideClassType(): Class<out T>
 
-  fun enable(
-    context: Context,
-    enable: Boolean
-  ) {
-    enable(context, enable, provideClassType())
-  }
-
-  @CheckResult
-  fun isEnabled(context: Context): Boolean {
-    return isEnabled(context, provideClassType())
-  }
-
-  private fun enable(
-    context: Context,
-    enable: Boolean,
-    targetClass: Class<out T>
-  ) {
-    Timber.d("set ${targetClass.simpleName} enabled state: $enable")
-    val name = ComponentName(context, targetClass)
-    val state: Int
-    if (enable) {
-      state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-    } else {
-      state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    fun enable(
+        context: Context,
+        enable: Boolean
+    ) {
+        enable(context, enable, provideClassType())
     }
 
-    context.packageManager.setComponentEnabledSetting(name, state, PackageManager.DONT_KILL_APP)
-  }
+    @CheckResult
+    fun isEnabled(context: Context): Boolean {
+        return isEnabled(context, provideClassType())
+    }
 
-  @CheckResult
-  private fun isEnabled(
-    context: Context,
-    targetClass: Class<out T>
-  ): Boolean {
-    val name = ComponentName(context, targetClass)
-    val state = context.packageManager.getComponentEnabledSetting(name)
-    return state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-  }
+    private fun enable(
+        context: Context,
+        enable: Boolean,
+        targetClass: Class<out T>
+    ) {
+        Timber.d("set ${targetClass.simpleName} enabled state: $enable")
+        val name = ComponentName(context, targetClass)
+        val state: Int
+        if (enable) {
+            state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        } else {
+            state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        }
 
+        context.packageManager.setComponentEnabledSetting(name, state, PackageManager.DONT_KILL_APP)
+    }
+
+    @CheckResult
+    private fun isEnabled(
+        context: Context,
+        targetClass: Class<out T>
+    ): Boolean {
+        val name = ComponentName(context, targetClass)
+        val state = context.packageManager.getComponentEnabledSetting(name)
+        return state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+    }
 }
-

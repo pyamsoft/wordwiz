@@ -33,24 +33,23 @@ import javax.inject.Singleton
 @Component(modules = [WordProcessModule::class])
 internal interface WordWizComponent {
 
-  @CheckResult
-  fun plusWordComponent(): WordComponent.Factory
-
-  @CheckResult
-  fun plusSettingsComponent(): SettingsComponent.Factory
-
-  @CheckResult
-  fun plusMainComponent(): MainComponent.Factory
-
-  @Component.Factory
-  interface Factory {
+    @CheckResult
+    fun plusWordComponent(): WordComponent.Factory
 
     @CheckResult
-    fun create(
-      @BindsInstance context: Context,
-      @BindsInstance theming: Theming,
-      @BindsInstance enforcer: Enforcer
-    ): WordWizComponent
-  }
+    fun plusSettingsComponent(): SettingsComponent.Factory
 
+    @CheckResult
+    fun plusMainComponent(): MainComponent.Factory
+
+    @Component.Factory
+    interface Factory {
+
+        @CheckResult
+        fun create(
+            @BindsInstance context: Context,
+            @BindsInstance theming: Theming,
+            @BindsInstance enforcer: Enforcer
+        ): WordWizComponent
+    }
 }

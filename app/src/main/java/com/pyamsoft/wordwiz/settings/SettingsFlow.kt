@@ -22,21 +22,20 @@ import com.pyamsoft.pydroid.arch.UiViewEvent
 import com.pyamsoft.pydroid.arch.UiViewState
 
 data class SettingsViewState(
-  val isWordCountEnabled: Boolean,
-  val isLetterCountEnabled: Boolean
+    val isWordCountEnabled: Boolean,
+    val isLetterCountEnabled: Boolean
 ) : UiViewState
 
 sealed class SettingsViewEvent : UiViewEvent {
 
-  data class ToggleWordCount(val isEnabled: Boolean) : SettingsViewEvent()
+    data class ToggleWordCount(val isEnabled: Boolean) : SettingsViewEvent()
 
-  data class ToggleLetterCount(val isEnabled: Boolean) : SettingsViewEvent()
+    data class ToggleLetterCount(val isEnabled: Boolean) : SettingsViewEvent()
 }
 
 sealed class SettingsControllerEvent : UiControllerEvent {
 
-  data class WordCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
+    data class WordCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
 
-  data class LetterCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
+    data class LetterCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
 }
-
