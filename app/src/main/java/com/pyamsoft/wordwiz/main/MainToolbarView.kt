@@ -18,8 +18,6 @@
 package com.pyamsoft.wordwiz.main
 
 import android.app.Activity
-import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -39,33 +37,34 @@ import javax.inject.Inject
 internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
     activity: Activity,
-    private val theming: Theming,
-    private val toolbarActivityProvider: ToolbarActivityProvider
+    theming: Theming,
+    toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
-
-    private var activity: Activity? = activity
 
     override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
 
     override val layout: Int = R.layout.toolbar
 
-    override fun onInflated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        val theme: Int
-        if (theming.isDarkTheme(requireNotNull(activity))) {
-            theme = R.style.ThemeOverlay_MaterialComponents
-        } else {
-            theme = R.style.ThemeOverlay_MaterialComponents_Light
+    init {
+        doOnInflate {
+            val theme: Int = if (theming.isDarkTheme(activity)) {
+                R.style.ThemeOverlay_MaterialComponents
+            } else {
+                R.style.ThemeOverlay_MaterialComponents_Light
+            }
+
+            layoutRoot.apply {
+                popupTheme = theme
+                toolbarActivityProvider.setToolbar(this)
+                setTitle(R.string.app_name)
+                ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
+                addPrivacy(WordWiz.PRIVACY_POLICY_URL, WordWiz.TERMS_CONDITIONS_URL)
+            }
         }
 
-        layoutRoot.apply {
-            popupTheme = theme
-            toolbarActivityProvider.setToolbar(this)
-            setTitle(R.string.app_name)
-            ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
-            addPrivacy(WordWiz.PRIVACY_POLICY_URL, WordWiz.TERMS_CONDITIONS_URL)
+        doOnTeardown {
+            toolbarActivityProvider.setToolbar(null)
+            layoutRoot.removePrivacy()
         }
     }
 
@@ -73,11 +72,5 @@ internal class MainToolbarView @Inject internal constructor(
         state: UnitViewState,
         savedState: UiSavedState
     ) {
-    }
-
-    override fun onTeardown() {
-        toolbarActivityProvider.setToolbar(null)
-        layoutRoot.removePrivacy()
-        activity = null
     }
 }

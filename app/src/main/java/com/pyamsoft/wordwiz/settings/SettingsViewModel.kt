@@ -36,9 +36,6 @@ internal class SettingsViewModel @Inject internal constructor(
     )
 ) {
 
-    override fun onInit() {
-    }
-
     private fun onWordCountToggled(enabled: Boolean) {
         setState { copy(isWordCountEnabled = enabled) }
         publish(WordCountAction(enabled))

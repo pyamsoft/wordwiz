@@ -17,7 +17,6 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import android.os.Bundle
 import com.pyamsoft.pydroid.arch.UiSavedState
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
@@ -27,18 +26,18 @@ import com.pyamsoft.wordwiz.R
 import javax.inject.Inject
 
 internal class SettingsToolbarView @Inject internal constructor(
-    private val toolbarActivity: ToolbarActivity
+    toolbarActivity: ToolbarActivity
 ) : UiView<SettingsViewState, SettingsViewEvent>() {
 
-    override fun id(): Int {
-        throw InvalidIdException
-    }
-
-    override fun doInflate(savedInstanceState: Bundle?) {
+    init {
         toolbarActivity.withToolbar { toolbar ->
             toolbar.setTitle(R.string.app_name)
             toolbar.setUpEnabled(false)
         }
+    }
+
+    override fun id(): Int {
+        throw InvalidIdException
     }
 
     override fun render(

@@ -35,6 +35,13 @@ internal class SettingsView @Inject internal constructor(
     private val wordCount by boundPref<SwitchPreferenceCompat>(R.string.word_count_key)
     private val letterCount by boundPref<SwitchPreferenceCompat>(R.string.letter_count_key)
 
+    init {
+        doOnTeardown {
+            wordCount.onPreferenceClickListener = null
+            letterCount.onPreferenceClickListener = null
+        }
+    }
+
     override fun onRender(
         state: SettingsViewState,
         savedState: UiSavedState
@@ -54,10 +61,5 @@ internal class SettingsView @Inject internal constructor(
                 return@setOnPreferenceClickListener true
             }
         }
-    }
-
-    override fun onTeardown() {
-        wordCount.onPreferenceClickListener = null
-        letterCount.onPreferenceClickListener = null
     }
 }

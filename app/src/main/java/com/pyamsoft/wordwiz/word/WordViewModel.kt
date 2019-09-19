@@ -32,9 +32,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class WordViewModel @Inject internal constructor(
-    private val interactor: WordProcessInteractor,
-    private val component: ComponentName,
-    private val text: CharSequence
+    interactor: WordProcessInteractor,
+    component: ComponentName,
+    text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
     initialState = WordProcessState(isProcessing = null, result = null)
 ) {
@@ -56,8 +56,10 @@ internal class WordViewModel @Inject internal constructor(
         }
     }
 
-    override fun onInit() {
-        process()
+    init {
+        doOnInit {
+            process()
+        }
     }
 
     override fun handleViewEvent(event: WordProcessViewEvent) {

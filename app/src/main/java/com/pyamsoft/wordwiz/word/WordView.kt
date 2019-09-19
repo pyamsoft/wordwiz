@@ -39,6 +39,13 @@ internal class WordView @Inject internal constructor(
 
     private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
+    init {
+        doOnTeardown {
+            clear()
+            hideMessage()
+        }
+    }
+
     override fun id(): Int {
         throw InvalidIdException
     }
@@ -82,11 +89,6 @@ internal class WordView @Inject internal constructor(
         Toaster.bindTo(owner)
             .short(context.applicationContext, message)
             .show()
-    }
-
-    override fun doTeardown() {
-        clear()
-        hideMessage()
     }
 
     private fun clear() {
