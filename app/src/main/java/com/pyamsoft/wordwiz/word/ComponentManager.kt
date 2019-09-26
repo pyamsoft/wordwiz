@@ -15,26 +15,15 @@
  *
  */
 
-package com.pyamsoft.wordwiz.main
+package com.pyamsoft.wordwiz.word
 
-import android.view.ViewGroup
 import androidx.annotation.CheckResult
-import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
-import dagger.BindsInstance
-import dagger.Subcomponent
 
-@Subcomponent
-internal interface MainComponent {
+interface ComponentManager {
 
-    fun inject(activity: MainActivity)
+    @CheckResult
+    fun isWordCountEnabled(): Boolean
 
-    @Subcomponent.Factory
-    interface Factory {
-
-        @CheckResult
-        fun create(
-            @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
-            @BindsInstance layoutRoot: ViewGroup
-        ): MainComponent
-    }
+    @CheckResult
+    fun isLetterCountEnabled(): Boolean
 }

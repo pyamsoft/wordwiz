@@ -17,22 +17,20 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import android.content.Context
 import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.LetterCountAction
 import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.WordCountAction
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
-import com.pyamsoft.wordwiz.word.LetterCountActivity
-import com.pyamsoft.wordwiz.word.WordCountActivity
+import com.pyamsoft.wordwiz.word.ComponentManager
 import javax.inject.Inject
 
 internal class SettingsViewModel @Inject internal constructor(
-    context: Context
+    manager: ComponentManager
 ) : UiViewModel<SettingsViewState, SettingsViewEvent, SettingsControllerEvent>(
     initialState = SettingsViewState(
-        isWordCountEnabled = WordCountActivity.isEnabled(context),
-        isLetterCountEnabled = LetterCountActivity.isEnabled(context)
+        isWordCountEnabled = manager.isWordCountEnabled(),
+        isLetterCountEnabled = manager.isLetterCountEnabled()
     )
 ) {
 

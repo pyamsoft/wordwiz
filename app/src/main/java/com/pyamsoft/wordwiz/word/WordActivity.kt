@@ -47,11 +47,10 @@ internal abstract class WordActivity<out T : WordProcessActivity> {
     ) {
         Timber.d("set ${targetClass.simpleName} enabled state: $enable")
         val name = ComponentName(context, targetClass)
-        val state: Int
-        if (enable) {
-            state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        val state = if (enable) {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         } else {
-            state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
         }
 
         context.packageManager.setComponentEnabledSetting(name, state, PackageManager.DONT_KILL_APP)

@@ -72,7 +72,7 @@ class MainActivity : RatingActivity() {
         val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
         Injector.obtain<WordWizComponent>(applicationContext)
             .plusMainComponent()
-            .create(this, this, layoutRoot)
+            .create(this, layoutRoot)
             .inject(this)
 
         val component = requireNotNull(view)
@@ -103,7 +103,12 @@ class MainActivity : RatingActivity() {
 
             component.also {
                 connect(it.id(), ConstraintSet.TOP, toolbarComponent.id(), ConstraintSet.BOTTOM)
-                connect(it.id(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                connect(
+                    it.id(),
+                    ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.BOTTOM
+                )
                 connect(it.id(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
                 connect(it.id(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
                 constrainHeight(it.id(), ConstraintSet.MATCH_CONSTRAINT)

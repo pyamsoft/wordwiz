@@ -21,16 +21,21 @@ import android.content.Context
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.pydroid.ui.theme.Theming
+import com.pyamsoft.wordwiz.WordWizComponent.WordWizModule
 import com.pyamsoft.wordwiz.main.MainComponent
 import com.pyamsoft.wordwiz.settings.SettingsComponent
+import com.pyamsoft.wordwiz.word.ComponentManager
+import com.pyamsoft.wordwiz.word.ComponentManagerImpl
 import com.pyamsoft.wordwiz.word.WordComponent
 import com.pyamsoft.wordwiz.word.WordProcessModule
+import dagger.Binds
 import dagger.BindsInstance
 import dagger.Component
+import dagger.Module
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [WordProcessModule::class])
+@Component(modules = [WordProcessModule::class, WordWizModule::class])
 internal interface WordWizComponent {
 
     @CheckResult
@@ -51,5 +56,12 @@ internal interface WordWizComponent {
             @BindsInstance theming: Theming,
             @BindsInstance enforcer: Enforcer
         ): WordWizComponent
+    }
+
+    @Module
+    abstract class WordWizModule {
+
+        @Binds
+        internal abstract fun bindComponentManager(impl: ComponentManagerImpl): ComponentManager
     }
 }
