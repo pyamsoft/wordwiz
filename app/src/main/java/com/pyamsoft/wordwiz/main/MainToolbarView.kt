@@ -27,7 +27,7 @@ import com.pyamsoft.pydroid.arch.UnitViewState
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.privacy.addPrivacy
 import com.pyamsoft.pydroid.ui.privacy.removePrivacy
-import com.pyamsoft.pydroid.ui.theme.Theming
+import com.pyamsoft.pydroid.ui.theme.ThemeProvider
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
-    theming: Theming,
+    theming: ThemeProvider,
     toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
 

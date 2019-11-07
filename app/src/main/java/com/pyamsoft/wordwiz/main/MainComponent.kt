@@ -20,6 +20,7 @@ package com.pyamsoft.wordwiz.main
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
+import com.pyamsoft.pydroid.ui.theme.ThemeProvider
 import dagger.BindsInstance
 import dagger.Subcomponent
 
@@ -34,7 +35,8 @@ internal interface MainComponent {
         @CheckResult
         fun create(
             @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
-            @BindsInstance layoutRoot: ViewGroup
+            @BindsInstance layoutRoot: ViewGroup,
+            @BindsInstance themeProvider: ThemeProvider
         ): MainComponent
     }
 }
