@@ -19,7 +19,6 @@ package com.pyamsoft.wordwiz
 
 import android.app.Application
 import com.pyamsoft.pydroid.ui.PYDroid
-import com.squareup.leakcanary.LeakCanary
 
 class WordWiz : Application() {
 
@@ -27,13 +26,6 @@ class WordWiz : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-
-        if (BuildConfig.DEBUG) {
-            LeakCanary.install(this)
-        }
 
         PYDroid.init(
             this,
