@@ -21,9 +21,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.pyamsoft.pydroid.arch.BaseUiView
-import com.pyamsoft.pydroid.arch.UiSavedState
-import com.pyamsoft.pydroid.arch.UnitViewEvent
-import com.pyamsoft.pydroid.arch.UnitViewState
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.privacy.addPrivacy
 import com.pyamsoft.pydroid.ui.privacy.removePrivacy
@@ -37,7 +34,7 @@ internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
     theming: ThemeProvider,
     toolbarActivityProvider: ToolbarActivityProvider
-) : BaseUiView<UnitViewState, UnitViewEvent>(parent) {
+) : BaseUiView<MainViewState, MainViewEvent>(parent) {
 
     override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
 
@@ -66,9 +63,6 @@ internal class MainToolbarView @Inject internal constructor(
         }
     }
 
-    override fun onRender(
-        state: UnitViewState,
-        savedState: UiSavedState
-    ) {
+    override fun onRender(state: MainViewState) {
     }
 }

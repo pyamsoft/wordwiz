@@ -25,10 +25,10 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
-import timber.log.Timber
 import java.util.Arrays
 import java.util.regex.Pattern
 import javax.inject.Inject
+import timber.log.Timber
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
     context: Context,

@@ -17,7 +17,7 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.pydroid.arch.UiSavedState
+import com.pyamsoft.pydroid.arch.UiBundleReader
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
 import com.pyamsoft.pydroid.ui.arch.InvalidIdException
@@ -40,9 +40,9 @@ internal class SettingsToolbarView @Inject internal constructor(
         throw InvalidIdException
     }
 
-    override fun render(
-        state: SettingsViewState,
-        savedState: UiSavedState
-    ) {
+    override fun onInit(savedInstanceState: UiBundleReader) {
+    }
+
+    override fun render(state: SettingsViewState) {
     }
 }

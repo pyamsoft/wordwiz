@@ -22,10 +22,12 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.pyamsoft.pydroid.arch.UnitViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.about.AboutFragment
+import com.pyamsoft.pydroid.ui.arch.factory
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
 import com.pyamsoft.pydroid.ui.rating.buildChangeLog
@@ -54,6 +56,13 @@ class MainActivity : RatingActivity() {
     @JvmField
     @Inject
     internal var theming: Theming? = null
+
+    @JvmField
+    @Inject
+    internal var factory: ViewModelProvider.Factory? = null
+    private val viewModel by factory<MainViewModel> { factory }
+
+    private var stateSaver: StateSaver? = null
 
     override val versionName: String = BuildConfig.VERSION_NAME
 
@@ -93,12 +102,14 @@ class MainActivity : RatingActivity() {
 
         val component = requireNotNull(view)
         val toolbarComponent = requireNotNull(toolbar)
-        val dropshadow = DropshadowView.create(layoutRoot)
+        val dropshadow = DropshadowView.createTyped<MainViewState, MainViewEvent>(layoutRoot)
 
-        createComponent(
+        stateSaver = createComponent(
             savedInstanceState, this,
-            UnitViewModel.create(),
-            component, toolbarComponent, dropshadow
+            viewModel,
+            component,
+            toolbarComponent,
+            dropshadow
         ) {}
 
         layoutRoot.layout {
@@ -148,12 +159,13 @@ class MainActivity : RatingActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        toolbar?.saveState(outState)
-        view?.saveState(outState)
+        stateSaver?.saveState(outState)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        factory = null
+        stateSaver = null
         view = null
         toolbar = null
     }

@@ -20,6 +20,7 @@ package com.pyamsoft.wordwiz.word
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
@@ -35,10 +36,13 @@ internal abstract class WordProcessActivity : ActivityBase() {
     @JvmField
     @Inject
     internal var factory: ViewModelProvider.Factory? = null
+    private val viewModel by factory<WordViewModel> { factory }
+
     @JvmField
     @Inject
     internal var view: WordView? = null
-    private val viewModel by factory<WordViewModel> { factory }
+
+    private var stateSaver: StateSaver? = null
 
     final override val fragmentContainerId: Int = 0
 
@@ -58,7 +62,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
             .create(this, componentName, text)
             .inject(this)
 
-        createComponent(
+        stateSaver = createComponent(
             savedInstanceState, this,
             viewModel,
             requireNotNull(view)
@@ -77,6 +81,11 @@ internal abstract class WordProcessActivity : ActivityBase() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        stateSaver?.saveState(outState)
+    }
+
     final override fun finish() {
         super.finish()
         overridePendingTransition(0, 0)
@@ -86,6 +95,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
         super.onDestroy()
         overridePendingTransition(0, 0)
 
+        stateSaver = null
         factory = null
         view = null
     }

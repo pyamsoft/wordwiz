@@ -20,6 +20,7 @@ package com.pyamsoft.wordwiz.settings
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
@@ -38,13 +39,17 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
     @JvmField
     @Inject
     internal var factory: ViewModelProvider.Factory? = null
+    private val viewModel by factory<SettingsViewModel> { factory }
+
     @JvmField
     @Inject
     internal var settingsView: SettingsView? = null
+
     @JvmField
     @Inject
     internal var toolbar: SettingsToolbarView? = null
-    private val viewModel by factory<SettingsViewModel> { factory }
+
+    private var stateSaver: StateSaver? = null
 
     override val preferenceXmlResId: Int = R.xml.preferences
 
@@ -61,7 +66,7 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
             .create(requireToolbarActivity(), preferenceScreen)
             .inject(this)
 
-        createComponent(
+        stateSaver = createComponent(
             savedInstanceState, viewLifecycleOwner,
             viewModel,
             requireNotNull(settingsView),
@@ -76,12 +81,13 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        settingsView?.saveState(outState)
-        toolbar?.saveState(outState)
+        stateSaver?.saveState(outState)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stateSaver = null
+        factory = null
         settingsView = null
         toolbar = null
         factory = null

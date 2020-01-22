@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Peter Kenji Yamanaka
+ * Copyright 2020 Peter Kenji Yamanaka
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,9 @@
 
 package com.pyamsoft.wordwiz.main
 
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import com.pyamsoft.pydroid.arch.BaseUiView
-import com.pyamsoft.wordwiz.R
-import javax.inject.Inject
+import com.pyamsoft.pydroid.arch.UiViewEvent
+import com.pyamsoft.pydroid.arch.UiViewState
 
-internal class MainFrameView @Inject internal constructor(
-    parent: ViewGroup
-) : BaseUiView<MainViewState, MainViewEvent>(parent) {
+object MainViewState : UiViewState
 
-    override val layoutRoot by boundView<FrameLayout>(R.id.layout_frame)
-
-    override val layout: Int = R.layout.layout_frame
-
-    override fun onRender(state: MainViewState) {
-    }
-}
+object MainViewEvent : UiViewEvent
