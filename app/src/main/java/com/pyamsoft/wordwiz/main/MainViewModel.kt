@@ -20,9 +20,12 @@ package com.pyamsoft.wordwiz.main
 import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.arch.UnitControllerEvent
 import javax.inject.Inject
+import javax.inject.Named
 
-internal class MainViewModel @Inject internal constructor() : UiViewModel<MainViewState, MainViewEvent, UnitControllerEvent>(
-    initialState = MainViewState
+internal class MainViewModel @Inject internal constructor(
+    @Named("debug") debug: Boolean
+) : UiViewModel<MainViewState, MainViewEvent, UnitControllerEvent>(
+    initialState = MainViewState, debug = debug
 ) {
 
     override fun handleViewEvent(event: MainViewEvent) {

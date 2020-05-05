@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
-import com.pyamsoft.pydroid.ui.about.AboutFragment
 import com.pyamsoft.pydroid.ui.arch.factory
 import com.pyamsoft.pydroid.ui.rating.ChangeLogBuilder
 import com.pyamsoft.pydroid.ui.rating.RatingActivity
@@ -149,8 +148,7 @@ class MainActivity : RatingActivity() {
     private fun showPreferenceFragment() {
         val fragmentManager = supportFragmentManager
         val tag = SettingsFragment.TAG
-        if (fragmentManager.findFragmentByTag(tag) == null && !AboutFragment.isPresent(this)
-        ) {
+        if (fragmentManager.findFragmentByTag(tag) == null) {
             fragmentManager.commit(this) {
                 add(fragmentContainerId, SettingsFragment(), tag)
             }

@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz
 
 import android.app.Application
 import com.pyamsoft.pydroid.ui.PYDroid
+import com.pyamsoft.pydroid.util.isDebugMode
 
 class WordWiz : Application() {
 
@@ -29,16 +30,16 @@ class WordWiz : Application() {
 
         PYDroid.init(
             this,
-            getString(R.string.app_name),
-            "https://github.com/pyamsoft/wordwiz",
-            "https://github.com/pyamsoft/wordwiz/issues",
-            PRIVACY_POLICY_URL,
-            TERMS_CONDITIONS_URL,
-            BuildConfig.VERSION_CODE,
-            BuildConfig.DEBUG
+            PYDroid.Parameters(
+                viewSourceUrl = "https://github.com/pyamsoft/wordwiz",
+                bugReportUrl = "https://github.com/pyamsoft/wordwiz/issues",
+                privacyPolicyUrl = PRIVACY_POLICY_URL,
+                termsConditionsUrl = TERMS_CONDITIONS_URL,
+                version = BuildConfig.VERSION_CODE
+            )
         ) { provider ->
             component = DaggerWordWizComponent.factory()
-                .create(this, provider.theming(), provider.enforcer())
+                .create(isDebugMode(), this, provider.theming(), provider.enforcer())
         }
     }
 

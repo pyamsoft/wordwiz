@@ -18,7 +18,6 @@
 package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.pyamsoft.pydroid.arch.BaseUiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
@@ -28,17 +27,18 @@ import com.pyamsoft.pydroid.ui.theme.ThemeProvider
 import com.pyamsoft.pydroid.util.toDp
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
+import com.pyamsoft.wordwiz.databinding.ToolbarBinding
 import javax.inject.Inject
 
 internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
     theming: ThemeProvider,
     toolbarActivityProvider: ToolbarActivityProvider
-) : BaseUiView<MainViewState, MainViewEvent>(parent) {
+) : BaseUiView<MainViewState, MainViewEvent, ToolbarBinding>(parent) {
 
-    override val layoutRoot by boundView<Toolbar>(R.id.toolbar)
+    override val viewBinding = ToolbarBinding::inflate
 
-    override val layout: Int = R.layout.toolbar
+    override val layoutRoot by boundView { toolbar }
 
     init {
         doOnInflate {

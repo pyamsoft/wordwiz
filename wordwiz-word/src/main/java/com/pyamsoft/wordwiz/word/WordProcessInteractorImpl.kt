@@ -25,10 +25,12 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
-import java.util.Arrays
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
-import timber.log.Timber
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
     context: Context,
@@ -88,7 +90,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
     override suspend fun getProcessType(
         componentName: ComponentName,
         text: CharSequence
-    ): WordProcessResult {
+    ): WordProcessResult = withContext(context = Dispatchers.Default) {
         enforcer.assertNotOnMainThread()
         val result: WordProcessResult
         try {
@@ -101,7 +103,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
             throw RuntimeException("Name not found for ComponentName: $componentName")
         }
 
-        return result
+        return@withContext result
     }
 
     @CheckResult

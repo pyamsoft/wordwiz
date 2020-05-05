@@ -23,14 +23,13 @@ import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
 import com.pyamsoft.pydroid.arch.UiBundleReader
 import com.pyamsoft.pydroid.arch.UiView
-import com.pyamsoft.pydroid.ui.arch.InvalidIdException
 import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
-import timber.log.Timber
 
 internal class WordView @Inject internal constructor(
     private val context: Context,
@@ -44,10 +43,6 @@ internal class WordView @Inject internal constructor(
             clear()
             hideMessage()
         }
-    }
-
-    override fun id(): Int {
-        throw InvalidIdException
     }
 
     override fun onInit(savedInstanceState: UiBundleReader) {

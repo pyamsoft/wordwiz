@@ -25,26 +25,24 @@ import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Named
 
 internal class WordViewModel @Inject internal constructor(
+    @Named("debug") debug: Boolean,
     interactor: WordProcessInteractor,
     component: ComponentName,
     text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
-    initialState = WordProcessState(isProcessing = null, result = null)
+    initialState = WordProcessState(isProcessing = null, result = null), debug = debug
 ) {
 
     private val processRunner = highlander<Unit> {
         handleProcessBegin()
         try {
-            val result = withContext(context = Dispatchers.Default) {
-                interactor.getProcessType(component, text)
-            }
+            val result = interactor.getProcessType(component, text)
             handleProcessSuccess(result)
         } catch (error: Throwable) {
             error.onActualError { e ->

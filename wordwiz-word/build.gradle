@@ -18,7 +18,6 @@
 apply plugin: "com.android.library"
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: "com.getkeepsafe.dexcount"
 
 //noinspection GroovyMissingReturnStatement
 android {
@@ -36,6 +35,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    viewBinding {
+        enabled true
+    }
 }
 
 // Kapt flags
@@ -52,7 +59,7 @@ kapt {
 }
 
 dependencies {
-    implementation "com.pyamsoft.pydroid:core:$pydroid"
+    implementation "com.pyamsoft.pydroid:arch:$pydroid"
 
     implementation "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"

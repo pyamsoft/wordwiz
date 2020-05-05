@@ -20,7 +20,6 @@ package com.pyamsoft.wordwiz.settings
 import com.pyamsoft.pydroid.arch.UiBundleReader
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
-import com.pyamsoft.pydroid.ui.arch.InvalidIdException
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.R
 import javax.inject.Inject
@@ -34,10 +33,6 @@ internal class SettingsToolbarView @Inject internal constructor(
             toolbar.setTitle(R.string.app_name)
             toolbar.setUpEnabled(false)
         }
-    }
-
-    override fun id(): Int {
-        throw InvalidIdException
     }
 
     override fun onInit(savedInstanceState: UiBundleReader) {
