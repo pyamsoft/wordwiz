@@ -24,7 +24,7 @@ import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
-import com.pyamsoft.pydroid.ui.arch.factory
+import com.pyamsoft.pydroid.ui.arch.viewModelFactory
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
@@ -36,7 +36,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
     @JvmField
     @Inject
     internal var factory: ViewModelProvider.Factory? = null
-    private val viewModel by factory<WordViewModel> { factory }
+    private val viewModel by viewModelFactory<WordViewModel> { factory }
 
     @JvmField
     @Inject

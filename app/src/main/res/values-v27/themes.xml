@@ -20,23 +20,23 @@
 <resources>
 
     <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
-        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.WordWiz.Dialog" parent="@style/Base.Theme.WordWiz.Dialog">
-        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.WordWiz.Dialog.Alert" parent="@style/Base.Theme.WordWiz.Dialog.Alert">
-        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.WordWiz.Splash" parent="@style/Base.Theme.WordWiz.Splash">
-        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.WordWiz.Transparent" parent="@style/Base.Theme.WordWiz.Transparent">
-        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
 </resources>

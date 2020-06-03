@@ -25,12 +25,11 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
+import java.util.regex.Pattern
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
-import java.util.regex.Pattern
-import javax.inject.Inject
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
     context: Context,
@@ -57,7 +56,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         enforcer.assertNotOnMainThread()
         val tokens = tokenizeString(text)
 
-        Timber.d("String tokenized: %s", Arrays.toString(tokens))
+        Timber.d("String tokenized: %s", tokens.contentToString())
         return tokens.size
     }
 

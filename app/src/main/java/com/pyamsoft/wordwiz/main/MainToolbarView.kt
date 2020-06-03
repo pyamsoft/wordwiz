@@ -53,7 +53,11 @@ internal class MainToolbarView @Inject internal constructor(
                 toolbarActivityProvider.setToolbar(this)
                 setTitle(R.string.app_name)
                 ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
-                addPrivacy(WordWiz.PRIVACY_POLICY_URL, WordWiz.TERMS_CONDITIONS_URL)
+                viewScope.addPrivacy(
+                    binding.toolbar,
+                    WordWiz.PRIVACY_POLICY_URL,
+                    WordWiz.TERMS_CONDITIONS_URL
+                )
             }
         }
 
