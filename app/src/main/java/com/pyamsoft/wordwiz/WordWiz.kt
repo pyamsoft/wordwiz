@@ -39,7 +39,7 @@ class WordWiz : Application() {
             )
         ) { provider ->
             component = DaggerWordWizComponent.factory()
-                .create(isDebugMode(), this, provider.theming(), provider.enforcer())
+                .create(isDebugMode(), this, provider.theming())
         }
     }
 

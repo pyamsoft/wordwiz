@@ -32,8 +32,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
-    context: Context,
-    private val enforcer: Enforcer
+    context: Context
 ) : WordProcessInteractor {
 
     private val packageManager: PackageManager = context.packageManager
@@ -43,7 +42,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun tokenizeString(text: CharSequence): Array<String> {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         Timber.d("Tokenize string by spaces")
         return text.toString()
             .split(SPLIT_BY_WHITESPACE.toRegex())
@@ -53,7 +52,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun getWordCount(text: CharSequence): Int {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         val tokens = tokenizeString(text)
 
         Timber.d("String tokenized: %s", tokens.contentToString())
@@ -62,7 +61,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun getLetterCount(text: CharSequence): Int {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         val tokens = tokenizeString(text)
 
         Timber.d("Get a sub of letter counts")
@@ -74,7 +73,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         text: CharSequence,
         snip: String
     ): Int {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
         val pattern = Pattern.compile(snip, Pattern.LITERAL)
         val matcher = pattern.matcher(text)
@@ -90,7 +89,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         componentName: ComponentName,
         text: CharSequence
     ): WordProcessResult = withContext(context = Dispatchers.Default) {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         val result: WordProcessResult
         try {
             Timber.d("Attempt to load the label this activity launched with")
@@ -110,7 +109,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         label: CharSequence,
         text: CharSequence
     ): WordProcessResult {
-        enforcer.assertNotOnMainThread()
+        Enforcer.assertNotOnMainThread()
         return when (label) {
             labelTypeWordCount -> WordProcessResult(
                 WORD_COUNT, getWordCount(text)

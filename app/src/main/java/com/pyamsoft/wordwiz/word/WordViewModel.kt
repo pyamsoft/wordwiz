@@ -25,6 +25,7 @@ import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.launch
@@ -67,7 +68,7 @@ internal class WordViewModel @Inject internal constructor(
     }
 
     private fun process() {
-        viewModelScope.launch { processRunner.call() }
+        viewModelScope.launch(context = Dispatchers.Default) { processRunner.call() }
     }
 
     private fun handleProcessBegin() {

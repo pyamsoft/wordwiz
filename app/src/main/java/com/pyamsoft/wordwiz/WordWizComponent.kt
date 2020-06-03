@@ -55,8 +55,7 @@ internal interface WordWizComponent {
         fun create(
             @Named("debug") @BindsInstance debug: Boolean,
             @BindsInstance context: Context,
-            @BindsInstance theming: Theming,
-            @BindsInstance enforcer: Enforcer
+            @BindsInstance theming: Theming
         ): WordWizComponent
     }
 
