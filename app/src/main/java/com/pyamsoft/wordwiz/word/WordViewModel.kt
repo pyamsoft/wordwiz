@@ -21,6 +21,7 @@ import android.content.ComponentName
 import androidx.lifecycle.viewModelScope
 import com.pyamsoft.highlander.highlander
 import com.pyamsoft.pydroid.arch.UiViewModel
+import com.pyamsoft.pydroid.arch.onActualError
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing

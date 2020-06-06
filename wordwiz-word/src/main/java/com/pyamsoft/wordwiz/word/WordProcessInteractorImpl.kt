@@ -42,7 +42,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun tokenizeString(text: CharSequence): Array<String> {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         Timber.d("Tokenize string by spaces")
         return text.toString()
             .split(SPLIT_BY_WHITESPACE.toRegex())
@@ -52,7 +52,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun getWordCount(text: CharSequence): Int {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         val tokens = tokenizeString(text)
 
         Timber.d("String tokenized: %s", tokens.contentToString())
@@ -61,7 +61,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
 
     @CheckResult
     private fun getLetterCount(text: CharSequence): Int {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         val tokens = tokenizeString(text)
 
         Timber.d("Get a sub of letter counts")
@@ -73,7 +73,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         text: CharSequence,
         snip: String
     ): Int {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         Timber.d("Find number of occurrences of %s in text:\n%s", snip, text)
         val pattern = Pattern.compile(snip, Pattern.LITERAL)
         val matcher = pattern.matcher(text)
@@ -89,7 +89,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         componentName: ComponentName,
         text: CharSequence
     ): WordProcessResult = withContext(context = Dispatchers.Default) {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         val result: WordProcessResult
         try {
             Timber.d("Attempt to load the label this activity launched with")
@@ -109,7 +109,7 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
         label: CharSequence,
         text: CharSequence
     ): WordProcessResult {
-        Enforcer.assertNotOnMainThread()
+        Enforcer.assertOffMainThread()
         return when (label) {
             labelTypeWordCount -> WordProcessResult(
                 WORD_COUNT, getWordCount(text)
