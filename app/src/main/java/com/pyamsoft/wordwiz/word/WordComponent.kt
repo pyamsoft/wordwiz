@@ -22,13 +22,13 @@ import androidx.annotation.CheckResult
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.wordwiz.ViewModelKey
 import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import com.pyamsoft.wordwiz.word.WordComponent.ViewModelModule
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
 import dagger.Subcomponent
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
 @Subcomponent(modules = [ViewModelModule::class])
@@ -55,7 +55,7 @@ internal interface WordComponent {
 
         @Binds
         @IntoMap
-        @ViewModelKey(WordViewModel::class)
+        @ClassKey(WordViewModel::class)
         internal abstract fun wordViewModel(viewModel: WordViewModel): UiViewModel<*, *, *>
     }
 }

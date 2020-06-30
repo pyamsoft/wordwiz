@@ -80,10 +80,6 @@ class MainActivity : RatingActivity() {
         feature("Added links to Terms of Service and Privacy Policy")
     }
 
-    override val changeLogTheme: Int = 0
-
-    override val versionCheckTheme: Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_WordWiz)
         super.onCreate(savedInstanceState)

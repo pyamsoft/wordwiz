@@ -22,13 +22,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
-import com.pyamsoft.wordwiz.ViewModelKey
 import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import com.pyamsoft.wordwiz.settings.SettingsComponent.ViewModelModule
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
 import dagger.Subcomponent
+import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
 @Subcomponent(modules = [ViewModelModule::class])
@@ -54,7 +54,7 @@ internal interface SettingsComponent {
 
         @Binds
         @IntoMap
-        @ViewModelKey(SettingsViewModel::class)
+        @ClassKey(SettingsViewModel::class)
         internal abstract fun settingsViewModel(viewModel: SettingsViewModel): UiViewModel<*, *, *>
     }
 }
