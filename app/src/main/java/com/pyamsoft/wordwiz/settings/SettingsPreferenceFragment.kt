@@ -53,6 +53,8 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
     override val preferenceXmlResId: Int = R.xml.preferences
 
+    override val hideClearAll: Boolean = true
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
