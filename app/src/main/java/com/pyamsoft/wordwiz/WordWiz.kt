@@ -17,42 +17,39 @@
 package com.pyamsoft.wordwiz
 
 import android.app.Application
+import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.ui.PYDroid
 import com.pyamsoft.pydroid.util.isDebugMode
 
 class WordWiz : Application() {
 
-    private var component: WordWizComponent? = null
+    private val component by lazy {
+        val url = "https://github.com/pyamsoft/wordwiz"
 
-    override fun onCreate() {
-        super.onCreate()
-
-        PYDroid.init(
+        val provider = PYDroid.init(
             this,
             PYDroid.Parameters(
-                viewSourceUrl = "https://github.com/pyamsoft/wordwiz",
-                bugReportUrl = "https://github.com/pyamsoft/wordwiz/issues",
+                viewSourceUrl = url,
+                bugReportUrl = "$url/issues",
                 privacyPolicyUrl = PRIVACY_POLICY_URL,
                 termsConditionsUrl = TERMS_CONDITIONS_URL,
                 version = BuildConfig.VERSION_CODE
             )
-        ) { provider ->
-            component = DaggerWordWizComponent.factory()
-                .create(isDebugMode(), this, provider.theming())
-        }
+        )
+
+        return@lazy DaggerWordWizComponent.factory()
+            .create(isDebugMode(), this, provider.theming())
     }
 
     override fun getSystemService(name: String): Any? {
-        val service = PYDroid.getSystemService(name)
-        if (service != null) {
-            return service
-        }
+        return PYDroid.getSystemService(name) ?: fallbackGetSystemService(name)
+    }
 
-        if (WordWizComponent::class.java.name == name) {
-            return requireNotNull(component)
+    @CheckResult
+    private fun fallbackGetSystemService(name: String): Any? {
+        return if (WordWizComponent::class.java.name == name) component else {
+            super.getSystemService(name)
         }
-
-        return super.getSystemService(name)
     }
 
     companion object {

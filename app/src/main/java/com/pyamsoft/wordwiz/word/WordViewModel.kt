@@ -25,11 +25,11 @@ import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Named
 
 internal class WordViewModel @Inject internal constructor(
     @Named("debug") debug: Boolean,
@@ -56,7 +56,7 @@ internal class WordViewModel @Inject internal constructor(
     }
 
     init {
-        doOnInit {
+        doOnBind {
             process()
         }
     }
