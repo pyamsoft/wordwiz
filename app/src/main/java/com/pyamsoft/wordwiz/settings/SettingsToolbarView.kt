@@ -34,9 +34,6 @@ internal class SettingsToolbarView @Inject internal constructor(
         }
     }
 
-    override fun onInit(savedInstanceState: UiBundleReader) {
-    }
-
     override fun render(state: SettingsViewState) {
     }
 }

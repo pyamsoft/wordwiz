@@ -44,9 +44,6 @@ internal class WordView @Inject internal constructor(
         }
     }
 
-    override fun onInit(savedInstanceState: UiBundleReader) {
-    }
-
     override fun render(state: WordProcessState) {
         state.isProcessing.let { processing ->
             if (processing != null) {
