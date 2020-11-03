@@ -46,6 +46,10 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
     @JvmField
     @Inject
+    internal var spacer: SettingsSpacer? = null
+
+    @JvmField
+    @Inject
     internal var toolbar: SettingsToolbarView? = null
 
     private var stateSaver: StateSaver? = null
@@ -69,7 +73,8 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
             savedInstanceState, viewLifecycleOwner,
             viewModel,
             requireNotNull(settingsView),
-            requireNotNull(toolbar)
+            requireNotNull(toolbar),
+            requireNotNull(spacer),
         ) {
             return@createComponent when (it) {
                 is WordCountAction -> onWordCountChanged(it.isEnabled)

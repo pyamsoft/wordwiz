@@ -18,12 +18,13 @@ package com.pyamsoft.wordwiz.main
 
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import androidx.core.view.updatePadding
 import com.pyamsoft.pydroid.arch.BaseUiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.privacy.addPrivacy
 import com.pyamsoft.pydroid.ui.privacy.removePrivacy
 import com.pyamsoft.pydroid.ui.theme.ThemeProvider
-import com.pyamsoft.pydroid.util.asDp
+import com.pyamsoft.pydroid.util.doOnApplyWindowInsets
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.databinding.ToolbarBinding
@@ -38,7 +39,7 @@ internal class MainToolbarView @Inject internal constructor(
 
     override val viewBinding = ToolbarBinding::inflate
 
-    override val layoutRoot by boundView { toolbar }
+    override val layoutRoot by boundView { appbar }
 
     init {
         doOnInflate {
@@ -48,22 +49,29 @@ internal class MainToolbarView @Inject internal constructor(
                 R2.style.ThemeOverlay_MaterialComponents_Light
             }
 
-            layoutRoot.apply {
+            binding.toolbar.apply {
                 popupTheme = theme
                 toolbarActivityProvider.setToolbar(this)
                 setTitle(R.string.app_name)
-                ViewCompat.setElevation(this, 4F.asDp(context).toFloat())
-                viewScope.addPrivacy(
-                    binding.toolbar,
-                    WordWiz.PRIVACY_POLICY_URL,
-                    WordWiz.TERMS_CONDITIONS_URL
-                )
+                ViewCompat.setElevation(this, 0F)
+            }
+
+            viewScope.addPrivacy(
+                binding.toolbar,
+                WordWiz.PRIVACY_POLICY_URL,
+                WordWiz.TERMS_CONDITIONS_URL
+            )
+        }
+
+        doOnInflate {
+            layoutRoot.doOnApplyWindowInsets { v, insets, padding ->
+                v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
             }
         }
 
         doOnTeardown {
             toolbarActivityProvider.setToolbar(null)
-            layoutRoot.removePrivacy()
+            binding.toolbar.removePrivacy()
         }
     }
 
