@@ -59,8 +59,15 @@ kapt {
 }
 
 dependencies {
-	implementation "com.pyamsoft.pydroid:arch:$pydroid"
+	// Timber logging
+	api "com.jakewharton.timber:timber:$timber"
+
+	api "com.pyamsoft.pydroid:arch:$pydroid"
 
 	implementation "com.google.dagger:dagger:$dagger"
 	kapt "com.google.dagger:dagger-compiler:$dagger"
+
+	api "com.pyamsoft.highlander:highlander:$highlander"
+
+	api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

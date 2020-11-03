@@ -23,11 +23,12 @@ import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.privacy.addPrivacy
 import com.pyamsoft.pydroid.ui.privacy.removePrivacy
 import com.pyamsoft.pydroid.ui.theme.ThemeProvider
-import com.pyamsoft.pydroid.util.toDp
+import com.pyamsoft.pydroid.util.asDp
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.databinding.ToolbarBinding
 import javax.inject.Inject
+import com.google.android.material.R as R2
 
 internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
@@ -42,16 +43,16 @@ internal class MainToolbarView @Inject internal constructor(
     init {
         doOnInflate {
             val theme: Int = if (theming.isDarkTheme()) {
-                R.style.ThemeOverlay_MaterialComponents
+                R2.style.ThemeOverlay_MaterialComponents
             } else {
-                R.style.ThemeOverlay_MaterialComponents_Light
+                R2.style.ThemeOverlay_MaterialComponents_Light
             }
 
             layoutRoot.apply {
                 popupTheme = theme
                 toolbarActivityProvider.setToolbar(this)
                 setTitle(R.string.app_name)
-                ViewCompat.setElevation(this, 4F.toDp(context).toFloat())
+                ViewCompat.setElevation(this, 4F.asDp(context).toFloat())
                 viewScope.addPrivacy(
                     binding.toolbar,
                     WordWiz.PRIVACY_POLICY_URL,
