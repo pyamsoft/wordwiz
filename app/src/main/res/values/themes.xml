@@ -18,23 +18,15 @@
 
 <resources>
 
-    <style name="Theme.WordWiz" parent="@style/Base.Theme.WordWiz">
+    <style name="Theme.WordWiz" parent="@style/Custom.Theme.WordWiz">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="Theme.WordWiz.Dialog" parent="@style/Base.Theme.WordWiz.Dialog">
+    <style name="Theme.WordWiz.Splash" parent="@style/Custom.Theme.WordWiz.Splash">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="Theme.WordWiz.Dialog.Alert" parent="@style/Base.Theme.WordWiz.Dialog.Alert">
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="Theme.WordWiz.Splash" parent="@style/Base.Theme.WordWiz.Splash">
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="Theme.WordWiz.Transparent" parent="@style/Base.Theme.WordWiz.Transparent">
+    <style name="Theme.WordWiz.Transparent" parent="@style/Custom.Theme.WordWiz.Transparent">
         <item name="android:windowLightStatusBar">false</item>
     </style>
 

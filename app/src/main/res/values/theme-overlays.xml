@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
   ~ Copyright 2020 Peter Kenji Yamanaka
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +18,9 @@
 
 <resources>
 
-    <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+    <style name="ThemeOverlay.WordWiz.Dialog" parent="@style/Custom.ThemeOverlay.WordWiz.Dialog" />
+
+    <style name="ThemeOverlay.WordWiz.Dialog.Alert" parent="@style/Custom.ThemeOverlay.WordWiz.Dialog.Alert" />
+
 
 </resources>

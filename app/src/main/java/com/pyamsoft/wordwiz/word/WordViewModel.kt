@@ -29,15 +29,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 
 internal class WordViewModel @Inject internal constructor(
-    @Named("debug") debug: Boolean,
     interactor: WordProcessInteractor,
     component: ComponentName,
     text: CharSequence
 ) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
-    initialState = WordProcessState(isProcessing = null, result = null), debug = debug
+    WordProcessState(
+        isProcessing = null,
+        result = null
+    )
 ) {
 
     private val processRunner = highlander<Unit> {
@@ -56,9 +57,7 @@ internal class WordViewModel @Inject internal constructor(
     }
 
     init {
-        doOnBind {
-            process()
-        }
+        process()
     }
 
     override fun handleViewEvent(event: WordProcessViewEvent) {

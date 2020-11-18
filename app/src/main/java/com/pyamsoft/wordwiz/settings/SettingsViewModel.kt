@@ -23,16 +23,14 @@ import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
 import com.pyamsoft.wordwiz.word.ComponentManager
 import javax.inject.Inject
-import javax.inject.Named
 
 internal class SettingsViewModel @Inject internal constructor(
-    @Named("debug") debug: Boolean,
     manager: ComponentManager
 ) : UiViewModel<SettingsViewState, SettingsViewEvent, SettingsControllerEvent>(
-    initialState = SettingsViewState(
+    SettingsViewState(
         isWordCountEnabled = manager.isWordCountEnabled(),
         isLetterCountEnabled = manager.isLetterCountEnabled()
-    ), debug = debug
+    )
 ) {
 
     private fun onWordCountToggled(enabled: Boolean) {

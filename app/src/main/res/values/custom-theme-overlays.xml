@@ -16,6 +16,13 @@
 
 <resources>
 
-    <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Custom.ThemeOverlay.WordWiz.Dialog" parent="@style/Base.ThemeOverlay.WordWiz.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+    </style>
+
+    <style name="Custom.ThemeOverlay.WordWiz.Dialog.Alert" parent="@style/Base.ThemeOverlay.WordWiz.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+    </style>
 
 </resources>

@@ -16,6 +16,8 @@
 
 <resources>
 
-    <style name="Base.Theme.WordWiz" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+    <style name="Base.ThemeOverlay.WordWiz.Dialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog" />
+
+    <style name="Base.ThemeOverlay.WordWiz.Dialog.Alert" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert" />
 
 </resources>
