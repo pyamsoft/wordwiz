@@ -37,12 +37,16 @@ class WordWiz : Application() {
             )
         )
 
-        return@lazy DaggerWordWizComponent.factory()
-            .create(isDebugMode(), this, provider.theming())
+        return@lazy DaggerWordWizComponent.factory().create(
+            isDebugMode(),
+            this,
+            provider.theming()
+        )
     }
 
     override fun getSystemService(name: String): Any? {
-        return PYDroid.getSystemService(name) ?: fallbackGetSystemService(name)
+        // Do this weird construct to ensure that component is initialized
+        return component.run { PYDroid.getSystemService(name) } ?: fallbackGetSystemService(name)
     }
 
     @CheckResult

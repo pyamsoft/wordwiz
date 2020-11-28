@@ -56,9 +56,8 @@ internal class MainToolbarView @Inject internal constructor(
                 ViewCompat.setElevation(this, 0F)
             }
 
-            viewScope.addPrivacy(
-                binding.toolbar,
-                WordWiz.PRIVACY_POLICY_URL,
+            binding.toolbar.addPrivacy(
+                viewScope, WordWiz.PRIVACY_POLICY_URL,
                 WordWiz.TERMS_CONDITIONS_URL
             )
         }
