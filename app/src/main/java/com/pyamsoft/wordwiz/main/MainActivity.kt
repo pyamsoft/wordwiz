@@ -28,7 +28,6 @@ import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.arch.viewModelFactory
 import com.pyamsoft.pydroid.ui.changelog.ChangeLogActivity
 import com.pyamsoft.pydroid.ui.changelog.buildChangeLog
-import com.pyamsoft.pydroid.ui.theme.ThemeProvider
 import com.pyamsoft.pydroid.ui.theme.Theming
 import com.pyamsoft.pydroid.ui.util.commit
 import com.pyamsoft.pydroid.ui.util.layout
@@ -74,9 +73,7 @@ class MainActivity : ChangeLogActivity() {
         get() = requireNotNull(view).id()
 
     override val changelog = buildChangeLog {
-        change("Lower memory consumption and faster operation")
-        bugfix("Fixed a memory leak in the license viewing experience")
-        feature("Added links to Terms of Service and Privacy Policy")
+        feature("Support for full screen content and gesture navigation")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,11 +84,9 @@ class MainActivity : ChangeLogActivity() {
         val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
         Injector.obtain<WordWizComponent>(applicationContext)
             .plusMainComponent()
-            .create(
-                this,
-                layoutRoot,
-                ThemeProvider { requireNotNull(theming).isDarkTheme(this) }
-            )
+            .create(this, layoutRoot) {
+                requireNotNull(theming).isDarkTheme(this)
+            }
             .inject(this)
 
         val component = requireNotNull(view)

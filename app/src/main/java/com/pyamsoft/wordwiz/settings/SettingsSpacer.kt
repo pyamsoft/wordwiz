@@ -34,6 +34,4 @@ class SettingsSpacer @Inject internal constructor(
         }
     }
 
-    override fun onRender(state: SettingsViewState) {
-    }
 }

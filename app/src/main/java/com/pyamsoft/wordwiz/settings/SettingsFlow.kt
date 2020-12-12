@@ -27,9 +27,9 @@ data class SettingsViewState(
 
 sealed class SettingsViewEvent : UiViewEvent {
 
-    data class ToggleWordCount(val isEnabled: Boolean) : SettingsViewEvent()
+    object ToggleWordCount : SettingsViewEvent()
 
-    data class ToggleLetterCount(val isEnabled: Boolean) : SettingsViewEvent()
+    object ToggleLetterCount : SettingsViewEvent()
 }
 
 sealed class SettingsControllerEvent : UiControllerEvent {

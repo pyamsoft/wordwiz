@@ -16,7 +16,7 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.pydroid.arch.UiBundleReader
+import com.pyamsoft.pydroid.arch.UiRender
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
 import com.pyamsoft.pydroid.ui.util.setUpEnabled
@@ -34,6 +34,6 @@ internal class SettingsToolbarView @Inject internal constructor(
         }
     }
 
-    override fun render(state: SettingsViewState) {
+    override fun render(state: UiRender<SettingsViewState>) {
     }
 }

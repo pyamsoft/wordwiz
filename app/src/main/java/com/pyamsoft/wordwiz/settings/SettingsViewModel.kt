@@ -33,20 +33,26 @@ internal class SettingsViewModel @Inject internal constructor(
     )
 ) {
 
-    private fun onWordCountToggled(enabled: Boolean) {
-        setState { copy(isWordCountEnabled = enabled) }
-        publish(WordCountAction(enabled))
+    private fun onWordCountToggled() {
+        setState(
+            stateChange = { copy(isWordCountEnabled = !isWordCountEnabled) },
+            andThen = { newState ->
+                publish(WordCountAction(newState.isWordCountEnabled))
+            })
     }
 
-    private fun onLetterCountToggled(enabled: Boolean) {
-        setState { copy(isLetterCountEnabled = enabled) }
-        publish(LetterCountAction(enabled))
+    private fun onLetterCountToggled() {
+        setState(
+            stateChange = { copy(isLetterCountEnabled = !isLetterCountEnabled) },
+            andThen = { newState ->
+                publish(LetterCountAction(newState.isLetterCountEnabled))
+            })
     }
 
     override fun handleViewEvent(event: SettingsViewEvent) {
         return when (event) {
-            is ToggleWordCount -> onWordCountToggled(event.isEnabled)
-            is ToggleLetterCount -> onLetterCountToggled(event.isEnabled)
+            is ToggleWordCount -> onWordCountToggled()
+            is ToggleLetterCount -> onLetterCountToggled()
         }
     }
 }

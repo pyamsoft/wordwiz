@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz.settings
 import androidx.lifecycle.LifecycleObserver
 import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
+import com.pyamsoft.pydroid.arch.UiRender
 import com.pyamsoft.pydroid.ui.arch.PrefUiView
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
@@ -38,23 +39,33 @@ internal class SettingsView @Inject internal constructor(
             wordCount.onPreferenceClickListener = null
             letterCount.onPreferenceClickListener = null
         }
+
+        doOnInflate {
+            wordCount.setOnPreferenceClickListener {
+                publish(ToggleWordCount)
+                return@setOnPreferenceClickListener true
+            }
+        }
+
+        doOnInflate {
+            letterCount.setOnPreferenceClickListener {
+                publish(ToggleLetterCount)
+                return@setOnPreferenceClickListener true
+            }
+        }
     }
 
-    override fun onRender(state: SettingsViewState) {
-        state.isWordCountEnabled.let { enabled ->
-            wordCount.isChecked = enabled
-            wordCount.setOnPreferenceClickListener {
-                publish(ToggleWordCount(!enabled))
-                return@setOnPreferenceClickListener true
-            }
-        }
+    private fun handleWordCount(isEnabled: Boolean) {
+        wordCount.isChecked = isEnabled
+    }
 
-        state.isLetterCountEnabled.let { enabled ->
-            letterCount.isChecked = enabled
-            letterCount.setOnPreferenceClickListener {
-                publish(ToggleLetterCount(!enabled))
-                return@setOnPreferenceClickListener true
-            }
-        }
+    private fun handleLetterCount(isEnabled: Boolean) {
+        letterCount.isChecked = isEnabled
+    }
+
+    override fun onRender(state: UiRender<SettingsViewState>) {
+        state.distinctBy { it.isWordCountEnabled }.render(viewScope) { handleWordCount(it) }
+        state.distinctBy { it.isLetterCountEnabled }.render(viewScope) { handleLetterCount(it) }
     }
 }
+

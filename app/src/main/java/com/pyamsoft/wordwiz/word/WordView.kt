@@ -20,7 +20,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
-import com.pyamsoft.pydroid.arch.UiBundleReader
+import com.pyamsoft.pydroid.arch.UiRender
 import com.pyamsoft.pydroid.arch.UiView
 import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
@@ -44,32 +44,34 @@ internal class WordView @Inject internal constructor(
         }
     }
 
-    override fun render(state: WordProcessState) {
-        state.isProcessing.let { processing ->
-            if (processing != null) {
-                clear()
-                if (!processing.isProcessing) {
-                    handler.postDelayed({ publish(CloseScreen) }, 750)
-                }
+    override fun render(state: UiRender<WordProcessState>) {
+        state.distinctBy { it.isProcessing }.render(viewScope) { handleProcessing(it) }
+        state.distinctBy { it.result }.render(viewScope) { handleResult(it) }
+    }
+
+    private fun handleProcessing(processing: WordProcessState.Processing?) {
+        processing?.also { p ->
+            clear()
+            if (!p.isProcessing) {
+                handler.postDelayed({ publish(CloseScreen) }, 750)
             }
         }
+    }
 
-        state.result.let { result ->
-            if (result == null) {
-                hideMessage()
-            } else {
-                return when (result.type) {
-                    WORD_COUNT -> showMessage("Word count: ${result.count}")
-                    LETTER_COUNT -> showMessage("Letter count: ${result.count}")
-                    else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
-                }
+    private fun handleResult(result: WordProcessResult?) {
+        if (result == null) {
+            hideMessage()
+        } else {
+            return when (result.type) {
+                WORD_COUNT -> showMessage("Word count: ${result.count}")
+                LETTER_COUNT -> showMessage("Letter count: ${result.count}")
+                else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
             }
         }
     }
 
     private fun hideMessage() {
-        Toaster.bindTo(owner)
-            .dismiss()
+        Toaster.bindTo(owner).dismiss()
     }
 
     fun showError(throwable: Throwable) {
@@ -77,8 +79,7 @@ internal class WordView @Inject internal constructor(
     }
 
     private fun showMessage(message: String) {
-        Toaster.bindTo(owner)
-            .short(context.applicationContext, message)
+        Toaster.bindTo(owner).short(context.applicationContext, message)
     }
 
     private fun clear() {

@@ -74,6 +74,4 @@ internal class MainToolbarView @Inject internal constructor(
         }
     }
 
-    override fun onRender(state: MainViewState) {
-    }
 }
