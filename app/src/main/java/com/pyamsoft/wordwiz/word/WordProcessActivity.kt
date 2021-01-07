@@ -45,6 +45,8 @@ internal abstract class WordProcessActivity : ActivityBase() {
 
     final override val fragmentContainerId: Int = 0
 
+    final override val applicationIcon: Int = 0
+
     final override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         setTheme(R.style.Theme_WordWiz_Transparent)
