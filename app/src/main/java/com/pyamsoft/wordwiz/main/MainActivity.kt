@@ -82,7 +82,7 @@ class MainActivity : ChangeLogActivity() {
         setContentView(R.layout.snackbar_screen)
 
         val layoutRoot = findViewById<ConstraintLayout>(R.id.content_root)
-        Injector.obtain<WordWizComponent>(applicationContext)
+        Injector.obtainFromApplication<WordWizComponent>(this)
             .plusMainComponent()
             .create(this, layoutRoot) {
                 requireNotNull(theming).isDarkTheme(this)

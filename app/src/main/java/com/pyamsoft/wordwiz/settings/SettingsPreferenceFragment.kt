@@ -64,7 +64,7 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        Injector.obtain<WordWizComponent>(requireContext().applicationContext)
+        Injector.obtainFromApplication<WordWizComponent>(view.context)
             .plusSettingsComponent()
             .create(requireToolbarActivity(), preferenceScreen)
             .inject(this)

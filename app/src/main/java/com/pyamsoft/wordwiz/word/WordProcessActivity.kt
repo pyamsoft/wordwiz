@@ -58,7 +58,7 @@ internal abstract class WordProcessActivity : ActivityBase() {
             return
         }
 
-        Injector.obtain<WordWizComponent>(applicationContext)
+        Injector.obtainFromApplication<WordWizComponent>(this)
             .plusWordComponent()
             .create(this, componentName, text)
             .inject(this)
