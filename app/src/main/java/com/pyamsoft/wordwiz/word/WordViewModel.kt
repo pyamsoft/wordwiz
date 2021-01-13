@@ -57,17 +57,15 @@ internal class WordViewModel @Inject internal constructor(
     }
 
     init {
-        process()
+        viewModelScope.launch(context = Dispatchers.Default) {
+            processRunner.call()
+        }
     }
 
     override fun handleViewEvent(event: WordProcessViewEvent) {
         return when (event) {
             is CloseScreen -> publish(Finish)
         }
-    }
-
-    private fun process() {
-        viewModelScope.launch(context = Dispatchers.Default) { processRunner.call() }
     }
 
     private fun handleProcessBegin() {

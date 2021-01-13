@@ -64,8 +64,8 @@ internal class SettingsView @Inject internal constructor(
     }
 
     override fun onRender(state: UiRender<SettingsViewState>) {
-        state.distinctBy { it.isWordCountEnabled }.render(viewScope) { handleWordCount(it) }
-        state.distinctBy { it.isLetterCountEnabled }.render(viewScope) { handleLetterCount(it) }
+        state.mapChanged { it.isWordCountEnabled }.render(viewScope) { handleWordCount(it) }
+        state.mapChanged { it.isLetterCountEnabled }.render(viewScope) { handleLetterCount(it) }
     }
 }
 

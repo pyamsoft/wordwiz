@@ -45,8 +45,8 @@ internal class WordView @Inject internal constructor(
     }
 
     override fun render(state: UiRender<WordProcessState>) {
-        state.distinctBy { it.isProcessing }.render(viewScope) { handleProcessing(it) }
-        state.distinctBy { it.result }.render(viewScope) { handleResult(it) }
+        state.mapChanged { it.isProcessing }.render(viewScope) { handleProcessing(it) }
+        state.mapChanged { it.result }.render(viewScope) { handleResult(it) }
     }
 
     private fun handleProcessing(processing: WordProcessState.Processing?) {
