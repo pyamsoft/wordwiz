@@ -18,15 +18,15 @@ package com.pyamsoft.wordwiz.settings
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
-import com.pyamsoft.pydroid.ui.arch.viewModelFactory
+import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.pydroid.ui.settings.AppSettingsPreferenceFragment
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.LetterCountAction
 import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.WordCountAction
 import com.pyamsoft.wordwiz.word.LetterCountActivity
@@ -37,8 +37,8 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
 
     @JvmField
     @Inject
-    internal var factory: ViewModelProvider.Factory? = null
-    private val viewModel by viewModelFactory<SettingsViewModel> { factory }
+    internal var factory: WordWizViewModelFactory? = null
+    private val viewModel by fromViewModelFactory<SettingsViewModel> { factory?.create(this) }
 
     @JvmField
     @Inject

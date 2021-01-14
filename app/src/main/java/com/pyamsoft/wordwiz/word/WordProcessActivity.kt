@@ -18,14 +18,14 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
-import com.pyamsoft.pydroid.ui.arch.viewModelFactory
+import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
 import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import javax.inject.Inject
@@ -34,8 +34,8 @@ internal abstract class WordProcessActivity : ActivityBase() {
 
     @JvmField
     @Inject
-    internal var factory: ViewModelProvider.Factory? = null
-    private val viewModel by viewModelFactory<WordViewModel> { factory }
+    internal var factory: WordWizViewModelFactory? = null
+    private val viewModel by fromViewModelFactory<WordViewModel> { factory?.create(this) }
 
     @JvmField
     @Inject

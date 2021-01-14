@@ -16,14 +16,12 @@
 
 package com.pyamsoft.wordwiz.main
 
+import com.pyamsoft.wordwiz.ViewModelFactoryModule
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
-import androidx.lifecycle.ViewModelProvider
-import com.pyamsoft.pydroid.arch.UiViewModel
+import androidx.lifecycle.ViewModel
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.theme.ThemeProvider
-import com.pyamsoft.wordwiz.WordWizViewModelFactory
-import com.pyamsoft.wordwiz.main.MainComponent.ViewModelModule
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
@@ -31,7 +29,12 @@ import dagger.Subcomponent
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
-@Subcomponent(modules = [ViewModelModule::class])
+@Subcomponent(
+    modules = [
+        MainComponent.ComponentModule::class,
+        ViewModelFactoryModule::class
+    ]
+)
 internal interface MainComponent {
 
     fun inject(activity: MainActivity)
@@ -48,14 +51,11 @@ internal interface MainComponent {
     }
 
     @Module
-    abstract class ViewModelModule {
-
-        @Binds
-        internal abstract fun bindViewModelFactory(factory: WordWizViewModelFactory): ViewModelProvider.Factory
+    abstract class ComponentModule {
 
         @Binds
         @IntoMap
         @ClassKey(MainViewModel::class)
-        internal abstract fun mainViewModel(viewModel: MainViewModel): UiViewModel<*, *, *>
+        internal abstract fun mainViewModel(viewModel: MainViewModel): ViewModel
     }
 }

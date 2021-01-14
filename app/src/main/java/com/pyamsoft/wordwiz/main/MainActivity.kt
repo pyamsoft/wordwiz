@@ -21,11 +21,10 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.lifecycle.ViewModelProvider
 import com.pyamsoft.pydroid.arch.StateSaver
 import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
-import com.pyamsoft.pydroid.ui.arch.viewModelFactory
+import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.pydroid.ui.changelog.ChangeLogActivity
 import com.pyamsoft.pydroid.ui.changelog.buildChangeLog
 import com.pyamsoft.pydroid.ui.theme.Theming
@@ -36,6 +35,7 @@ import com.pyamsoft.pydroid.util.stableLayoutHideNavigation
 import com.pyamsoft.wordwiz.BuildConfig
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
+import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import com.pyamsoft.wordwiz.settings.SettingsFragment
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
@@ -56,8 +56,8 @@ class MainActivity : ChangeLogActivity() {
 
     @JvmField
     @Inject
-    internal var factory: ViewModelProvider.Factory? = null
-    private val viewModel by viewModelFactory<MainViewModel> { factory }
+    internal var factory: WordWizViewModelFactory? = null
+    private val viewModel by fromViewModelFactory<MainViewModel> { factory?.create(this) }
 
     private var stateSaver: StateSaver? = null
 
