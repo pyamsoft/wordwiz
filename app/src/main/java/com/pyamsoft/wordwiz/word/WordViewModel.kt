@@ -62,10 +62,8 @@ internal class WordViewModel @Inject internal constructor(
         }
     }
 
-    override fun handleViewEvent(event: WordProcessViewEvent) {
-        return when (event) {
-            is CloseScreen -> publish(Finish)
-        }
+    override fun handleViewEvent(event: WordProcessViewEvent) = when (event) {
+        is CloseScreen -> publish(Finish)
     }
 
     private fun handleProcessBegin() {

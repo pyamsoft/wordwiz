@@ -40,7 +40,7 @@ class WordWiz : Application() {
         return@lazy DaggerWordWizComponent.factory().create(
             isDebugMode(),
             this,
-            provider.theming()
+            provider.get().theming()
         )
     }
 

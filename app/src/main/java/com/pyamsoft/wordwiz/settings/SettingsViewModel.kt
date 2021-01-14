@@ -49,10 +49,8 @@ internal class SettingsViewModel @Inject internal constructor(
             })
     }
 
-    override fun handleViewEvent(event: SettingsViewEvent) {
-        return when (event) {
-            is ToggleWordCount -> onWordCountToggled()
-            is ToggleLetterCount -> onLetterCountToggled()
-        }
+    override fun handleViewEvent(event: SettingsViewEvent) = when (event) {
+        is ToggleWordCount -> onWordCountToggled()
+        is ToggleLetterCount -> onLetterCountToggled()
     }
 }

@@ -58,15 +58,11 @@ internal class WordView @Inject internal constructor(
         }
     }
 
-    private fun handleResult(result: WordProcessResult?) {
-        if (result == null) {
-            hideMessage()
-        } else {
-            return when (result.type) {
-                WORD_COUNT -> showMessage("Word count: ${result.count}")
-                LETTER_COUNT -> showMessage("Letter count: ${result.count}")
-                else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
-            }
+    private fun handleResult(result: WordProcessResult?) = if (result == null) hideMessage() else {
+        when (result.type) {
+            WORD_COUNT -> showMessage("Word count: ${result.count}")
+            LETTER_COUNT -> showMessage("Letter count: ${result.count}")
+            else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
         }
     }
 

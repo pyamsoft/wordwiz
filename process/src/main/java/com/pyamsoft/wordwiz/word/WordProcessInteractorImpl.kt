@@ -24,11 +24,11 @@ import androidx.annotation.CheckResult
 import com.pyamsoft.pydroid.core.Enforcer
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
-import java.util.regex.Pattern
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.regex.Pattern
+import javax.inject.Inject
 
 internal class WordProcessInteractorImpl @Inject internal constructor(
     context: Context
@@ -107,18 +107,11 @@ internal class WordProcessInteractorImpl @Inject internal constructor(
     private fun getProcessTypeForLabel(
         label: CharSequence,
         text: CharSequence
-    ): WordProcessResult {
-        Enforcer.assertOffMainThread()
-        return when (label) {
-            labelTypeWordCount -> WordProcessResult(
-                WORD_COUNT, getWordCount(text)
-            )
-            labelTypeLetterCount -> WordProcessResult(
-                LETTER_COUNT, getLetterCount(text)
-            )
-            labelTypeOccurrences -> throw RuntimeException("Not ready yet")
-            else -> throw IllegalArgumentException("Invalid label: $label")
-        }
+    ): WordProcessResult = when (label) {
+        labelTypeWordCount -> WordProcessResult(WORD_COUNT, getWordCount(text))
+        labelTypeLetterCount -> WordProcessResult(LETTER_COUNT, getLetterCount(text))
+        labelTypeOccurrences -> throw RuntimeException("Not ready yet")
+        else -> throw IllegalArgumentException("Invalid label: $label")
     }
 
     companion object {
