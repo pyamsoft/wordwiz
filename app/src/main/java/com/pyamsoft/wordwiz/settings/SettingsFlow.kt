@@ -16,7 +16,6 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.pydroid.arch.UiControllerEvent
 import com.pyamsoft.pydroid.arch.UiViewEvent
 import com.pyamsoft.pydroid.arch.UiViewState
 
@@ -32,9 +31,3 @@ sealed class SettingsViewEvent : UiViewEvent {
     object ToggleLetterCount : SettingsViewEvent()
 }
 
-sealed class SettingsControllerEvent : UiControllerEvent {
-
-    data class WordCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
-
-    data class LetterCountAction(val isEnabled: Boolean) : SettingsControllerEvent()
-}

@@ -17,40 +17,40 @@
 package com.pyamsoft.wordwiz.settings
 
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.LetterCountAction
-import com.pyamsoft.wordwiz.settings.SettingsControllerEvent.WordCountAction
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
-import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
+import com.pyamsoft.pydroid.arch.UnitControllerEvent
 import com.pyamsoft.wordwiz.word.ComponentManager
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 internal class SettingsViewModel @Inject internal constructor(
     manager: ComponentManager
-) : UiViewModel<SettingsViewState, SettingsViewEvent, SettingsControllerEvent>(
+) : UiViewModel<SettingsViewState, SettingsViewEvent, UnitControllerEvent>(
     SettingsViewState(
         isWordCountEnabled = manager.isWordCountEnabled(),
         isLetterCountEnabled = manager.isLetterCountEnabled()
     )
 ) {
 
-    private fun onWordCountToggled() {
-        setState(
+    internal inline fun handleWordCountToggled(
+        scope: CoroutineScope,
+        crossinline onToggle: (isEnabled: Boolean) -> Unit
+    ) {
+        scope.setState(
             stateChange = { copy(isWordCountEnabled = !isWordCountEnabled) },
             andThen = { newState ->
-                publish(WordCountAction(newState.isWordCountEnabled))
+                onToggle(newState.isWordCountEnabled)
             })
     }
 
-    private fun onLetterCountToggled() {
-        setState(
+    internal inline fun handleLetterCountToggled(
+        scope: CoroutineScope,
+        crossinline onToggle: (isEnabled: Boolean) -> Unit
+    ) {
+        scope.setState(
             stateChange = { copy(isLetterCountEnabled = !isLetterCountEnabled) },
             andThen = { newState ->
-                publish(LetterCountAction(newState.isLetterCountEnabled))
+                onToggle(newState.isLetterCountEnabled)
             })
     }
 
-    override fun handleViewEvent(event: SettingsViewEvent) = when (event) {
-        is ToggleWordCount -> onWordCountToggled()
-        is ToggleLetterCount -> onLetterCountToggled()
-    }
 }

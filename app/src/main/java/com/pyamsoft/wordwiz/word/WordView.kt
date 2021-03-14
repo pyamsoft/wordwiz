@@ -47,6 +47,7 @@ internal class WordView @Inject internal constructor(
     override fun render(state: UiRender<WordProcessState>) {
         state.mapChanged { it.isProcessing }.render(viewScope) { handleProcessing(it) }
         state.mapChanged { it.result }.render(viewScope) { handleResult(it) }
+        state.mapChanged { it.error }.render(viewScope) { handleError(it) }
     }
 
     private fun handleProcessing(processing: WordProcessState.Processing?) {
@@ -70,8 +71,10 @@ internal class WordView @Inject internal constructor(
         Toaster.bindTo(owner).dismiss()
     }
 
-    fun showError(throwable: Throwable) {
-        showMessage(throwable.message ?: "An unexpected error occurred.")
+    private fun handleError(throwable: Throwable?) {
+        if (throwable != null) {
+            showMessage(throwable.message ?: "An unexpected error occurred.")
+        }
     }
 
     private fun showMessage(message: String) {

@@ -18,16 +18,15 @@ package com.pyamsoft.wordwiz.word
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.pyamsoft.pydroid.arch.StateSaver
-import com.pyamsoft.pydroid.arch.createComponent
+import com.pyamsoft.pydroid.arch.bindController
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
 import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.WordWizViewModelFactory
-import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
-import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import javax.inject.Inject
 
 internal abstract class WordProcessActivity : ActivityBase() {
@@ -63,16 +62,17 @@ internal abstract class WordProcessActivity : ActivityBase() {
             .create(this, componentName, text)
             .inject(this)
 
-        stateSaver = createComponent(
-            savedInstanceState, this,
-            viewModel,
+        stateSaver = viewModel.bindController(
+            savedInstanceState,
+            this,
             requireNotNull(view)
         ) {
-            return@createComponent when (it) {
-                is Finish -> finish()
-                is Error -> requireNotNull(view).showError(it.throwable)
+            return@bindController when (it) {
+                is WordProcessViewEvent.CloseScreen -> finish()
             }
         }
+
+        viewModel.handleProcess(lifecycleScope)
     }
 
     final override fun onStop() {

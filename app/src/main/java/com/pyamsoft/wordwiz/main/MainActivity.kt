@@ -22,7 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.pyamsoft.pydroid.arch.StateSaver
-import com.pyamsoft.pydroid.arch.createComponent
+import com.pyamsoft.pydroid.arch.bindController
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.pydroid.ui.changelog.ChangeLogActivity
@@ -95,9 +95,9 @@ class MainActivity : ChangeLogActivity() {
 
         stableLayoutHideNavigation()
 
-        stateSaver = createComponent(
-            savedInstanceState, this,
-            viewModel,
+        stateSaver = viewModel.bindController(
+            savedInstanceState,
+            this,
             component,
             toolbarComponent,
             dropshadow

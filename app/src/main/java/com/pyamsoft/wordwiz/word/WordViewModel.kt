@@ -17,16 +17,12 @@
 package com.pyamsoft.wordwiz.word
 
 import android.content.ComponentName
-import androidx.lifecycle.viewModelScope
 import com.pyamsoft.highlander.highlander
 import com.pyamsoft.pydroid.arch.UiViewModel
+import com.pyamsoft.pydroid.arch.UnitControllerEvent
 import com.pyamsoft.pydroid.arch.onActualError
-import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Error
-import com.pyamsoft.wordwiz.word.WordProcessControllerEvent.Finish
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
-import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,15 +30,15 @@ internal class WordViewModel @Inject internal constructor(
     interactor: WordProcessInteractor,
     component: ComponentName,
     text: CharSequence
-) : UiViewModel<WordProcessState, WordProcessViewEvent, WordProcessControllerEvent>(
+) : UiViewModel<WordProcessState, WordProcessViewEvent, UnitControllerEvent>(
     WordProcessState(
         isProcessing = null,
-        result = null
+        result = null,
+        error = null
     )
 ) {
 
     private val processRunner = highlander<Unit> {
-        handleProcessBegin()
         try {
             val result = interactor.getProcessType(component, text)
             handleProcessSuccess(result)
@@ -51,34 +47,21 @@ internal class WordViewModel @Inject internal constructor(
                 Timber.e(e, "Error handling process request")
                 handleProcessError(e)
             }
-        } finally {
-            handleProcessComplete()
         }
     }
 
-    init {
-        viewModelScope.launch(context = Dispatchers.Default) {
+    internal fun handleProcess(scope: CoroutineScope) {
+        scope.setState(stateChange = { copy(isProcessing = Processing(true)) }, andThen = {
             processRunner.call()
-        }
+            setState { copy(isProcessing = Processing(false)) }
+        })
     }
 
-    override fun handleViewEvent(event: WordProcessViewEvent) = when (event) {
-        is CloseScreen -> publish(Finish)
-    }
-
-    private fun handleProcessBegin() {
-        setState { copy(isProcessing = Processing(true)) }
+    private fun handleProcessError(throwable: Throwable) {
+        setState { copy(error = throwable) }
     }
 
     private fun handleProcessSuccess(result: WordProcessResult) {
         setState { copy(result = result) }
-    }
-
-    private fun handleProcessError(throwable: Throwable) {
-        publish(Error(throwable))
-    }
-
-    private fun handleProcessComplete() {
-        setState { copy(isProcessing = Processing(false)) }
     }
 }
