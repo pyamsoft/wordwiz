@@ -22,7 +22,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.pyamsoft.pydroid.arch.StateSaver
-import com.pyamsoft.pydroid.arch.bindController
+import com.pyamsoft.pydroid.arch.UiController
+import com.pyamsoft.pydroid.arch.UnitControllerEvent
+import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
 import com.pyamsoft.pydroid.ui.changelog.ChangeLogActivity
@@ -40,7 +42,7 @@ import com.pyamsoft.wordwiz.settings.SettingsFragment
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
 
-class MainActivity : ChangeLogActivity() {
+class MainActivity : ChangeLogActivity(), UiController<UnitControllerEvent> {
 
     @JvmField
     @Inject
@@ -91,12 +93,14 @@ class MainActivity : ChangeLogActivity() {
 
         val component = requireNotNull(view)
         val toolbarComponent = requireNotNull(toolbar)
-        val dropshadow = DropshadowView.createTyped<MainViewState, MainViewEvent>(layoutRoot)
+        val dropshadow = DropshadowView.create(layoutRoot)
 
         stableLayoutHideNavigation()
 
-        stateSaver = viewModel.bindController(
+        stateSaver = createComponent(
             savedInstanceState,
+            this,
+            viewModel,
             this,
             component,
             toolbarComponent,
@@ -135,6 +139,9 @@ class MainActivity : ChangeLogActivity() {
         }
 
         showPreferenceFragment()
+    }
+
+    override fun onControllerEvent(event: UnitControllerEvent) {
     }
 
     private fun showPreferenceFragment() {

@@ -19,7 +19,8 @@ package com.pyamsoft.wordwiz.settings
 import android.os.Bundle
 import android.view.View
 import com.pyamsoft.pydroid.arch.StateSaver
-import com.pyamsoft.pydroid.arch.bindController
+import com.pyamsoft.pydroid.arch.UiController
+import com.pyamsoft.pydroid.arch.createComponent
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.requireToolbarActivity
 import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
@@ -31,7 +32,8 @@ import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 import javax.inject.Inject
 
-class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
+class SettingsPreferenceFragment : AppSettingsPreferenceFragment(),
+    UiController<SettingsControllerEvent> {
 
     @JvmField
     @Inject
@@ -67,20 +69,18 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
             .create(requireToolbarActivity(), preferenceScreen)
             .inject(this)
 
-        stateSaver = viewModel.bindController(
+        stateSaver = createComponent(
             savedInstanceState,
             viewLifecycleOwner,
+            viewModel,
+            this,
             requireNotNull(settingsView),
             requireNotNull(toolbar),
             requireNotNull(spacer),
         ) {
-            return@bindController when (it) {
-                is SettingsViewEvent.ToggleLetterCount -> viewModel.handleLetterCountToggled(this) { enabled ->
-                    onLetterCountChanged(enabled)
-                }
-                is SettingsViewEvent.ToggleWordCount -> viewModel.handleWordCountToggled(this) { enabled ->
-                    onWordCountChanged(enabled)
-                }
+            return@createComponent when (it) {
+                is SettingsViewEvent.ToggleLetterCount -> viewModel.handleLetterCountToggled()
+                is SettingsViewEvent.ToggleWordCount -> viewModel.handleWordCountToggled()
             }
         }
     }
@@ -107,8 +107,16 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment() {
         LetterCountActivity.enable(requireContext(), enabled)
     }
 
+    override fun onControllerEvent(event: SettingsControllerEvent) {
+        return when (event) {
+            is SettingsControllerEvent.LetterCountToggled -> onLetterCountChanged(event.enabled)
+            is SettingsControllerEvent.WordCountToggled -> onWordCountChanged(event.enabled)
+        }
+    }
+
     companion object {
 
         const val TAG = "SettingsPreferenceFragment"
     }
+
 }

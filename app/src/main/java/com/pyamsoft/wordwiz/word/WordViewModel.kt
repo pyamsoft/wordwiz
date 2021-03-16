@@ -30,7 +30,7 @@ internal class WordViewModel @Inject internal constructor(
     interactor: WordProcessInteractor,
     component: ComponentName,
     text: CharSequence
-) : UiViewModel<WordProcessState, WordProcessViewEvent, UnitControllerEvent>(
+) : UiViewModel<WordProcessState, UnitControllerEvent>(
     WordProcessState(
         isProcessing = null,
         result = null,

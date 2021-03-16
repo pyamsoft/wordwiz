@@ -16,40 +16,33 @@
 
 package com.pyamsoft.wordwiz.settings
 
+import androidx.lifecycle.viewModelScope
 import com.pyamsoft.pydroid.arch.UiViewModel
-import com.pyamsoft.pydroid.arch.UnitControllerEvent
 import com.pyamsoft.wordwiz.word.ComponentManager
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 internal class SettingsViewModel @Inject internal constructor(
     manager: ComponentManager
-) : UiViewModel<SettingsViewState, SettingsViewEvent, UnitControllerEvent>(
+) : UiViewModel<SettingsViewState, SettingsControllerEvent>(
     SettingsViewState(
         isWordCountEnabled = manager.isWordCountEnabled(),
         isLetterCountEnabled = manager.isLetterCountEnabled()
     )
 ) {
 
-    internal inline fun handleWordCountToggled(
-        scope: CoroutineScope,
-        crossinline onToggle: (isEnabled: Boolean) -> Unit
-    ) {
-        scope.setState(
+    internal fun handleWordCountToggled() {
+        viewModelScope.setState(
             stateChange = { copy(isWordCountEnabled = !isWordCountEnabled) },
             andThen = { newState ->
-                onToggle(newState.isWordCountEnabled)
+                publish(SettingsControllerEvent.WordCountToggled(newState.isWordCountEnabled))
             })
     }
 
-    internal inline fun handleLetterCountToggled(
-        scope: CoroutineScope,
-        crossinline onToggle: (isEnabled: Boolean) -> Unit
-    ) {
-        scope.setState(
+    internal fun handleLetterCountToggled() {
+        viewModelScope.setState(
             stateChange = { copy(isLetterCountEnabled = !isLetterCountEnabled) },
             andThen = { newState ->
-                onToggle(newState.isLetterCountEnabled)
+                publish(SettingsControllerEvent.LetterCountToggled(newState.isLetterCountEnabled))
             })
     }
 

@@ -20,6 +20,8 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import com.pyamsoft.pydroid.arch.BaseUiView
+import com.pyamsoft.pydroid.arch.UnitViewEvent
+import com.pyamsoft.pydroid.arch.UnitViewState
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.privacy.addPrivacy
 import com.pyamsoft.pydroid.ui.privacy.removePrivacy
@@ -35,7 +37,7 @@ internal class MainToolbarView @Inject internal constructor(
     parent: ViewGroup,
     theming: ThemeProvider,
     toolbarActivityProvider: ToolbarActivityProvider
-) : BaseUiView<MainViewState, MainViewEvent, ToolbarBinding>(parent) {
+) : BaseUiView<UnitViewState, UnitViewEvent, ToolbarBinding>(parent) {
 
     override val viewBinding = ToolbarBinding::inflate
 

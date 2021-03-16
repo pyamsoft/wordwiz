@@ -19,8 +19,7 @@ package com.pyamsoft.wordwiz.word
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.pyamsoft.pydroid.arch.StateSaver
-import com.pyamsoft.pydroid.arch.bindController
+import com.pyamsoft.pydroid.arch.*
 import com.pyamsoft.pydroid.ui.Injector
 import com.pyamsoft.pydroid.ui.app.ActivityBase
 import com.pyamsoft.pydroid.ui.arch.fromViewModelFactory
@@ -29,7 +28,7 @@ import com.pyamsoft.wordwiz.WordWizComponent
 import com.pyamsoft.wordwiz.WordWizViewModelFactory
 import javax.inject.Inject
 
-internal abstract class WordProcessActivity : ActivityBase() {
+internal abstract class WordProcessActivity : ActivityBase(), UiController<UnitControllerEvent> {
 
     @JvmField
     @Inject
@@ -62,12 +61,14 @@ internal abstract class WordProcessActivity : ActivityBase() {
             .create(this, componentName, text)
             .inject(this)
 
-        stateSaver = viewModel.bindController(
+        stateSaver = createComponent(
             savedInstanceState,
+            this,
+            viewModel,
             this,
             requireNotNull(view)
         ) {
-            return@bindController when (it) {
+            return@createComponent when (it) {
                 is WordProcessViewEvent.CloseScreen -> finish()
             }
         }
@@ -82,7 +83,10 @@ internal abstract class WordProcessActivity : ActivityBase() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    final override fun onControllerEvent(event: UnitControllerEvent) {
+    }
+
+    final override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         stateSaver?.saveState(outState)
     }
