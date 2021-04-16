@@ -67,7 +67,7 @@ dependencies {
 	implementation "com.google.dagger:dagger:$dagger"
 	kapt "com.google.dagger:dagger-compiler:$dagger"
 
-	api "com.github.pyamsoft.highlander:highlander:$highlander"
+	api "com.github.pyamsoft:highlander:$highlander"
 
 	api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
