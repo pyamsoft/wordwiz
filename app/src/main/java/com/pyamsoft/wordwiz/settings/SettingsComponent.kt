@@ -16,11 +16,11 @@
 
 package com.pyamsoft.wordwiz.settings
 
-import com.pyamsoft.wordwiz.ViewModelFactoryModule
 import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceScreen
 import com.pyamsoft.pydroid.ui.app.ToolbarActivity
+import com.pyamsoft.wordwiz.ViewModelFactoryModule
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
@@ -28,32 +28,27 @@ import dagger.Subcomponent
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
-@Subcomponent(
-    modules = [
-        SettingsComponent.ComponentModule::class,
-        ViewModelFactoryModule::class
-    ]
-)
+@Subcomponent(modules = [SettingsComponent.ComponentModule::class, ViewModelFactoryModule::class])
 internal interface SettingsComponent {
 
-    fun inject(fragment: SettingsPreferenceFragment)
+  fun inject(fragment: SettingsPreferenceFragment)
 
-    @Subcomponent.Factory
-    interface Factory {
+  @Subcomponent.Factory
+  interface Factory {
 
-        @CheckResult
-        fun create(
-            @BindsInstance toolbarActivity: ToolbarActivity,
-            @BindsInstance preferenceScreen: PreferenceScreen
-        ): SettingsComponent
-    }
+    @CheckResult
+    fun create(
+        @BindsInstance toolbarActivity: ToolbarActivity,
+        @BindsInstance preferenceScreen: PreferenceScreen
+    ): SettingsComponent
+  }
 
-    @Module
-    abstract class ComponentModule {
+  @Module
+  abstract class ComponentModule {
 
-        @Binds
-        @IntoMap
-        @ClassKey(SettingsViewModel::class)
-        internal abstract fun settingsViewModel(viewModel: SettingsViewModel): ViewModel
-    }
+    @Binds
+    @IntoMap
+    @ClassKey(SettingsViewModel::class)
+    internal abstract fun settingsViewModel(viewModel: SettingsViewModel): ViewModel
+  }
 }

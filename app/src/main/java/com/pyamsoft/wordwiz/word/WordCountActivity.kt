@@ -18,10 +18,10 @@ package com.pyamsoft.wordwiz.word
 
 internal class WordCountActivity : WordProcessActivity() {
 
-    companion object : WordActivity<WordCountActivity>() {
+  companion object : WordActivity<WordCountActivity>() {
 
-        override fun provideClassType(): Class<out WordCountActivity> {
-            return WordCountActivity::class.java
-        }
+    override fun provideClassType(): Class<out WordCountActivity> {
+      return WordCountActivity::class.java
     }
+  }
 }

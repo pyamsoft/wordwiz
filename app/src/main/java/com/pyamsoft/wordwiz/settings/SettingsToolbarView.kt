@@ -23,17 +23,15 @@ import com.pyamsoft.pydroid.ui.util.setUpEnabled
 import com.pyamsoft.wordwiz.R
 import javax.inject.Inject
 
-internal class SettingsToolbarView @Inject internal constructor(
-    toolbarActivity: ToolbarActivity
-) : UiView<SettingsViewState, SettingsViewEvent>() {
+internal class SettingsToolbarView @Inject internal constructor(toolbarActivity: ToolbarActivity) :
+    UiView<SettingsViewState, SettingsViewEvent>() {
 
-    init {
-        toolbarActivity.withToolbar { toolbar ->
-            toolbar.setTitle(R.string.app_name)
-            toolbar.setUpEnabled(false)
-        }
+  init {
+    toolbarActivity.withToolbar { toolbar ->
+      toolbar.setTitle(R.string.app_name)
+      toolbar.setUpEnabled(false)
     }
+  }
 
-    override fun render(state: UiRender<SettingsViewState>) {
-    }
+  override fun render(state: UiRender<SettingsViewState>) {}
 }

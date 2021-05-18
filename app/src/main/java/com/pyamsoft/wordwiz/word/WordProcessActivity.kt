@@ -30,78 +30,68 @@ import javax.inject.Inject
 
 internal abstract class WordProcessActivity : ActivityBase(), UiController<UnitControllerEvent> {
 
-    @JvmField
-    @Inject
-    internal var factory: WordWizViewModelFactory? = null
-    private val viewModel by fromViewModelFactory<WordViewModel> { factory?.create(this) }
+  @JvmField @Inject internal var factory: WordWizViewModelFactory? = null
+  private val viewModel by fromViewModelFactory<WordViewModel> { factory?.create(this) }
 
-    @JvmField
-    @Inject
-    internal var view: WordView? = null
+  @JvmField @Inject internal var view: WordView? = null
 
-    private var stateSaver: StateSaver? = null
+  private var stateSaver: StateSaver? = null
 
-    final override val fragmentContainerId: Int = 0
+  final override val fragmentContainerId: Int = 0
 
-    final override val applicationIcon: Int = 0
+  final override val applicationIcon: Int = 0
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
-        overridePendingTransition(0, 0)
-        setTheme(R.style.Theme_WordWiz_Transparent)
-        super.onCreate(savedInstanceState)
+  final override fun onCreate(savedInstanceState: Bundle?) {
+    overridePendingTransition(0, 0)
+    setTheme(R.style.Theme_WordWiz_Transparent)
+    super.onCreate(savedInstanceState)
 
-        val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
-        if (text == null || text.isBlank()) {
-            finish()
-            return
+    val text: CharSequence? = intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+    if (text == null || text.isBlank()) {
+      finish()
+      return
+    }
+
+    Injector.obtainFromApplication<WordWizComponent>(this)
+        .plusWordComponent()
+        .create(this, componentName, text)
+        .inject(this)
+
+    stateSaver =
+        createComponent(savedInstanceState, this, viewModel, this, requireNotNull(view)) {
+          return@createComponent when (it) {
+            is WordProcessViewEvent.CloseScreen -> finish()
+          }
         }
 
-        Injector.obtainFromApplication<WordWizComponent>(this)
-            .plusWordComponent()
-            .create(this, componentName, text)
-            .inject(this)
+    viewModel.handleProcess(lifecycleScope)
+  }
 
-        stateSaver = createComponent(
-            savedInstanceState,
-            this,
-            viewModel,
-            this,
-            requireNotNull(view)
-        ) {
-            return@createComponent when (it) {
-                is WordProcessViewEvent.CloseScreen -> finish()
-            }
-        }
-
-        viewModel.handleProcess(lifecycleScope)
+  final override fun onStop() {
+    super.onStop()
+    if (!isFinishing && !isChangingConfigurations) {
+      finish()
     }
+  }
 
-    final override fun onStop() {
-        super.onStop()
-        if (!isFinishing && !isChangingConfigurations) {
-            finish()
-        }
-    }
+  final override fun onControllerEvent(event: UnitControllerEvent) {}
 
-    final override fun onControllerEvent(event: UnitControllerEvent) {
-    }
+  final override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    stateSaver?.saveState(outState)
+  }
 
-    final override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        stateSaver?.saveState(outState)
-    }
+  final override fun finish() {
+    super.finish()
+    overridePendingTransition(0, 0)
+  }
 
-    final override fun finish() {
-        super.finish()
-        overridePendingTransition(0, 0)
-    }
+  final override fun onDestroy() {
+    super.onDestroy()
+    overridePendingTransition(0, 0)
 
-    final override fun onDestroy() {
-        super.onDestroy()
-        overridePendingTransition(0, 0)
-
-        stateSaver = null
-        factory = null
-        view = null
-    }
+    stateSaver = null
+    factory = null
+    view = null
+  }
 }

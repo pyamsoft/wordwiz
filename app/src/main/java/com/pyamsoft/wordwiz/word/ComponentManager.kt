@@ -20,9 +20,7 @@ import androidx.annotation.CheckResult
 
 interface ComponentManager {
 
-    @CheckResult
-    fun isWordCountEnabled(): Boolean
+  @CheckResult fun isWordCountEnabled(): Boolean
 
-    @CheckResult
-    fun isLetterCountEnabled(): Boolean
+  @CheckResult fun isLetterCountEnabled(): Boolean
 }

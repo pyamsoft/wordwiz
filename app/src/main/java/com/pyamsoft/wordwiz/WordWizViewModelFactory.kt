@@ -24,28 +24,27 @@ import com.pyamsoft.pydroid.arch.*
 import dagger.Reusable
 import javax.inject.Inject
 import javax.inject.Provider
-import kotlin.reflect.KClass
 
 interface WordWizViewModelFactory {
 
-    @CheckResult
-    fun create(owner: SavedStateRegistryOwner): ViewModelProvider.Factory
-
+  @CheckResult fun create(owner: SavedStateRegistryOwner): ViewModelProvider.Factory
 }
 
 @Reusable
-internal class WordWizViewModelFactoryImpl @Inject internal constructor(
+internal class WordWizViewModelFactoryImpl
+@Inject
+internal constructor(
     private val viewModels: Map<Class<*>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : WordWizViewModelFactory {
 
-    override fun create(owner: SavedStateRegistryOwner): ViewModelProvider.Factory {
-        return object : SavedStateViewModelFactory(owner, null) {
-            override fun <T : ViewModel> createViewModel(
-                modelClass: Class<T>,
-                savedState: UiSavedState
-            ): ViewModel {
-                return viewModels[modelClass]?.get() ?: fail(modelClass)
-            }
-        }
+  override fun create(owner: SavedStateRegistryOwner): ViewModelProvider.Factory {
+    return object : SavedStateViewModelFactory(owner, null) {
+      override fun <T : ViewModel> createViewModel(
+          modelClass: Class<T>,
+          savedState: UiSavedState
+      ): ViewModel {
+        return viewModels[modelClass]?.get() ?: fail(modelClass)
+      }
     }
+  }
 }

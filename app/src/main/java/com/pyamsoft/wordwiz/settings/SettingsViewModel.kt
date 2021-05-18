@@ -21,29 +21,25 @@ import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.wordwiz.word.ComponentManager
 import javax.inject.Inject
 
-internal class SettingsViewModel @Inject internal constructor(
-    manager: ComponentManager
-) : UiViewModel<SettingsViewState, SettingsControllerEvent>(
-    SettingsViewState(
-        isWordCountEnabled = manager.isWordCountEnabled(),
-        isLetterCountEnabled = manager.isLetterCountEnabled()
-    )
-) {
+internal class SettingsViewModel @Inject internal constructor(manager: ComponentManager) :
+    UiViewModel<SettingsViewState, SettingsControllerEvent>(
+        SettingsViewState(
+            isWordCountEnabled = manager.isWordCountEnabled(),
+            isLetterCountEnabled = manager.isLetterCountEnabled())) {
 
-    internal fun handleWordCountToggled() {
-        viewModelScope.setState(
-            stateChange = { copy(isWordCountEnabled = !isWordCountEnabled) },
-            andThen = { newState ->
-                publish(SettingsControllerEvent.WordCountToggled(newState.isWordCountEnabled))
-            })
-    }
+  internal fun handleWordCountToggled() {
+    viewModelScope.setState(
+        stateChange = { copy(isWordCountEnabled = !isWordCountEnabled) },
+        andThen = { newState ->
+          publish(SettingsControllerEvent.WordCountToggled(newState.isWordCountEnabled))
+        })
+  }
 
-    internal fun handleLetterCountToggled() {
-        viewModelScope.setState(
-            stateChange = { copy(isLetterCountEnabled = !isLetterCountEnabled) },
-            andThen = { newState ->
-                publish(SettingsControllerEvent.LetterCountToggled(newState.isLetterCountEnabled))
-            })
-    }
-
+  internal fun handleLetterCountToggled() {
+    viewModelScope.setState(
+        stateChange = { copy(isLetterCountEnabled = !isLetterCountEnabled) },
+        andThen = { newState ->
+          publish(SettingsControllerEvent.LetterCountToggled(newState.isLetterCountEnabled))
+        })
+  }
 }

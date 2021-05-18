@@ -17,7 +17,7 @@
 package com.pyamsoft.wordwiz.word
 
 enum class ProcessType {
-    WORD_COUNT,
-    LETTER_COUNT,
-    OCCURRENCES
+  WORD_COUNT,
+  LETTER_COUNT,
+  OCCURRENCES
 }

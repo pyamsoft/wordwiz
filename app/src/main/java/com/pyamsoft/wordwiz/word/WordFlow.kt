@@ -25,10 +25,10 @@ data class WordProcessState(
     val error: Throwable?
 ) : UiViewState {
 
-    data class Processing internal constructor(val isProcessing: Boolean)
+  data class Processing internal constructor(val isProcessing: Boolean)
 }
 
 sealed class WordProcessViewEvent : UiViewEvent {
 
-    object CloseScreen : WordProcessViewEvent()
+  object CloseScreen : WordProcessViewEvent()
 }

@@ -26,46 +26,43 @@ import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleLetterCount
 import com.pyamsoft.wordwiz.settings.SettingsViewEvent.ToggleWordCount
 import javax.inject.Inject
 
-internal class SettingsView @Inject internal constructor(
-    preferenceScreen: PreferenceScreen
-) : PrefUiView<SettingsViewState, SettingsViewEvent>(preferenceScreen),
-    LifecycleObserver {
+internal class SettingsView @Inject internal constructor(preferenceScreen: PreferenceScreen) :
+    PrefUiView<SettingsViewState, SettingsViewEvent>(preferenceScreen), LifecycleObserver {
 
-    private val wordCount by boundPref<SwitchPreferenceCompat>(R.string.word_count_key)
-    private val letterCount by boundPref<SwitchPreferenceCompat>(R.string.letter_count_key)
+  private val wordCount by boundPref<SwitchPreferenceCompat>(R.string.word_count_key)
+  private val letterCount by boundPref<SwitchPreferenceCompat>(R.string.letter_count_key)
 
-    init {
-        doOnTeardown {
-            wordCount.onPreferenceClickListener = null
-            letterCount.onPreferenceClickListener = null
-        }
-
-        doOnInflate {
-            wordCount.setOnPreferenceClickListener {
-                publish(ToggleWordCount)
-                return@setOnPreferenceClickListener true
-            }
-        }
-
-        doOnInflate {
-            letterCount.setOnPreferenceClickListener {
-                publish(ToggleLetterCount)
-                return@setOnPreferenceClickListener true
-            }
-        }
+  init {
+    doOnTeardown {
+      wordCount.onPreferenceClickListener = null
+      letterCount.onPreferenceClickListener = null
     }
 
-    private fun handleWordCount(isEnabled: Boolean) {
-        wordCount.isChecked = isEnabled
+    doOnInflate {
+      wordCount.setOnPreferenceClickListener {
+        publish(ToggleWordCount)
+        return@setOnPreferenceClickListener true
+      }
     }
 
-    private fun handleLetterCount(isEnabled: Boolean) {
-        letterCount.isChecked = isEnabled
+    doOnInflate {
+      letterCount.setOnPreferenceClickListener {
+        publish(ToggleLetterCount)
+        return@setOnPreferenceClickListener true
+      }
     }
+  }
 
-    override fun onRender(state: UiRender<SettingsViewState>) {
-        state.mapChanged { it.isWordCountEnabled }.render(viewScope) { handleWordCount(it) }
-        state.mapChanged { it.isLetterCountEnabled }.render(viewScope) { handleLetterCount(it) }
-    }
+  private fun handleWordCount(isEnabled: Boolean) {
+    wordCount.isChecked = isEnabled
+  }
+
+  private fun handleLetterCount(isEnabled: Boolean) {
+    letterCount.isChecked = isEnabled
+  }
+
+  override fun onRender(state: UiRender<SettingsViewState>) {
+    state.mapChanged { it.isWordCountEnabled }.render(viewScope) { handleWordCount(it) }
+    state.mapChanged { it.isLetterCountEnabled }.render(viewScope) { handleLetterCount(it) }
+  }
 }
-

@@ -26,62 +26,64 @@ import com.pyamsoft.pydroid.ui.util.Toaster
 import com.pyamsoft.wordwiz.word.ProcessType.LETTER_COUNT
 import com.pyamsoft.wordwiz.word.ProcessType.WORD_COUNT
 import com.pyamsoft.wordwiz.word.WordProcessViewEvent.CloseScreen
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.LazyThreadSafetyMode.NONE
+import timber.log.Timber
 
-internal class WordView @Inject internal constructor(
-    private val context: Context,
-    private val owner: LifecycleOwner
-) : UiView<WordProcessState, WordProcessViewEvent>() {
+internal class WordView
+@Inject
+internal constructor(private val context: Context, private val owner: LifecycleOwner) :
+    UiView<WordProcessState, WordProcessViewEvent>() {
 
-    private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
+  private val handler by lazy(NONE) { Handler(Looper.getMainLooper()) }
 
-    init {
-        doOnTeardown {
-            clear()
-            hideMessage()
-        }
+  init {
+    doOnTeardown {
+      clear()
+      hideMessage()
     }
+  }
 
-    override fun render(state: UiRender<WordProcessState>) {
-        state.mapChanged { it.isProcessing }.render(viewScope) { handleProcessing(it) }
-        state.mapChanged { it.result }.render(viewScope) { handleResult(it) }
-        state.mapChanged { it.error }.render(viewScope) { handleError(it) }
+  override fun render(state: UiRender<WordProcessState>) {
+    state.mapChanged { it.isProcessing }.render(viewScope) { handleProcessing(it) }
+    state.mapChanged { it.result }.render(viewScope) { handleResult(it) }
+    state.mapChanged { it.error }.render(viewScope) { handleError(it) }
+  }
+
+  private fun handleProcessing(processing: WordProcessState.Processing?) {
+    processing?.also { p ->
+      clear()
+      if (!p.isProcessing) {
+        handler.postDelayed({ publish(CloseScreen) }, 750)
+      }
     }
+  }
 
-    private fun handleProcessing(processing: WordProcessState.Processing?) {
-        processing?.also { p ->
-            clear()
-            if (!p.isProcessing) {
-                handler.postDelayed({ publish(CloseScreen) }, 750)
-            }
-        }
-    }
-
-    private fun handleResult(result: WordProcessResult?) = if (result == null) hideMessage() else {
+  private fun handleResult(result: WordProcessResult?) =
+      if (result == null) hideMessage()
+      else {
         when (result.type) {
-            WORD_COUNT -> showMessage("Word count: ${result.count}")
-            LETTER_COUNT -> showMessage("Letter count: ${result.count}")
-            else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
+          WORD_COUNT -> showMessage("Word count: ${result.count}")
+          LETTER_COUNT -> showMessage("Letter count: ${result.count}")
+          else -> Timber.d("Unhandled process success: ${result.type} ${result.count}")
         }
-    }
+      }
 
-    private fun hideMessage() {
-        Toaster.bindTo(owner).dismiss()
-    }
+  private fun hideMessage() {
+    Toaster.bindTo(owner).dismiss()
+  }
 
-    private fun handleError(throwable: Throwable?) {
-        if (throwable != null) {
-            showMessage(throwable.message ?: "An unexpected error occurred.")
-        }
+  private fun handleError(throwable: Throwable?) {
+    if (throwable != null) {
+      showMessage(throwable.message ?: "An unexpected error occurred.")
     }
+  }
 
-    private fun showMessage(message: String) {
-        Toaster.bindTo(owner).short(context.applicationContext, message)
-    }
+  private fun showMessage(message: String) {
+    Toaster.bindTo(owner).short(context.applicationContext, message)
+  }
 
-    private fun clear() {
-        handler.removeCallbacksAndMessages(null)
-    }
+  private fun clear() {
+    handler.removeCallbacksAndMessages(null)
+  }
 }

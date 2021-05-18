@@ -22,46 +22,47 @@ import com.pyamsoft.pydroid.arch.UiViewModel
 import com.pyamsoft.pydroid.arch.UnitControllerEvent
 import com.pyamsoft.pydroid.arch.onActualError
 import com.pyamsoft.wordwiz.word.WordProcessState.Processing
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
-import javax.inject.Inject
 
-internal class WordViewModel @Inject internal constructor(
+internal class WordViewModel
+@Inject
+internal constructor(
     interactor: WordProcessInteractor,
     component: ComponentName,
     text: CharSequence
-) : UiViewModel<WordProcessState, UnitControllerEvent>(
-    WordProcessState(
-        isProcessing = null,
-        result = null,
-        error = null
-    )
-) {
+) :
+    UiViewModel<WordProcessState, UnitControllerEvent>(
+        WordProcessState(isProcessing = null, result = null, error = null)) {
 
-    private val processRunner = highlander<Unit> {
+  private val processRunner =
+      highlander<Unit> {
         try {
-            val result = interactor.getProcessType(component, text)
-            handleProcessSuccess(result)
+          val result = interactor.getProcessType(component, text)
+          handleProcessSuccess(result)
         } catch (error: Throwable) {
-            error.onActualError { e ->
-                Timber.e(e, "Error handling process request")
-                handleProcessError(e)
-            }
+          error.onActualError { e ->
+            Timber.e(e, "Error handling process request")
+            handleProcessError(e)
+          }
         }
-    }
+      }
 
-    internal fun handleProcess(scope: CoroutineScope) {
-        scope.setState(stateChange = { copy(isProcessing = Processing(true)) }, andThen = {
-            processRunner.call()
-            setState { copy(isProcessing = Processing(false)) }
+  internal fun handleProcess(scope: CoroutineScope) {
+    scope.setState(
+        stateChange = { copy(isProcessing = Processing(true)) },
+        andThen = {
+          processRunner.call()
+          setState { copy(isProcessing = Processing(false)) }
         })
-    }
+  }
 
-    private fun handleProcessError(throwable: Throwable) {
-        setState { copy(error = throwable) }
-    }
+  private fun handleProcessError(throwable: Throwable) {
+    setState { copy(error = throwable) }
+  }
 
-    private fun handleProcessSuccess(result: WordProcessResult) {
-        setState { copy(result = result) }
-    }
+  private fun handleProcessSuccess(result: WordProcessResult) {
+    setState { copy(result = result) }
+  }
 }

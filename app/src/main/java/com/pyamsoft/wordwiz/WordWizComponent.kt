@@ -37,30 +37,26 @@ import javax.inject.Singleton
 @Component(modules = [WordProcessModule::class, WordWizModule::class])
 internal interface WordWizComponent {
 
-    @CheckResult
-    fun plusWordComponent(): WordComponent.Factory
+  @CheckResult fun plusWordComponent(): WordComponent.Factory
+
+  @CheckResult fun plusSettingsComponent(): SettingsComponent.Factory
+
+  @CheckResult fun plusMainComponent(): MainComponent.Factory
+
+  @Component.Factory
+  interface Factory {
 
     @CheckResult
-    fun plusSettingsComponent(): SettingsComponent.Factory
+    fun create(
+        @Named("debug") @BindsInstance debug: Boolean,
+        @BindsInstance context: Context,
+        @BindsInstance theming: Theming
+    ): WordWizComponent
+  }
 
-    @CheckResult
-    fun plusMainComponent(): MainComponent.Factory
+  @Module
+  abstract class WordWizModule {
 
-    @Component.Factory
-    interface Factory {
-
-        @CheckResult
-        fun create(
-            @Named("debug") @BindsInstance debug: Boolean,
-            @BindsInstance context: Context,
-            @BindsInstance theming: Theming
-        ): WordWizComponent
-    }
-
-    @Module
-    abstract class WordWizModule {
-
-        @Binds
-        internal abstract fun bindComponentManager(impl: ComponentManagerImpl): ComponentManager
-    }
+    @Binds internal abstract fun bindComponentManager(impl: ComponentManagerImpl): ComponentManager
+  }
 }

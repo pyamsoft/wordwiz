@@ -23,7 +23,7 @@ import dagger.Module
 @Module
 abstract class ViewModelFactoryModule {
 
-    @Binds
-    @CheckResult
-    internal abstract fun bindFactory(impl: WordWizViewModelFactoryImpl): WordWizViewModelFactory
+  @Binds
+  @CheckResult
+  internal abstract fun bindFactory(impl: WordWizViewModelFactoryImpl): WordWizViewModelFactory
 }

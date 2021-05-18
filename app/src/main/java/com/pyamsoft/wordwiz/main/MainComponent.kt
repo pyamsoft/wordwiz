@@ -16,12 +16,12 @@
 
 package com.pyamsoft.wordwiz.main
 
-import com.pyamsoft.wordwiz.ViewModelFactoryModule
 import android.view.ViewGroup
 import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModel
 import com.pyamsoft.pydroid.ui.app.ToolbarActivityProvider
 import com.pyamsoft.pydroid.ui.theme.ThemeProvider
+import com.pyamsoft.wordwiz.ViewModelFactoryModule
 import dagger.Binds
 import dagger.BindsInstance
 import dagger.Module
@@ -29,33 +29,28 @@ import dagger.Subcomponent
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
 
-@Subcomponent(
-    modules = [
-        MainComponent.ComponentModule::class,
-        ViewModelFactoryModule::class
-    ]
-)
+@Subcomponent(modules = [MainComponent.ComponentModule::class, ViewModelFactoryModule::class])
 internal interface MainComponent {
 
-    fun inject(activity: MainActivity)
+  fun inject(activity: MainActivity)
 
-    @Subcomponent.Factory
-    interface Factory {
+  @Subcomponent.Factory
+  interface Factory {
 
-        @CheckResult
-        fun create(
-            @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
-            @BindsInstance layoutRoot: ViewGroup,
-            @BindsInstance themeProvider: ThemeProvider
-        ): MainComponent
-    }
+    @CheckResult
+    fun create(
+        @BindsInstance toolbarActivityProvider: ToolbarActivityProvider,
+        @BindsInstance layoutRoot: ViewGroup,
+        @BindsInstance themeProvider: ThemeProvider
+    ): MainComponent
+  }
 
-    @Module
-    abstract class ComponentModule {
+  @Module
+  abstract class ComponentModule {
 
-        @Binds
-        @IntoMap
-        @ClassKey(MainViewModel::class)
-        internal abstract fun mainViewModel(viewModel: MainViewModel): ViewModel
-    }
+    @Binds
+    @IntoMap
+    @ClassKey(MainViewModel::class)
+    internal abstract fun mainViewModel(viewModel: MainViewModel): ViewModel
+  }
 }

@@ -32,44 +32,34 @@ import com.pyamsoft.wordwiz.word.LetterCountActivity
 import com.pyamsoft.wordwiz.word.WordCountActivity
 import javax.inject.Inject
 
-class SettingsPreferenceFragment : AppSettingsPreferenceFragment(),
-    UiController<SettingsControllerEvent> {
+class SettingsPreferenceFragment :
+    AppSettingsPreferenceFragment(), UiController<SettingsControllerEvent> {
 
-    @JvmField
-    @Inject
-    internal var factory: WordWizViewModelFactory? = null
-    private val viewModel by fromViewModelFactory<SettingsViewModel> { factory?.create(this) }
+  @JvmField @Inject internal var factory: WordWizViewModelFactory? = null
+  private val viewModel by fromViewModelFactory<SettingsViewModel> { factory?.create(this) }
 
-    @JvmField
-    @Inject
-    internal var settingsView: SettingsView? = null
+  @JvmField @Inject internal var settingsView: SettingsView? = null
 
-    @JvmField
-    @Inject
-    internal var spacer: SettingsSpacer? = null
+  @JvmField @Inject internal var spacer: SettingsSpacer? = null
 
-    @JvmField
-    @Inject
-    internal var toolbar: SettingsToolbarView? = null
+  @JvmField @Inject internal var toolbar: SettingsToolbarView? = null
 
-    private var stateSaver: StateSaver? = null
+  private var stateSaver: StateSaver? = null
 
-    override val preferenceXmlResId: Int = R.xml.preferences
+  override val preferenceXmlResId: Int = R.xml.preferences
 
-    override val hideClearAll: Boolean = true
+  override val hideClearAll: Boolean = true
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(view, savedInstanceState)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
 
-        Injector.obtainFromApplication<WordWizComponent>(view.context)
-            .plusSettingsComponent()
-            .create(requireToolbarActivity(), preferenceScreen)
-            .inject(this)
+    Injector.obtainFromApplication<WordWizComponent>(view.context)
+        .plusSettingsComponent()
+        .create(requireToolbarActivity(), preferenceScreen)
+        .inject(this)
 
-        stateSaver = createComponent(
+    stateSaver =
+        createComponent(
             savedInstanceState,
             viewLifecycleOwner,
             viewModel,
@@ -78,45 +68,44 @@ class SettingsPreferenceFragment : AppSettingsPreferenceFragment(),
             requireNotNull(toolbar),
             requireNotNull(spacer),
         ) {
-            return@createComponent when (it) {
-                is SettingsViewEvent.ToggleLetterCount -> viewModel.handleLetterCountToggled()
-                is SettingsViewEvent.ToggleWordCount -> viewModel.handleWordCountToggled()
-            }
+          return@createComponent when (it) {
+            is SettingsViewEvent.ToggleLetterCount -> viewModel.handleLetterCountToggled()
+            is SettingsViewEvent.ToggleWordCount -> viewModel.handleWordCountToggled()
+          }
         }
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    stateSaver?.saveState(outState)
+  }
+
+  override fun onDestroyView() {
+    super.onDestroyView()
+    stateSaver = null
+    factory = null
+    settingsView = null
+    toolbar = null
+    factory = null
+  }
+
+  private fun onWordCountChanged(enabled: Boolean) {
+    WordCountActivity.enable(requireContext(), enabled)
+  }
+
+  private fun onLetterCountChanged(enabled: Boolean) {
+    LetterCountActivity.enable(requireContext(), enabled)
+  }
+
+  override fun onControllerEvent(event: SettingsControllerEvent) {
+    return when (event) {
+      is SettingsControllerEvent.LetterCountToggled -> onLetterCountChanged(event.enabled)
+      is SettingsControllerEvent.WordCountToggled -> onWordCountChanged(event.enabled)
     }
+  }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        stateSaver?.saveState(outState)
-    }
+  companion object {
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        stateSaver = null
-        factory = null
-        settingsView = null
-        toolbar = null
-        factory = null
-    }
-
-    private fun onWordCountChanged(enabled: Boolean) {
-        WordCountActivity.enable(requireContext(), enabled)
-    }
-
-    private fun onLetterCountChanged(enabled: Boolean) {
-        LetterCountActivity.enable(requireContext(), enabled)
-    }
-
-    override fun onControllerEvent(event: SettingsControllerEvent) {
-        return when (event) {
-            is SettingsControllerEvent.LetterCountToggled -> onLetterCountChanged(event.enabled)
-            is SettingsControllerEvent.WordCountToggled -> onWordCountChanged(event.enabled)
-        }
-    }
-
-    companion object {
-
-        const val TAG = "SettingsPreferenceFragment"
-    }
-
+    const val TAG = "SettingsPreferenceFragment"
+  }
 }

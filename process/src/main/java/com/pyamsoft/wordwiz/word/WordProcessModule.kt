@@ -23,7 +23,7 @@ import dagger.Module
 @Module
 abstract class WordProcessModule {
 
-    @Binds
-    @CheckResult
-    internal abstract fun bindInteractor(impl: WordProcessInteractorImpl): WordProcessInteractor
+  @Binds
+  @CheckResult
+  internal abstract fun bindInteractor(impl: WordProcessInteractorImpl): WordProcessInteractor
 }

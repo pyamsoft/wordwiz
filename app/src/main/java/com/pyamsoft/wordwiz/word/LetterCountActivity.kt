@@ -18,10 +18,10 @@ package com.pyamsoft.wordwiz.word
 
 internal class LetterCountActivity : WordProcessActivity() {
 
-    companion object : WordActivity<LetterCountActivity>() {
+  companion object : WordActivity<LetterCountActivity>() {
 
-        override fun provideClassType(): Class<out LetterCountActivity> {
-            return LetterCountActivity::class.java
-        }
+    override fun provideClassType(): Class<out LetterCountActivity> {
+      return LetterCountActivity::class.java
     }
+  }
 }

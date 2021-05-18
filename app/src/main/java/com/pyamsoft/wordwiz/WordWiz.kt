@@ -23,42 +23,39 @@ import com.pyamsoft.pydroid.util.isDebugMode
 
 class WordWiz : Application() {
 
-    private val component by lazy {
-        val url = "https://github.com/pyamsoft/wordwiz"
+  private val component by lazy {
+    val url = "https://github.com/pyamsoft/wordwiz"
 
-        val provider = PYDroid.init(
+    val provider =
+        PYDroid.init(
             this,
             PYDroid.Parameters(
                 viewSourceUrl = url,
                 bugReportUrl = "$url/issues",
                 privacyPolicyUrl = PRIVACY_POLICY_URL,
                 termsConditionsUrl = TERMS_CONDITIONS_URL,
-                version = BuildConfig.VERSION_CODE
-            )
-        )
+                version = BuildConfig.VERSION_CODE))
 
-        return@lazy DaggerWordWizComponent.factory().create(
-            isDebugMode(),
-            this,
-            provider.get().theming()
-        )
-    }
+    return@lazy DaggerWordWizComponent.factory()
+        .create(isDebugMode(), this, provider.get().theming())
+  }
 
-    override fun getSystemService(name: String): Any? {
-        // Do this weird construct to ensure that component is initialized
-        return component.run { PYDroid.getSystemService(name) } ?: fallbackGetSystemService(name)
-    }
+  override fun getSystemService(name: String): Any? {
+    // Do this weird construct to ensure that component is initialized
+    return component.run { PYDroid.getSystemService(name) } ?: fallbackGetSystemService(name)
+  }
 
-    @CheckResult
-    private fun fallbackGetSystemService(name: String): Any? {
-        return if (WordWizComponent::class.java.name == name) component else {
-            super.getSystemService(name)
-        }
+  @CheckResult
+  private fun fallbackGetSystemService(name: String): Any? {
+    return if (WordWizComponent::class.java.name == name) component
+    else {
+      super.getSystemService(name)
     }
+  }
 
-    companion object {
-        const val PRIVACY_POLICY_URL = "https://pyamsoft.blogspot.com/p/wordwiz-privacy-policy.html"
-        const val TERMS_CONDITIONS_URL =
-            "https://pyamsoft.blogspot.com/p/wordwiz-terms-and-conditions.html"
-    }
+  companion object {
+    const val PRIVACY_POLICY_URL = "https://pyamsoft.blogspot.com/p/wordwiz-privacy-policy.html"
+    const val TERMS_CONDITIONS_URL =
+        "https://pyamsoft.blogspot.com/p/wordwiz-terms-and-conditions.html"
+  }
 }

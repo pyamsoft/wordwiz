@@ -21,15 +21,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class ComponentManagerImpl @Inject internal constructor(
-    private val context: Context
-) : ComponentManager {
+internal class ComponentManagerImpl @Inject internal constructor(private val context: Context) :
+    ComponentManager {
 
-    override fun isWordCountEnabled(): Boolean {
-        return WordCountActivity.isEnabled(context)
-    }
+  override fun isWordCountEnabled(): Boolean {
+    return WordCountActivity.isEnabled(context)
+  }
 
-    override fun isLetterCountEnabled(): Boolean {
-        return LetterCountActivity.isEnabled(context)
-    }
+  override fun isLetterCountEnabled(): Boolean {
+    return LetterCountActivity.isEnabled(context)
+  }
 }

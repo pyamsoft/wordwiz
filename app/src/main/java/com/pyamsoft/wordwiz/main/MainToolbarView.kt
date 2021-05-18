@@ -19,6 +19,7 @@ package com.pyamsoft.wordwiz.main
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
+import com.google.android.material.R as R2
 import com.pyamsoft.pydroid.arch.BaseUiView
 import com.pyamsoft.pydroid.arch.UnitViewEvent
 import com.pyamsoft.pydroid.arch.UnitViewState
@@ -31,49 +32,48 @@ import com.pyamsoft.wordwiz.R
 import com.pyamsoft.wordwiz.WordWiz
 import com.pyamsoft.wordwiz.databinding.ToolbarBinding
 import javax.inject.Inject
-import com.google.android.material.R as R2
 
-internal class MainToolbarView @Inject internal constructor(
+internal class MainToolbarView
+@Inject
+internal constructor(
     parent: ViewGroup,
     theming: ThemeProvider,
     toolbarActivityProvider: ToolbarActivityProvider
 ) : BaseUiView<UnitViewState, UnitViewEvent, ToolbarBinding>(parent) {
 
-    override val viewBinding = ToolbarBinding::inflate
+  override val viewBinding = ToolbarBinding::inflate
 
-    override val layoutRoot by boundView { appbar }
+  override val layoutRoot by boundView { appbar }
 
-    init {
-        doOnInflate {
-            val theme: Int = if (theming.isDarkTheme()) {
-                R2.style.ThemeOverlay_MaterialComponents
-            } else {
-                R2.style.ThemeOverlay_MaterialComponents_Light
-            }
+  init {
+    doOnInflate {
+      val theme: Int =
+          if (theming.isDarkTheme()) {
+            R2.style.ThemeOverlay_MaterialComponents
+          } else {
+            R2.style.ThemeOverlay_MaterialComponents_Light
+          }
 
-            binding.toolbar.apply {
-                popupTheme = theme
-                toolbarActivityProvider.setToolbar(this)
-                setTitle(R.string.app_name)
-                ViewCompat.setElevation(this, 0F)
-            }
+      binding.toolbar.apply {
+        popupTheme = theme
+        toolbarActivityProvider.setToolbar(this)
+        setTitle(R.string.app_name)
+        ViewCompat.setElevation(this, 0F)
+      }
 
-            binding.toolbar.addPrivacy(
-                viewScope, WordWiz.PRIVACY_POLICY_URL,
-                WordWiz.TERMS_CONDITIONS_URL
-            )
-        }
-
-        doOnInflate {
-            layoutRoot.doOnApplyWindowInsets { v, insets, padding ->
-                v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
-            }
-        }
-
-        doOnTeardown {
-            toolbarActivityProvider.setToolbar(null)
-            binding.toolbar.removePrivacy()
-        }
+      binding.toolbar.addPrivacy(
+          viewScope, WordWiz.PRIVACY_POLICY_URL, WordWiz.TERMS_CONDITIONS_URL)
     }
 
+    doOnInflate {
+      layoutRoot.doOnApplyWindowInsets { v, insets, padding ->
+        v.updatePadding(top = padding.top + insets.systemWindowInsetTop)
+      }
+    }
+
+    doOnTeardown {
+      toolbarActivityProvider.setToolbar(null)
+      binding.toolbar.removePrivacy()
+    }
+  }
 }
